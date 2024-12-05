@@ -151,6 +151,13 @@ lawyer_language(PersonId, Language).
 
 person_language(PersonId, Language).
 
+%% proceeding_language(PersonId, Language)
+%
+% The language of the proceedings is X
+%
+
+proceeding_language(PersonId, Language).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Directive 2012_13
