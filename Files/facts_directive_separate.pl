@@ -123,13 +123,6 @@ person_document(PersonId, indictment).
 person_document(PersonId, judgement).
 
 
-%% essential_document(_, PersonId, _documents)
-%
-% The document is essential
-%
-
-essential_document(_, PersonId, documents).
-
 %% person_understands(PersonId, Language)
 %
 % The person reads and understands language X
