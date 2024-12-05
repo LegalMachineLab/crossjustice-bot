@@ -607,12 +607,12 @@ authority_nominates(PersonId, HolderId).
 person_status(HolderId, holder_of_parental_responsibility).
 
 
-%% contrary_to_child_interest(PersonId)
+%% contrary_to_child_interest(ParentId)
 %
-% The person is acting contrary to the interests of the child
+% The person (ParentId) is acting contrary to the interests of the child
 %
 
-contrary_to_child_interest(PersonId).
+contrary_to_child_interest(ParentId).
 
 
 %% jeopardises_proceedings(HolderId)
