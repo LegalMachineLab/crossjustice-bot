@@ -2,13 +2,13 @@
 
 - Piattaforma python
 
-- Estrazione Fatti via LLM pubblico
+- Estrazione Fatti via LLM pubblico **(OK CIRCA)**
   - Selezionare LLM da [groq](https://groq.com/)
 	- Lista fatti da [CrossJustice](https://github.com/LegalMachineLab/CrossJustice/blob/main/docs/facts.md)
 	- **Task 1**: LLM conversa con l'utente e seleziona dalla lista di fatti quelli che pensa essere rilevanti per il caso
 	  - Dare un recap all'utente di quel che ho capito del suo caso
 
-- Interrogazione **CrossJustice**
+- Interrogazione **CrossJustice** **(OK CIRCA)**
 	- **INPUT**: lista fatti
 	- **TARGET**: direttive
 	- Come farlo (https://github.com/LegalMachineLab/CrossJustice/blob/main/crossjustice/python/pl_wrapper.py)
