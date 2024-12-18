@@ -63,7 +63,7 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
 
   def select_prompt():
 
-    res = prompt_model(f"According to the following input, does the user want to know her rights?\nReply OUTPUT if that is the case.\n\n{input_text}")
+    res = prompt_model(f"According to the following input, does the user want to know her rights?\nReply OUTPUT if that is the case. Do not include anything else in your response.\n\n{input_text}")
     print(res)
 
     return f"""
@@ -85,9 +85,11 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
 
         These are the rights computed by the symbolic engine til now:
 
-        {rights[0]}
+        {[k for k, v in rights.items()]}
 
-        Make the user know them.
+        Make the user know them end ask if he wants to know more about one of them.
+        Just list the rights without additions.
+
       """
 
   groq_chat = ChatGroq(

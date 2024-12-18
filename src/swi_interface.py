@@ -365,55 +365,19 @@ def prettify_response(response, facts):
 
     def _to_theory(elem):
 
-        for law, rights in elem.items():
-            if law == "directive":
-                for y in rights:
-                    y[
-                        "arg_rule"
-                    ] = f"right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}).\\n".replace(
-                        "'", ""
-                    )
-                    for prop in y["auxiliary"]:
-                        prop[
-                            "arg_rule"
-                        ] = f"auxiliary({law}, {prop['article']}, {prop['matter']}, {prop['value']}, {sorted(set(_extract_facts(prop['explanation_raw'])))}).\\n".replace(
-                            "'", ""
-                        )
-                    for prop in y["property"]:
-                        prop[
-                            "arg_rule"
-                        ] = f"property({law}, {prop['article']}, {prop['matter']}, {prop['value']}, {sorted(set(_extract_facts(prop['explanation_raw'])))}).\\n".replace(
-                            "'", ""
-                        )
+        modifier = lambda x : "-" if x ==  "directive" else "="
 
-        return (
-            "\\n".join(
-                [
-                    f":= (right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}))."
-                    for law, rights in elem.items()
-                    for y in rights
-                    if law != "directive"
-                ]
-            ).replace("'", ""),
-            "\\n".join(
-                [
-                    f":= (auxiliary({law}, {prop['article']}, {prop['matter']}, {prop['value']}, {sorted(set(_extract_facts(prop['explanation_raw'])))})."
-                    for law, rights in elem.items()
-                    for y in rights
-                    for prop in y["auxiliary"]
-                    if law != "directive"
-                ]
-            ).replace("'", ""),
-            "\\n".join(
-                [
-                    f":= (property({law}, {prop['article']}, {prop['matter']}, {prop['value']}, {sorted(set(_extract_facts(prop['explanation_raw'])))})."
-                    for law, rights in elem.items()
-                    for y in rights
-                    for prop in y["property"]
-                    if law != "directive"
-                ]
-            ).replace("'", ""),
-        )
+        import random
+
+        for law, rights in elem.items():
+            for y in rights:
+              y[
+                  "arg_rule"
+              ] = f"f{random.randint(1, 10000)} :{modifier(law)}> right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}).\\n".replace(
+                  "'", ""
+              )
+
+        return elem
 
     import copy
 
@@ -421,24 +385,14 @@ def prettify_response(response, facts):
 
     for elem in pretty:
         _prettify(elem, "has_right", elem["law"])
-        elem["property"] = [
-            _prettify(property, "right_property", elem["law"])
-            for property in elem["property"]
-        ]
-        elem["auxiliary"] = [
-            _prettify(property, "auxiliary_right", elem["law"])
-            for property in elem["auxiliary"]
-        ]
 
-    return pretty
+    group = {}
+    for item in pretty:
+        group.setdefault(item["right"], []).append(item)
+    for key, value in group.items():
+        national_group = {}
+        for item in value:
+            national_group.setdefault(nationality(item["law"]), []).append(item)
+        group[key] = _to_theory(national_group)
 
-    # group = {}
-    # for item in pretty:
-    #     group.setdefault(item["right"], []).append(item)
-    # for key, value in group.items():
-    #     national_group = {}
-    #     for item in value:
-    #         national_group.setdefault(nationality(item["law"]), []).append(item)
-    #     group[key] = (national_group, *_to_theory(national_group))
-
-    # return group
+    return group
