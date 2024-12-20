@@ -172,78 +172,6 @@ def right_to(
         )
     )
 
-
-def auxiliary_right(
-    person,
-    facts,
-    laws=["it", "es", "pl", "nl", "bg", "dir"],
-    modules=[],
-    ref="Ref",
-    checked=True,
-    explanation=False,
-):
-
-    return set(
-        (
-            law,
-            module,
-            x["Art"],
-            x["Opt"],
-            x["Value"],
-            x["Ref"] if ref == "Ref" else ref,
-            _json_clean_explanation(x["Expl"]) if explanation else "",
-        )
-        for law, module in _mappings
-        if law in laws or module in modules
-        for x in _with_facts(
-            lambda: _solve(
-                _with_explanation(
-                    module,
-                    f"auxiliary_right{ '_checked' if checked else '' }(Art, {ref}, {person}, Opt, Value)",
-                    explanation,
-                )
-            ),
-            facts,
-            module,
-        )
-    )
-
-
-def right_property(
-    person,
-    facts,
-    laws=["it", "es", "pl", "nl", "dir"],
-    modules=[],
-    ref="Ref",
-    checked=True,
-    explanation=False,
-):
-
-    return set(
-        (
-            law,
-            module,
-            x["Art"],
-            x["Opt"],
-            x["Value"],
-            x["Ref"] if ref == "Ref" else ref,
-            _json_clean_explanation(x["Expl"]) if explanation else "",
-        )
-        for law, module in _mappings
-        if law in laws or module in modules
-        for x in _with_facts(
-            lambda: _solve(
-                _with_explanation(
-                    module,
-                    f"right_property{ '_checked' if checked else '' }(Art, {ref}, {person}, Opt, Value)",
-                    explanation,
-                )
-            ),
-            facts,
-            module,
-        )
-    )
-
 def generate_response(personId, facts, laws):
 
     return facts, [
@@ -252,43 +180,7 @@ def generate_response(personId, facts, laws):
             "law": item[1],
             "article": item[2],
             "option": item[3],
-            "explanation": item[5] if not item[5] else json.loads(item[5]),
-            "auxiliary": [],
-            "property": [],
-            # "auxiliary": [
-            #     {
-            #         "article": aux[2],
-            #         "matter": aux[3],
-            #         "value": aux[4],
-            #         "explanation": aux[6] if not aux[6] else json.loads(aux[6]),
-            #     }
-            #     for aux in auxiliary_right(
-            #         form.base_info.defendant_name(),
-            #         facts,
-            #         laws=[],
-            #         modules=[item[1]],
-            #         ref=item[2],
-            #         checked=False,
-            #         explanation=form.explanation(),
-            #     )
-            # ],
-            # "property": [
-            #     {
-            #         "article": aux[2],
-            #         "matter": aux[3],
-            #         "value": aux[4],
-            #         "explanation": aux[6] if not aux[6] else json.loads(aux[6]),
-            #     }
-            #     for aux in right_property(
-            #         form.base_info.defendant_name(),
-            #         facts,
-            #         laws=[],
-            #         modules=[item[1]],
-            #         ref=item[2],
-            #         checked=False,
-            #         explanation=form.explanation(),
-            #     )
-            # ],
+            "explanation": item[5] if not item[5] else json.loads(item[5])
         }
         for item in right_to(
             personId,
@@ -307,7 +199,6 @@ def prettify_response(response, facts):
         path = source_path(directive, nationality(law))
         with open(path, "r") as pl_src:
             law_text = pl_src.read()
-            # res = re.search(r'has_right\(_' + article + '.+\n%\n%([^()]+)\n+', law_text)
             res = re.search(
                 type
                 + r"\(_"
@@ -373,9 +264,10 @@ def prettify_response(response, facts):
             for y in rights:
               y[
                   "arg_rule"
-              ] = f"f{random.randint(1, 10000)} :{modifier(law)}> right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}).\\n".replace(
+              ] = f"f{random.randint(1, 10000)} :{modifier(law)}> right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}).".replace(
                   "'", ""
               )
+              del y['explanation_raw']
 
         return elem
 

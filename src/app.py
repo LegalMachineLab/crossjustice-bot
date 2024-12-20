@@ -16,6 +16,8 @@ from langchain.prompts import PromptTemplate
 from swi_interface import generate_response, prettify_response
 import input_facts
 
+from argumentation.arg_interface import get_full_theory, run_reasoner
+
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.5):
 
   client = Groq(
@@ -63,34 +65,70 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
 
   def select_prompt():
 
-    res = prompt_model(f"According to the following input, does the user want to know her rights?\nReply OUTPUT if that is the case. Do not include anything else in your response.\n\n{input_text}")
+    right_keys = [k for k, _ in rights.items()]
+
+    res = prompt_model(f"""
+        According to the following input, what does the user want to do?
+
+        1. Input new facts into the system;
+        2. Know which rights are deducible from her scenario;
+        3. Know about one of this specific rights: {right_keys}
+
+        Reply "1" if 1, "2" if 2, and "3 - right from the list" if 3.
+        Do not include anything else in your output.
+
+        {input_text}
+    """)
     print(res)
 
+    target = [x.strip() for x in res.split("-")][1] if "3" in res else st.session_state.target
+    conformity = {}
+    st.session_state.target = target
+    if target and target not in st.session_state.arguments:
+       print(target)
+       theory = get_full_theory("\n".join([x["arg_rule"] for _, v in rights[target].items() for x in v]), ["it"])
+       conformity = run_reasoner(theory)
+       print(conformity)
+       st.session_state.arguments[target] = conformity
+    elif target:
+       conformity = st.session_state.arguments[target]
+
     return f"""
-        You must help the user to describe their case and then extract the relevant facts from this list of facts:
+      You must help the user to describe their case and then extract the relevant facts from this list of facts:
 
-        {input_facts.facts + input_facts.facts_dir_2016_800}
+      {input_facts.facts + input_facts.facts_dir_2016_800}
 
-        Make sure that all the facts are extracted correctly!
-        Do not create new facts!
+      Make sure that all the facts are extracted correctly!
+      Do not create new facts!
 
-        Include a list of Prolog facts extracted so far inside a markdown block.
+      Include a list of Prolog facts extracted so far inside a markdown code block.
+      When you provide the full list of facts is the only time tou can use markdown code blocks.
 
-        Suggest to the user facts that could be relevant but he didnt mention.
+      Suggest to the user facts that could be relevant but he didnt mention.
 
-        Do not put textual comments inside the Prolog markdown block.
-        All variables must be grounded for a fact to be valid.
-        If you dont know the value of PersonId, use anonym.
-      """ if "INPUT" in res or not rights else f"""
+      Do not put textual comments inside the Prolog markdown block.
+      All variables must be grounded for a fact to be valid.
+      If you dont know the value of PersonId, use anonym.
 
-        These are the rights computed by the symbolic engine til now:
+      These are the rights computed by the symbolic engine til now:
 
-        {[k for k, v in rights.items()]}
+      {right_keys}
 
-        Make the user know them end ask if he wants to know more about one of them.
-        Just list the rights without additions.
+      Make the user know them end ask if he wants to know more about one of them.
+      Just list the rights without additions.
 
-      """
+    """ + (f"""
+      These are the details on {target}:
+
+      {rights[target]}
+
+      Arguments on conformity with national implamentations [it]:
+
+      {conformity}
+
+      Questions on conformity can only be answered based on these arguments. Do not add anything.
+
+    """ if target else "")
 
   groq_chat = ChatGroq(
       groq_api_key='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',
@@ -101,7 +139,7 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
   prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=select_prompt()),
-            MessagesPlaceholder(variable_name="chat_message"),
+            MessagesPlaceholder(variable_name="my_chat"),
             HumanMessagePromptTemplate.from_template("{human_input}")
         ])
 
@@ -120,9 +158,11 @@ def main():
 
     if "chat_message" not in st.session_state:
       st.session_state.facts = []
-      st.session_state.rights = []
+      st.session_state.rights = {}
       st.session_state.chat_message = []
-      st.session_state.memory = ConversationBufferWindowMemory(k=10, memory_key="chat_message", return_messages=True)
+      st.session_state.target = ""
+      st.session_state.arguments = {}
+      st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
 
     for message in st.session_state.chat_message:
         with st.chat_message(message["role"]):
