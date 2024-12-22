@@ -116,6 +116,12 @@ person_document(PersonId, indictment).
 
 person_document(PersonId, judgement).
 
+%% person_speaks(PersonId, Language).
+%
+% The person speaks language X
+%
+
+person_speaks(PersonId, Language)
 
 %% person_understands(PersonId, Language)
 %
@@ -131,12 +137,6 @@ person_understands(PersonId, Language).
 
 lawyer_language(PersonId, Language).
 
-%% person_language(PersonId, Language)
-%
-% The person speaks, reads and understands language X
-%
-
-person_language(PersonId, Language).
 
 %% proceeding_language(PersonId, Language)
 %

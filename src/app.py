@@ -96,25 +96,36 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
     return f"""
       You must help the user to describe their case and then extract the relevant facts from this list of facts:
 
-      {input_facts.facts + input_facts.facts_dir_2016_800}
+      {input_facts.facts + input_facts.facts_dir_2010_64}
 
-      Make sure that all the facts are extracted correctly!
-      Do not create new facts!
+      Make sure the user provides the following details as clearly and accurately as possible:
 
-      Include a list of Prolog facts extracted so far inside a markdown code block.
-      When you provide the full list of facts is the only time tou can use markdown code blocks.
+      Who is involved?
+      - All parties must be presented explicitly.
+      - If you dont know the name of the person, use anonym.
+      What happened?
+      - Describe the key events or conditions relevant to your case.
+      - Be specific about the actions taken or situations that occurred.
+      When did it happen?
+      - Describe the applicable stage of the proceedings.
 
-      Suggest to the user facts that could be relevant but he didnt mention.
+      Respect the following instructions:
+      - DO NOT create new facts.
+      - Only use the list of facts provided as input.
+      - DO NOT tell the user what rights apply.
+      - DO NOT ask similar questions again.
 
-      Do not put textual comments inside the Prolog markdown block.
-      All variables must be grounded for a fact to be valid.
-      If you dont know the value of PersonId, use anonym.
+      Format of the output:
+      - Include the list of Prolog facts extracted so far inside a markdown block.
+      - DO NOT put comments inside the Prolog markdown block.
+      - All variables must be grounded for a fact to be valid.
 
-      These are the rights computed by the symbolic engine til now:
+      These are the rights computed by the symbolic engine up to this point:
 
       {right_keys}
 
-      Make the user know them end ask if he wants to know more about one of them.
+      If needed, suggest additional facts that could be relevant.
+      Ask the user if they apply to the case.
       Just list the rights without additions.
 
     """ + (f"""
