@@ -96,7 +96,7 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
     return f"""
       You must help the user to describe their case and then extract the relevant facts from this list of facts:
 
-      {input_facts.facts + input_facts.facts_dir_2010_64}
+      {input_facts.facts + input_facts.facts_dir_2013_48}
 
       Make sure the user provides the following details as clearly and accurately as possible:
 
@@ -109,11 +109,18 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
       When did it happen?
       - Describe the applicable stage of the proceedings.
 
+      Apply the following assumptions:
+      - If a person was made aware of being accused or suspect, assume person_made_aware(PersonId, personStatus).
+      - If a person was made aware of being accused or suspect, assume the proceeding has started.
+      - if a person has been arrested, summoned, assume the proceeding has started.
+      - if a person was arrested or similar assume it was deprived of liberty.
+
       Respect the following instructions:
       - DO NOT create new facts.
       - Only use the list of facts provided as input.
-      - DO NOT tell the user what rights apply.
-      - DO NOT ask similar questions again.
+      - DO NOT tell the user what rights apply except for the result of the symbolic engine.
+      - DO NOT ask similar questions again
+      - DO NOT suggest prolog facts, just ask related questions.
 
       Format of the output:
       - Include the list of Prolog facts extracted so far inside a markdown block.

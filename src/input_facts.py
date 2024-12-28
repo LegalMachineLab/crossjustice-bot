@@ -146,6 +146,131 @@ lawyer_language(PersonId, Language).
 proceeding_language(PersonId, Language).
 """
 
+facts_dir_2013_48 = """
+
+%% person_status(PersonId, _requested)
+%
+% The person is requested under an european arrest warrant
+%
+
+person_status(PersonId, requested).
+
+
+%% person_status(PersonId, _deprived_of_liberty)
+%
+% The person has been deprived of liberty
+%
+
+person_status(PersonId, deprived_of_liberty).
+
+
+%% proceeding_matter(PersonId, _questioning)
+%
+% The defendant has been subject to questioning
+%
+
+proceeding_matter(PersonId, questioning).
+
+
+%% proceeding_matter(PersonId, _evidence_gathering_act)
+%
+% The proceedings concern any evidence gathering act
+%
+
+proceeding_matter(PersonId, evidence_gathering_act).
+
+
+%% proceeding_matter(PersonId, _summoned_court)
+%
+% The proceedings concern the summon to court of the person
+%
+
+proceeding_matter(PersonId, summoned_court).
+
+
+%% proceeding_matter(PersonId, _pre_trial)
+%
+% The proceedings are happening before the trial has started
+%
+
+proceeding_matter(PersonId, pre_trial).
+
+
+%% person_event(PersonId, _geographical_remoteness)
+%
+% The person's geographical remoteness makes it impossible to ensure no delay to the presence of the lawyer
+%
+
+person_event(PersonId, geographical_remoteness).
+
+
+%% person_nominate(PersonId, PersonId2)
+%
+% The person would like to nominate X as a third person to communicate with
+%
+
+person_nominate(PersonId, PersonId2).
+
+
+%% person_danger(PersonId, _life)
+%
+% There is need to avoid damage to a person's life
+%
+
+person_danger(PersonId, life).
+
+
+%% person_danger(PersonId, _liberty)
+%
+% There is need to avoid damage to a person's liberty
+%
+
+person_danger(PersonId, liberty).
+
+
+%% person_danger(PersonId, _physical_integrity)
+%
+% There is need to avoid damage to a person's physical integrity
+%
+
+person_danger(PersonId, physical_integrity).
+
+
+%% proceeding_danger(PersonId, _substantially_jeopardised)
+%
+% There is danger of the proceedings being substantially jeopardised
+%
+
+proceeding_danger(PersonId, substantially_jeopardised).
+
+
+%% proceeding_country(PersonId, Country)
+%
+% The proceedings are located in country X
+%
+
+proceeding_country(PersonId, Country).
+
+
+%% person_nationality(PersonId, Country)
+%
+% The person is of nationality X
+%
+
+person_nationality(PersonId, Country).
+
+
+%% proceeding_matter(PersonId, _hearing)
+%
+% The proceedings concern an hearing
+%
+
+proceeding_matter(PersonId, hearing).
+
+"""
+
+
+
 facts_dir_2016_800 = """
 % Directive 2016/800
 
@@ -256,7 +381,7 @@ proceeding_matter(PersonId, court_hearing).
 
 %% proceeding_matter(PersonId, _questioning)
 %
-% The proceedings concern the questioning of the defendant
+% The defendant has been subject to questioning
 %
 
 proceeding_matter(PersonId, questioning).
@@ -406,7 +531,7 @@ person_request_submitted(PersonId, lawyer_medical_exam).
 
 %% person_danger(PersonId, _life)
 %
-% There is need to avoid damage to a person's life
+% There is need to avoid damage to someone's life
 %
 
 person_danger(PersonId, life).
@@ -414,7 +539,7 @@ person_danger(PersonId, life).
 
 %% person_danger(PersonId, _liberty)
 %
-% There is need to avoid damage to a person's liberty
+% There is need to avoid damage to someone's liberty
 %
 
 person_danger(PersonId, liberty).
@@ -422,7 +547,7 @@ person_danger(PersonId, liberty).
 
 %% person_danger(PersonId, _physical_integrity)
 %
-% There is need to avoid damage to a person's physical integrity
+% There is need to avoid damage to someone's physical integrity
 %
 
 person_danger(PersonId, physical_integrity).
