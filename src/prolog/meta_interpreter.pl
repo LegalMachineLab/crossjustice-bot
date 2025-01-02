@@ -28,5 +28,7 @@ solve(A, [A|[Res]]) :-
 
 solve(A, [abduced(A)]) :-
     abd_enabled,
+    A \= has_right(_, _, _, _),
+    A \= has_right(_, _, _, _, _),
     \+ clause(A, _),
     \+ call(A).

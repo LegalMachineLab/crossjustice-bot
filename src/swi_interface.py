@@ -172,7 +172,7 @@ def right_to(
         )
     )
 
-def generate_response(personId, facts, laws, abduce=False):
+def generate_response(personId, facts, laws, right="Right", abduce=False):
 
     return facts, [
         {
@@ -187,7 +187,7 @@ def generate_response(personId, facts, laws, abduce=False):
             facts + (["abd_enabled"] if abduce else []),
             laws=laws,
             modules=[],
-            right="Right",
+            right=right,
             explanation=True,
         )
     ]
@@ -321,7 +321,7 @@ if __name__ == "__main__":
             "proceeding_language(personId, langUnknown)"
         ]
 
-    facts, response = generate_response("personId", [], ["dir", "it"], True)
+    facts, response = generate_response("personId", test_facts(), ["dir", "it"], right="right_to_appear", abduce=True)
     pretty = prettify_response(response, facts)
 
     for k, i in pretty.items():
