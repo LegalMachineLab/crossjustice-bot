@@ -25,3 +25,8 @@ solve(A, [system_predicate]) :-
 solve(A, [A|[Res]]) :-
     clause(A,B),
     solve(B, Res).
+
+solve(A, [abduced(A)]) :-
+    abd_enabled,
+    \+ clause(A, _),
+    \+ call(A).

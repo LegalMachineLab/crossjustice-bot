@@ -89,11 +89,11 @@ def _generate_interpreter():
     return (
         swipl,
         _add_directive(swipl, root, "directive_2010_64", ["it", "es", "nl", "pl", "bg"])
-        + _add_directive(swipl, root, "directive_2016_800", ["it", "nl", "pl", "bg"])
+        # + _add_directive(swipl, root, "directive_2016_800", ["it", "nl", "pl", "bg"])
         + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
         + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])
         + _add_directive(swipl, root, "directive_2013_48", ["it", "nl", "pl", "bg"])
-        + _add_directive(swipl, root, "directive_2016_1919", ["it", "nl", "pl", "bg"]),
+        # + _add_directive(swipl, root, "directive_2016_1919", ["it", "nl", "pl", "bg"]),
     )
 
 
@@ -172,7 +172,7 @@ def right_to(
         )
     )
 
-def generate_response(personId, facts, laws):
+def generate_response(personId, facts, laws, abduce=False):
 
     return facts, [
         {
@@ -184,7 +184,7 @@ def generate_response(personId, facts, laws):
         }
         for item in right_to(
             personId,
-            facts,
+            facts + (["abd_enabled"] if abduce else []),
             laws=laws,
             modules=[],
             right="Right",
@@ -230,16 +230,16 @@ def prettify_response(response, facts):
                 )
             elif x in facts:
                 log += "<li>" + x + " <b>[FACT]</b></li>"
+            elif x.startswith("abduced"):
+                log += (
+                    "<li>"
+                    + re.search(r"abduced\((.+)\)", x).group(1)
+                    + " <b>[ABDUCED]</b></li>"
+                )
             else:
                 log += "<li>" + x + "</li>"
         log += "</ul>"
         return log
-
-    def _prettify(elem, type, law):
-        elem["article_text"] = _get_article_text(type, law, elem["article"])
-        elem["explanation_raw"] = elem["explanation"]
-        elem["explanation"] = _to_html_tree(elem["explanation"], facts)
-        return elem
 
     def _extract_facts(explanation):
         if explanation == "":
@@ -250,9 +250,29 @@ def prettify_response(response, facts):
                 continue
             if isinstance(x, list):
                 temp += _extract_facts(x)
-            if x in facts:
+            elif x in facts:
                 temp += [x]
         return temp
+
+    def _extract_abduced_facts(explanation):
+        if explanation == "":
+            return []
+        temp = []
+        for x in explanation:
+            if isinstance(x, list) and not x:
+                continue
+            if isinstance(x, list):
+                temp += _extract_abduced_facts(x)
+            elif x.startswith("abduced"):
+                temp += [re.search(r"abduced\((.+)\)", x).group(1)]
+        return temp
+
+    def _prettify(elem, type, law):
+        elem["article_text"] = _get_article_text(type, law, elem["article"])
+        elem["abduced"] = _extract_abduced_facts(elem["explanation"])
+        elem["facts"] = _extract_facts(elem["explanation"])
+        elem["explanation"] = _to_html_tree(elem["explanation"], facts)
+        return elem
 
     def _to_theory(elem):
 
@@ -264,10 +284,9 @@ def prettify_response(response, facts):
             for y in rights:
               y[
                   "arg_rule"
-              ] = f"f{random.randint(1, 10000)} :{modifier(law)}> right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(_extract_facts(y['explanation_raw'])))}).".replace(
+              ] = f"f{random.randint(1, 10000)} :{modifier(law)}> right({law}, {y['article']}, {y['right']}, {y['option']}, {sorted(set(y['facts'] + y['abduced']))}).".replace(
                   "'", ""
               )
-              del y['explanation_raw']
 
         return elem
 
@@ -288,3 +307,23 @@ def prettify_response(response, facts):
         group[key] = _to_theory(national_group)
 
     return group
+
+if __name__ == "__main__":
+
+    def test_facts():
+        return [
+            "proceeding_type(personId, criminal)",
+            "person_status(personId, accused)",
+            "person_made_aware(personId, personStatus)",
+            "proceeding_status(personId, started)",
+            "person_understands(personId, unknown)",
+            "person_speaks(personId, unknown)",
+            "proceeding_language(personId, langUnknown)"
+        ]
+
+    facts, response = generate_response("personId", [], ["dir", "it"], True)
+    pretty = prettify_response(response, facts)
+
+    for k, i in pretty.items():
+        print(k)
+        print(i)
