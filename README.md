@@ -14,7 +14,7 @@
 	- Come farlo (https://github.com/LegalMachineLab/CrossJustice/blob/main/crossjustice/python/pl_wrapper.py)
 	- **OUTPUT**: lista diritti
 
-- Domanda: *ho gli stessi diritti nel mio paese?*
+- Domanda: *ho gli stessi diritti nel mio paese?* **(OK CIRCA)**
 	- Interrogazione **CrossJustice** base nazionale
 	- Uso argomentazione per identificare la non conformità
 		- Ho il diritto
