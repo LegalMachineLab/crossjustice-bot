@@ -90,8 +90,8 @@ def _generate_interpreter():
         swipl,
         _add_directive(swipl, root, "directive_2010_64", ["it", "es", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_800", ["it", "nl", "pl", "bg"])
-        + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
-        + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])
+        # + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
+        # + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])
         + _add_directive(swipl, root, "directive_2013_48", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_1919", ["it", "nl", "pl", "bg"]),
     )
@@ -321,7 +321,22 @@ if __name__ == "__main__":
             "proceeding_language(personId, langUnknown)"
         ]
 
-    facts, response = generate_response("personId", test_facts(), ["dir", "it"], right="right_to_appear", abduce=True)
+    def tt():
+        return [
+            "person_status(mario, accused)",
+            "person_nationality(mario, italian)",
+            "proceeding_country(mario, france)",
+            "proceeding_matter(mario, questioning)",
+            "person_made_aware(mario, personStatus)",
+            "person_status(mario, deprived_of_liberty)",
+            "proceeding_status(mario, started)"
+        ]
+    
+    def n():
+        return ['proceeding_type(alessandro, criminal)', 'person_status(alessandro, suspect)', 'person_made_aware(alessandro, personStatus)', 'proceeding_status(alessandro, started)', 'person_status(alessandro, deprived_of_liberty)', 'proceeding_country(alessandro, france)', 'person_nationality(alessandro, italy)']
+
+    #facts, response = generate_response("personId", tt(), ["dir", "it"], right="right_to_appear", abduce=True)
+    facts, response = generate_response("mario", n(), ["it"], right="right_to_communicate", abduce=True)
     pretty = prettify_response(response, facts)
 
     for k, i in pretty.items():

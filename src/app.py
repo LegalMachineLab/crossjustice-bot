@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 from groq import Groq
 import random
@@ -17,6 +18,7 @@ from swi_interface import generate_response, prettify_response
 import input_facts
 
 from argumentation.arg_interface import get_full_theory, run_reasoner
+
 
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.5):
 
@@ -45,53 +47,11 @@ def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.5):
   return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
 
 
-person_id = "anonym"
+def arg_hash(context):
+    hash(f"{context["target"]} - {context["national_target"]} - {context["facts"]}")
 
-def parse_output(user_text):
 
-  def extract_code(completion):
-    from mdextractor import extract_md_blocks
-    blocks = extract_md_blocks(completion)
-    return blocks[0] if blocks else ""
-
-  user_facts = [x for x in extract_code(user_text).replace(".", "").split("\n") if x]
-  #if user_facts:
-    #personId = "anonym"
-    #personId = prompt(f"Extract the personId from this list of facts: {user_facts}.")
-
-  return user_text, user_facts
-
-def llm_response(input_text, person_id, user_facts, rights, memory):
-
-  def select_prompt():
-
-    right_keys = [k for k, _ in rights.items()]
-
-    res = prompt_model(f"""
-        According to the following input, what does the user want to do?
-
-        1. Input new facts into the system;
-        2. Know which rights are deducible from her scenario;
-        3. Know about one of this specific rights: {right_keys}
-
-        Reply "1" if 1, "2" if 2, and "3 - right from the list" if 3.
-        Do not include anything else in your output.
-
-        {input_text}
-    """)
-    print(res)
-
-    target = [x.strip() for x in res.split("-")][1] if "3" in res else st.session_state.target
-    conformity = {}
-    st.session_state.target = target
-    if target and target not in st.session_state.arguments:
-       print(target)
-       theory = get_full_theory("\n".join([x["arg_rule"] for _, v in rights[target].items() for x in v]), ["it"])
-       conformity = run_reasoner(theory)
-       print(conformity)
-       st.session_state.arguments[target] = conformity
-    elif target:
-       conformity = st.session_state.arguments[target]
+def select_prompt(context):
 
     return f"""
       You must help the user to describe their case and then extract the relevant facts from this list of facts:
@@ -129,57 +89,129 @@ def llm_response(input_text, person_id, user_facts, rights, memory):
 
       These are the rights computed by the symbolic engine up to this point:
 
-      {right_keys}
+      {[k for k, _ in context["rights"].items()]}
 
       If needed, suggest additional facts that could be relevant.
       Ask the user if they apply to the case.
       Just list the rights without additions.
 
     """ + (f"""
-      These are the details on {target}:
 
-      {rights[target]}
+      These are the details on {context["target"]}:
 
-      Arguments on conformity with national implamentations [it]:
+      {context["rights"][context["target"]]}
 
-      {conformity}
+    """ if context["target"] else "") + (f"""
+
+      Arguments on conformity with national implamentations [{context["national_target"]}]:
+
+      {context["arguments"][arg_hash(context)]}
 
       Questions on conformity can only be answered based on these arguments. Do not add anything.
 
-    """ if target else "")
+      These are some facts required by the national implementation: {context["suggestions"]}
 
-  groq_chat = ChatGroq(
-      groq_api_key='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',
-      model_name="llama3-70b-8192"
-      #model_name="mixtral-8x7b-32768"
-  )
+    """ if context["target"] and context["national_target"] else "")
 
-  prompt = ChatPromptTemplate.from_messages(
+
+def select_state(input, context):
+    res = prompt_model(f"""
+        According to the following input, what does the user want to do?
+
+        1. Input new facts into the system;
+        2. Know which rights are deducible from her scenario;
+        3. Know about one of this specific rights: {[k for k, _ in context["rights"].items()]}
+
+        Reply "1" if 1, "2" if 2, and "3 - right from the list" if 3.
+        Do not include anything else in your output.
+
+        {input}
+    """)
+
+    context["target"] = [x.strip() for x in res.split("-")][1] if "3" in res else context["target"]
+    context["state"] = "1" if "1" in res else "2" if "2" in res else "3"
+
+
+def run_argumentation(context):
+    if context["target"] and context["national_target"] and arg_hash(context) not in context["arguments"]:
+      theory = get_full_theory("\n".join([x["arg_rule"] for _, v in context["rights"][context["target"]].items() for x in v]), [context["national_target"]])
+      context["arguments"][arg_hash(context)] = run_reasoner(theory)
+      print(context["arguments"][arg_hash(context)])
+
+
+def parse_output(user_text):
+
+  def _extract_code(completion):
+    from mdextractor import extract_md_blocks
+    blocks = extract_md_blocks(completion)
+    return blocks[0] if blocks else ""
+
+  return [x for x in _extract_code(user_text).replace(".", "").split("\n") if x]
+
+
+def run_prolog(output, context):
+  try:
+    user_facts = parse_output(output)
+    if user_facts:
+      context["person_id"] = re.search(r"person_status\((.+),", "\n".join(user_facts)).group(1).strip()
+      facts, prolog_response = generate_response(context["person_id"], user_facts, ["dir"] + ([context["national_target"]] if context["national_target"] else []))
+      pretty = prettify_response(prolog_response, facts)
+      context["rights"] = pretty
+      context["facts"] = user_facts
+      print(context["person_id"])
+      print(context["facts"])
+      print(context["rights"])
+  except Exception as e:
+    print(e)
+
+
+def suggest_facts(context):
+  if not context["national_target"] or not context["target"] or not context["person_id"]:
+     return
+  try:
+      facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["national_target"]], right=context["target"], abduce=True)
+      pretty = prettify_response(prolog_response, facts)
+      abduced = set([y for _, v in pretty[context["target"]].items() for x in v for y in x["abduced"]])
+      context["suggestions"] = abduced
+      print("Abduction result:")
+      print(abduced)
+  except Exception as e:
+    print(e)
+
+
+def llm_response(input_text, context, memory):
+  return LLMChain(
+      llm=ChatGroq(
+          groq_api_key='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',
+          model_name="llama3-70b-8192"
+      ),
+      prompt=ChatPromptTemplate.from_messages(
         [
-            SystemMessage(content=select_prompt()),
+            SystemMessage(content=select_prompt(context)),
             MessagesPlaceholder(variable_name="my_chat"),
             HumanMessagePromptTemplate.from_template("{human_input}")
-        ])
-
-  conversation = LLMChain(
-      llm=groq_chat,
-      prompt=prompt,
+        ]),
       verbose=False,
       memory=memory,
-  )
+  ).predict(human_input=input_text)
 
-  return conversation.predict(human_input=input_text)
 
 def main():
 
     st.title("Chat with CrossJustice!")
 
     if "chat_message" not in st.session_state:
-      st.session_state.facts = []
-      st.session_state.rights = {}
+      st.session_state.context = {
+        "facts" : [],
+        "rights" : {},
+        "target" : "",
+        "arguments" : {},
+        "person_id" : "",
+        "national_target" : "nl",
+        "state" : "1",
+        "suggestions" : set()
+      }
       st.session_state.chat_message = []
-      st.session_state.target = ""
-      st.session_state.arguments = {}
       st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
 
     for message in st.session_state.chat_message:
@@ -193,19 +225,19 @@ def main():
 
         st.session_state.chat_message.append({"role": "user", "content": user_question})
 
-        response = llm_response(user_question, person_id, st.session_state.facts, st.session_state.rights, st.session_state.memory)
+        select_state(user_question, st.session_state.context)
+        print(st.session_state.context["state"])
 
-        try:
-          txt, user_facts = parse_output(response)
-          if user_facts:
-            facts, prolog_response = generate_response(person_id, user_facts, ["dir"])
-            pretty = prettify_response(prolog_response, facts)
-            st.session_state.rights = pretty
-            st.session_state.facts = user_facts
-            print(facts)
-            print(pretty)
-        except Exception as e:
-          print(e)
+        run_argumentation(st.session_state.context)
+        suggest_facts(st.session_state.context)
+
+        # if st.session_state.context["state"] == "1":
+        #   st.session_state.context["rights"] = {}
+        #   st.session_state.context["target"] = ""
+
+        response = llm_response(user_question, st.session_state.context, st.session_state.memory)
+
+        run_prolog(response, st.session_state.context)
 
         with st.chat_message("ai"):
           st.markdown(response)
