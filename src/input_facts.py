@@ -50,13 +50,6 @@ person_made_aware(PersonId, personStatus).
 
 proceeding_status(PersonId, started).
 
-
-%% proceeding_status(PersonId, _concluded)
-%
-% The proceedings have reached the final determination
-%
-
-proceeding_status(PersonId, concluded).
 """
 
 facts_dir_2010_64 = """

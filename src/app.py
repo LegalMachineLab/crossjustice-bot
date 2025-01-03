@@ -54,46 +54,44 @@ def arg_hash(context):
 def select_prompt(context):
 
     return f"""
-      You must help the user to describe their case and then extract the relevant facts from this list of facts:
+      Follow all instructions of Phase 1, before Phase 2.
 
-      {input_facts.facts + input_facts.facts_dir_2013_48}
+      Phase 1: Interacting with the user.
+      Assist the user in building a comprehensive case description by extracting relevant Prolog facts, while conversing with the user.
+      There are certain facts which are essential and must always apply, unless explicitly stated otherwise: '''{input_facts.facts}'''.
 
-      Make sure the user provides the following details as clearly and accurately as possible:
+      There are other conditions which you shall evaluate whether these facts can reasonably apply to the given scenario,
+      considering any relevant conditions and context :'''{input_facts.facts_dir_2010_64}'''.
 
-      Who is involved?
-      - All parties must be presented explicitly.
-      - If you dont know the name of the person, use anonym.
-      What happened?
-      - Describe the key events or conditions relevant to your case.
-      - Be specific about the actions taken or situations that occurred.
-      When did it happen?
-      - Describe the applicable stage of the proceedings.
-
-      Apply the following assumptions:
-      - If a person was made aware of being accused or suspect, assume person_made_aware(PersonId, personStatus).
-      - If a person was made aware of being accused or suspect, assume the proceeding has started.
-      - if a person has been arrested, summoned, assume the proceeding has started.
-      - if a person was arrested or similar assume it was deprived of liberty.
+      Use the fact to verify if it is possible it may apply to the given scenario.
+      You can assume that some facts are present if similar or connected facts apply.
+      Avoid asking yes or no questions.
 
       Respect the following instructions:
       - DO NOT create new facts.
-      - Only use the list of facts provided as input.
-      - DO NOT tell the user what rights apply except for the result of the symbolic engine.
-      - DO NOT ask similar questions again
-      - DO NOT suggest prolog facts, just ask related questions.
+      - DO NOT tell the user what rights may apply.
+      - DO NOT ask similar questions more than once.
 
       Format of the output:
-      - Include the list of Prolog facts extracted so far inside a markdown block.
-      - DO NOT put comments inside the Prolog markdown block.
-      - All variables must be grounded for a fact to be valid.
+      - Include the list of Prolog facts extracted inside a single markdown block.
+      - DO NOT create more than one block. Keep all facts in a single one.
+      - DO NOT put comments inside the markdown block.
+      - All variables must be lower letter for a fact to be valid.
 
-      These are the rights computed by the symbolic engine up to this point:
+      Phase 2: Presenting the Rights
+      Here is the list of rights computed by the symbolic engine: {[k for k, _ in context["rights"].items()]}.
+      Each right has a label, a corresponding article, and an option (specific application).
 
-      {[k for k, _ in context["rights"].items()]}
+      For each right, follow these instructions:
+      - Explain what each right refers to.
+      - Tell the user the article and source of origin.
+      - Give a summary of the relevant facts which grant the specific right.
 
-      If needed, suggest additional facts that could be relevant.
-      Ask the user if they apply to the case.
-      Just list the rights without additions.
+      Ask if the user wants to know about the conformity evaluation with the European country about any right.
+
+      Respect the following instructions:
+      - DO NOT create new rights.
+      - DO NOT provide legal advice.
 
     """ + (f"""
 
@@ -103,13 +101,18 @@ def select_prompt(context):
 
     """ if context["target"] else "") + (f"""
 
-      Arguments on conformity with national implamentations [{context["national_target"]}]:
+      Arguments on conformity with national implementations [{context["national_target"]}]:
 
       {context["arguments"][arg_hash(context)]}
 
       Questions on conformity can only be answered based on these arguments. Do not add anything.
 
-      These are some facts required by the national implementation: {context["suggestions"]}
+      There are three levels of conformity:
+      - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
+      - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
+      - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
+
+      These are some specific and additional facts required by the national implementation: {context["suggestions"]}
 
     """ if context["target"] and context["national_target"] else "")
 
