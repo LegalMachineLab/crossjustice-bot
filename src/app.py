@@ -78,8 +78,18 @@ def select_prompt(context):
       - DO NOT put comments inside the markdown block.
       - All variables must be lower letter for a fact to be valid.
 
-      Phase 2: Presenting the Rights
       Here is the list of rights computed by the symbolic engine: {[k for k, _ in context["rights"].items()]}.
+
+      Ask if the user wants to know more about any of these rights.
+
+    """ + (f"""
+
+      Phase 2: Presenting the Rights
+
+      These are the details on {context["target"]}:
+
+      {context["rights"][context["target"]]}
+
       Each right has a label, a corresponding article, and an option (specific application).
 
       For each right, follow these instructions:
@@ -92,12 +102,6 @@ def select_prompt(context):
       Respect the following instructions:
       - DO NOT create new rights.
       - DO NOT provide legal advice.
-
-    """ + (f"""
-
-      These are the details on {context["target"]}:
-
-      {context["rights"][context["target"]]}
 
     """ if context["target"] else "") + (f"""
 
