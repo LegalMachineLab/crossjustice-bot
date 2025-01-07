@@ -170,14 +170,12 @@ def run_prolog(output, context):
     user_facts = parse_output(output)
     if user_facts:
       context["person_id"] = re.search(r"person_status\((.+),", "\n".join(user_facts)).group(1).strip()
-      facts, prolog_responseD = generate_response(context["person_id"], user_facts, ["dir"])
-      xt["person_id"], user_facts, [facts, prolog_responseN = generate_response(contecontext["national_target"]] if context["national_target"] else [])
-      prettyD = prettify_response(prolog_responseD, facts)
-      prettyN = prettify_response(prolog_responseN, facts)
-      context["rightsD"] = prettyD
-      context["rightsN"] = prettyN
+      facts, prolog_response = generate_response(context["person_id"], user_facts, ["dir"] + ([context["national_target"]] if context["national_target"] else []))
+      pretty = prettify_response(prolog_response, facts)
+      context["rightsD"] = { k : { "directive" : v["directive"] } for k, v in pretty.items() if "directive" in v}
+      context["rightsN"] = { k : { context["national_target"] : v[context["national_target"]] } for k, v in pretty.items() if context["national_target"] in v}
       context["facts"] = user_facts
-      context["rights"] = {**prettyD, **prettyN}
+      context["rights"] = pretty
       print(context["person_id"])
       print(context["facts"])
       print("Directive:\n")
