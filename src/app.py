@@ -61,7 +61,7 @@ def select_prompt(context):
       There are certain facts which are essential and must always apply, unless explicitly stated otherwise: '''{input_facts.facts}'''.
 
       There are other conditions which you shall evaluate whether these facts can reasonably apply to the given scenario,
-      considering any relevant conditions and context :'''{input_facts.facts_dir_2010_64}'''.
+      considering any relevant conditions and context :'''{input_facts.facts_dir_2013_48}'''.
 
       Use the fact to verify if it is possible it may apply to the given scenario.
       You can assume that some facts are present if similar or connected facts apply.
@@ -78,19 +78,28 @@ def select_prompt(context):
       - DO NOT put comments inside the markdown block.
       - All variables must be lower letter for a fact to be valid.
 
-      Here is the list of rights computed by the symbolic engine: {[k for k, _ in context["rights"].items()]}.
-
-      Ask if the user wants to know more about any of these rights.
+      After some questions ask the users if she wants to know what rights she has.
 
     """ + (f"""
+      Phase 2: Presenting the rights computed by the symbolic engine.
+           Present the user the following lists of rights separately.
 
-      Phase 2: Presenting the Rights
+      - Rights granted at the EUROPEAN level: {[k for k, _ in context["rightsD"].items()]}
+
+      - Rights recognised at NATIONAL level: {[k for k, _ in context["rightsN"].items()]}
+
+      Ask if the user wants to know more details any of these rights.
+
+    """ if context["state"] == "2" else "") + (f"""
+
+      Phase 3: Explaining the Rights
 
       These are the details on {context["target"]}:
 
       {context["rights"][context["target"]]}
 
-      Each right has a label, a corresponding article, and an option (specific application).
+      The right has a label, a corresponding article, and an option (specific application).
+      One right can have multiple options. Show all the options.
 
       For each right, follow these instructions:
       - Explain what each right refers to.
@@ -161,13 +170,20 @@ def run_prolog(output, context):
     user_facts = parse_output(output)
     if user_facts:
       context["person_id"] = re.search(r"person_status\((.+),", "\n".join(user_facts)).group(1).strip()
-      facts, prolog_response = generate_response(context["person_id"], user_facts, ["dir"] + ([context["national_target"]] if context["national_target"] else []))
-      pretty = prettify_response(prolog_response, facts)
-      context["rights"] = pretty
+      facts, prolog_responseD = generate_response(context["person_id"], user_facts, ["dir"])
+      xt["person_id"], user_facts, [facts, prolog_responseN = generate_response(contecontext["national_target"]] if context["national_target"] else [])
+      prettyD = prettify_response(prolog_responseD, facts)
+      prettyN = prettify_response(prolog_responseN, facts)
+      context["rightsD"] = prettyD
+      context["rightsN"] = prettyN
       context["facts"] = user_facts
+      context["rights"] = {**prettyD, **prettyN}
       print(context["person_id"])
       print(context["facts"])
-      print(context["rights"])
+      print("Directive:\n")
+      print(context["rightsD"])
+      print("National:\n")
+      print(context["rightsN"])
   except Exception as e:
     print(e)
 
@@ -211,6 +227,8 @@ def main():
       st.session_state.context = {
         "facts" : [],
         "rights" : {},
+        "rightsD" : {},
+        "rightsN" : {},
         "target" : "",
         "arguments" : {},
         "person_id" : "",
