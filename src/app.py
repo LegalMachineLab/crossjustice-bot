@@ -104,7 +104,7 @@ def select_prompt(context):
       For each right, follow these instructions:
       - Explain what each right refers to.
       - Tell the user the article and source of origin.
-      - Give a summary of the relevant facts which grant the specific right.
+      - Give a summary of the conditions for the application of the specific right.
 
       Ask if the user wants to know about the conformity evaluation with the European country about any right.
 
@@ -121,10 +121,12 @@ def select_prompt(context):
       Questions on conformity can only be answered based on these arguments. Do not add anything.
 
       There are three levels of conformity:
-      - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
-      - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
-      - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
+        - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
+        - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
+        - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
 
+      If there's no or partial conformity, evaluate the conditions required by the national implementation of the EU right.
+      Analyze the key differences between the two.
       These are some specific and additional facts required by the national implementation: {context["suggestions"]}
 
     """ if context["target"] and context["national_target"] else "")
@@ -178,9 +180,9 @@ def run_prolog(output, context):
       context["rights"] = pretty
       print(context["person_id"])
       print(context["facts"])
-      print("Directive:\n")
+      print("\nDirective:")
       print(context["rightsD"])
-      print("National:\n")
+      print("\nNational:")
       print(context["rightsN"])
   except Exception as e:
     print(e)

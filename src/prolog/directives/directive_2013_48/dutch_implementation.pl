@@ -702,15 +702,15 @@ has_right(art27_1, PersonId, right_to_inform, relative_household) :-
 % any national of the sending State who is in prison, custody or detention in their district in pursuance of a judgement.
 % Nevertheless, consular officers shall refrain from taking action on behalf of a national who is in prison, custody or
 % detention if he expressly opposes such action.
-has_right(art36_1a, PersonId, right_to_communicate, consul) :-
+has_right(art36_1a, PersonId, right_to_communicate, consular_authority) :-
     proceeding_country(PersonId, Country),
     \+ person_nationality(PersonId, Country).
 
-has_right(art36_1b, PersonId, right_to_communicate, consul) :-
+has_right(art36_1b, PersonId, right_to_communicate, consular_authority) :-
     person_status(PersonId, deprived_of_liberty),
     person_request_submitted(PersonId, communicate_consul).
 
-has_right(art36, PersonId, right_to_visit, consul) :-
+has_right(art36, PersonId, right_to_visit, consular_authority) :-
     person_status(PersonId, deprived_of_liberty),
     proceeding_country(PersonId, Country),
     \+ person_nationality(PersonId, Country).
