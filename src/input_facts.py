@@ -569,3 +569,8 @@ imperative_immediate_action(PersonId, investigating_authority).
 
 proceeding_matter(PersonId, trial_in_absentia).
 """
+
+dir_facts = {
+    "directive_2010_64" : facts_dir_2010_64,
+    "directive_2013_48" : facts_dir_2013_48
+}

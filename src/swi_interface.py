@@ -142,37 +142,38 @@ def _with_explanation(module, query, explanation=True):
 def right_to(
     person,
     facts,
-    laws=["it", "es", "pl", "nl", "bg", "dir"],
-    modules=[],
+    laws=["it", "nl", "bg", "dir"],
+    modules=["directive_2010_64", "directive_2013_48"],
     right="Right",
+    opt="Opt",
     explanation=False,
 ):
-
+    modules = [m if l == "dir" else f"{m}_{l}" for m in modules for l in laws]
     return set(
         (
             law,
             module,
             x["Art"],
-            x["Opt"],
+            x["Opt"] if opt == "Opt" else opt,
             x["Right"] if right == "Right" else right,
             _json_clean_explanation(x["Expl"]) if explanation else "",
         )
         for law, module in _mappings
-        if law in laws or module in modules
+        if law in laws and module in modules
         for x in _with_facts(
             lambda: _solve(
                 _with_explanation(
                     module,
-                    f"has_right({right}, {law}, Art, {person}, Opt)",
+                    f"has_right({right}, {law}, Art, {person}, {opt})",
                     explanation,
                 )
             ),
             facts,
-            module,
+            module
         )
     )
 
-def generate_response(personId, facts, laws, right="Right", abduce=False):
+def generate_response(personId, facts, laws, modules, right="Right", opt="Opt", abduce=False):
 
     return facts, [
         {
@@ -186,8 +187,9 @@ def generate_response(personId, facts, laws, right="Right", abduce=False):
             personId,
             facts + (["abd_enabled"] if abduce else []),
             laws=laws,
-            modules=[],
+            modules=modules,
             right=right,
+            opt=opt,
             explanation=True,
         )
     ]
@@ -333,10 +335,10 @@ if __name__ == "__main__":
         ]
     
     def n():
-        return ['proceeding_type(alessandro, criminal)', 'person_status(alessandro, suspect)', 'person_made_aware(alessandro, personStatus)', 'proceeding_status(alessandro, started)', 'person_status(alessandro, deprived_of_liberty)', 'proceeding_country(alessandro, france)', 'person_nationality(alessandro, italy)']
+        return ['proceeding_type(alessandro, criminal)', 'person_status(alessandro, suspect)', 'person_made_aware(alessandro, personStatus)', 'person_status(alessandro, deprived_of_liberty)', "proceeding_country(alessandro, 'netherlands')", "person_nationality(alessandro, 'italy')", 'person_nominate(alessandro, giulio)']
 
     #facts, response = generate_response("personId", tt(), ["dir", "it"], right="right_to_appear", abduce=True)
-    facts, response = generate_response("mario", n(), ["it"], right="right_to_communicate", abduce=True)
+    facts, response = generate_response("alessandro", n(), ["dir"], ["directive_2013_48"])
     pretty = prettify_response(response, facts)
 
     for k, i in pretty.items():
