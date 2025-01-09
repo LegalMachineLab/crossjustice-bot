@@ -1,7 +1,5 @@
 # IL BOT (E RISBOT)
 
-- Piattaforma python
-
 - Estrazione Fatti via LLM pubblico **(OK CIRCA)**
   - Selezionare LLM da [groq](https://groq.com/)
 	- Lista fatti da [CrossJustice](https://github.com/LegalMachineLab/CrossJustice/blob/main/docs/facts.md)
@@ -23,7 +21,7 @@
 		- Manca di identificare eventuali diritti nazionali che non sono dati dai fatti in kb
 			- Task 2: LLM estrae da codice / transposition tables / a manina
 
-- LLM spiega i problemi e capisce con l'utente se è risolvibile
+- LLM spiega i problemi e capisce con l'utente se è risolvibile **(OK CIRCA)**
 	- introdurre nuovi fatti
   - revisionarne di vecchi
 	- ...
