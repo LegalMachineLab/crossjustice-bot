@@ -570,6 +570,293 @@ imperative_immediate_action(PersonId, investigating_authority).
 proceeding_matter(PersonId, trial_in_absentia).
 """
 
+facts_dir_2013_48_it = """
+Italian Code of Criminal Procedure
+
+%% proceeding_matter(PersonId, _precautionary_detention)
+%
+% The person is detained for precautionary detention.
+%
+
+proceeding_matter(PersonId, precautionary_detention).
+
+
+%% person_status(PersonId, _detained)
+%
+% The person is currently detained.
+%
+
+person_status(PersonId, detained).
+
+
+%% person_status(PersonId, _arrested)
+%
+% The person is arrested
+%
+
+person_status(PersonId, arrested).
+
+%% proceeding_matter(PersonId, _precautionary_measure)
+%
+% The person is under a precautionary measure different from precautionary detention.
+%
+
+proceeding_matter(PersonId, _precautionary_measure).
+
+
+%% proceeding_matter(PersonId, _investigative_questioning)
+%
+% Police officials will conduct investigative questioning.
+%
+
+proceeding_matter(PersonId, investigative_questioning).
+
+
+%% proceeding_matter(PersonId, _inspection)
+%
+% Public Prosecutor must carry out an inspection.
+%
+
+proceeding_matter(PersonId, inspection).
+
+
+%% proceeding_matter(PersonId, _informal_identification)
+%
+% Public Prosecutor must carry out an informal_identification.
+%
+
+proceeding_matter(PersonId, informal_identification).
+
+
+%% physical_presence_required(PersonId, _lawyer).
+%
+% The lawyer must be present for an investigation activity.
+%
+
+physical_presence_required(PersonId, lawyer)
+
+
+
+%% proceeding_matter(PersonId, _hearing)
+%
+% A hearing is scheduled for the proceedings involving PersonId.
+%
+
+proceeding_matter(PersonId, hearing).
+
+
+
+%% person_status(PersonId, _inmate)
+%
+% PersonId is currently in custody as an inmate.
+%
+
+person_status(PersonId, inmate).
+
+
+
+%% person_status(PersonId, _convicted)
+%
+% PersonId has been convicted of a crime.
+%
+
+person_status(PersonId, convicted).
+
+
+
+%% authority_decision(PersonId, _authorized)
+%
+% The authority has granted authorization for actions related to PersonId.
+%
+
+authority_decision(PersonId, authorized).
+
+
+
+%% person_status(PersonId, _temporary_custody)
+%
+% PersonId is being held in temporary custody.
+%
+
+person_status(PersonId, temporary_custody).
+
+"""
+
+
+facts_dir_2013_48_nl = """
+Dutch Code of Criminal Procedure
+
+Here is the explanation following the requested format, with uncommented Prolog facts included at the end of each block:
+
+```prolog
+%% person_status(PersonId, arrested)
+%
+% PersonId has been arrested and is in custody.
+%
+person_status(PersonId, arrested).
+
+%% person_status(PersonId, raise_suspicion)
+%
+% The person who was initially questioned as a witness becomes, in the course of the interview, suspect.
+%
+
+person_status(PersonId, raise_suspicion).
+
+
+
+%% person_status(PersonId, _detention)
+%
+% The detention of the person has been ordered for investigation at the arraignment.
+%
+
+person_status(PersonId, detention).
+
+
+
+%% person_status(PersonId, vulnerable)
+%
+% PersonId is in a vulnerable state, requiring special attention or measures.
+%
+
+person_status(PersonId, vulnerable).
+
+
+
+%% proceeding_matter(PersonId, imprisonment_over_twelve_years)
+%
+% The proceedings involve potential imprisonment exceeding twelve years.
+%
+
+proceeding_matter(PersonId, imprisonment_over_twelve_years).
+
+
+
+%% proceeding_matter(PersonId, _pre_trial_detention)
+%
+% The proceedings involve potential pre-trial detention.
+%
+
+proceeding_matter(PersonId, pre_trial_detention).
+
+
+
+%% person_request_submitted(PersonId, _waive_right)
+%
+% PersonId has submitted a request to waive their rights to legal assistance.
+%
+
+person_request_submitted(PersonId, waive_right).
+
+
+
+%% person_status(PersonId, _informed_consequences)
+%
+% PersonId has been informed of the consequences of waiving their rights to legal assistance.
+%
+
+person_status(PersonId, informed_consequences).
+
+
+
+%% person_request_submitted(PersonId, _lawyer_participation)
+%
+% PersonId has requested the participation of a lawyer in their proceedings.
+%
+
+person_request_submitted(PersonId, lawyer_participation).
+
+
+
+%% proceeding_matter(PersonId, _prevent_damage_investigation)
+%
+% There is a need to prevent substantial damage to the investigation..
+%
+
+proceeding_matter(PersonId, prevent_damage_investigation).
+
+
+
+%% proceeding_matter(PersonId, arraignment)
+%
+% An arraignment is scheduled as part of the proceedings involving PersonId.
+%
+
+proceeding_matter(PersonId, arraignment).
+
+
+
+%% proceeding_event(PersonId, superseding_interest)
+%
+% The interest of theinvestigation does not permit the lawyer's presence.
+%
+
+proceeding_event(PersonId, superseding_interest).
+
+
+
+%% person_status(PersonId, detained)
+%
+% PersonId is currently detained and awaiting further legal actions.
+%
+
+person_status(PersonId, detained).
+
+
+
+%% person_request_submitted(PersonId, appoint_lawyer)
+%
+% PersonId has submitted a request to appoint a lawyer for their case.
+%
+
+person_request_submitted(PersonId, appoint_lawyer).
+
+
+
+%% proceeding_matter(PersonId, _surrender)
+%
+% The proceedings concern the surrender of the person
+%
+
+proceeding_matter(PersonId, surrender).
+
+%% person_status(PersonId, _prisoner)
+%
+% The person is a prisoner
+%
+
+person_status(PersonId, prisoner).
+
+
+
+%% person_status(PersonId, _child)
+%
+% The person is a child
+%
+
+person_status(PersonId, child).
+
+
+
+%% proceeding_matter(PersonId, _identity_parade)
+%
+% The proceedings concern an identity parade
+%
+
+proceeding_matter(PersonId, identity_parade).
+
+
+
+%% person_request_submitted(PersonId, _communicate_consul)
+%
+% The person has submitted a request to communicate with the consul
+%
+
+person_request_submitted(PersonId, communicate_consul).
+
+
+"""
+
+
 dir_facts = {
     "directive_2010_64" : facts_dir_2010_64,
     "directive_2013_48" : facts_dir_2013_48
