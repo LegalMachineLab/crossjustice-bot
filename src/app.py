@@ -1,7 +1,7 @@
 import re
 import streamlit as st
 from groq import Groq
-import random
+import time
 
 from langchain.chains import ConversationChain, LLMChain
 from langchain_core.prompts import (
@@ -21,30 +21,33 @@ from argumentation.arg_interface import get_full_theory, run_reasoner
 
 
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.5):
-
   client = Groq(
       api_key='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',
   )
 
-  completion = client.chat.completions.create(
-      model=model,
-      messages=[
-          {
-              "role": "system",
-              "content": system
-          },
-          {
-              "role": "user",
-              "content": prompt
-          }
-      ],
-      temperature=temperature,
-      top_p=1,
-      stream=True,
-      stop=None,
-  )
+  while True:
+    try:
+      completion = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "system",
+                "content": system
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=temperature,
+        top_p=1,
+        stream=True,
+        stop=None,
+      )
 
-  return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
+      return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
+    except Exception as e:
+      time.sleep(3)
 
 
 def arg_hash(context):
@@ -124,26 +127,13 @@ def select_prompt(context):
       - DO NOT create new rights.
       - DO NOT provide legal advice.
 
-      Arguments on conformity with national implementations [{context["country_target"]}]:
+      Questions on conformity can only be answered based on the following text. Do not add anything.
 
-      {context["arguments"][arg_hash(context)]}
+      {context["pretty_arguments"][arg_hash(context)]}
 
-      Questions on conformity can only be answered based on these arguments. Do not add anything.
-
-      There are three levels of conformity:
-        - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
-        - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
-        - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
-
-      If there's no or partial conformity, evaluate the conditions required by the national implementation of the EU right.
-      Analyze the key differences between the two.
       These are some specific and additional facts required by the national implementation: {context["suggestions"]}
 
-      Details on national implementation:
-
-      {context["target"]}
-
-    """ if context["right_target"] else "")
+    """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
 
 
 def select_state(messages, context):
@@ -160,13 +150,14 @@ def select_state(messages, context):
         {messages[-2:]}
     """)
 
-    print("Selecting State")
+    print("Selecting State:")
     print(res)
     print()
 
     context["right_target"] = [x.strip() for x in res.split("-")][2] if "3" in res else context["right_target"]
     context["opt_target"] = [x.strip() for x in res.split("-")][3] if "3" in res else context["opt_target"]
-    context["state"] = "1" if "1" in res else "2" if "2" in [x.strip() for x in res.split("-")][0] else "3"
+    raw_state = [x.strip() for x in res.split("-")][0]
+    context["state"] = "1" if "1" in raw_state else "2" if "2" in raw_state else "3"
 
 
 def run_argumentation(context):
@@ -174,8 +165,34 @@ def run_argumentation(context):
       rules = [x["arg_rule"] for _, v in filter_target(context["rights"], context).items() for x in v] + [x["arg_rule"] for _, v in filter_target(context["target"], context).items() for x in v]
       theory = get_full_theory("\n".join(rules), [context["country_target"]])
       context["arguments"][arg_hash(context)] = run_reasoner(theory)
+      context["pretty_arguments"][arg_hash(context)] = prompt_model(f"""
+        Arguments on conformity with national implementations [{context["country_target"]}]:
+
+        {context["arguments"][arg_hash(context)]}
+
+        There are three levels of conformity:
+          - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
+          - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
+          - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
+
+        If there's no or partial conformity, evaluate the conditions required by the national implementation of the EU right.
+        Analyze the key differences between the two.
+
+        Details on national implementation:
+
+        {context["target"]}
+
+        Details on european implementation:
+
+        {filter_target(context["rights"], context)}
+
+        Explain if there is conformity and why.
+      """)
       print("Argumentation result:")
       print(context["arguments"][arg_hash(context)])
+      print()
+      print("Argumentation parsed:")
+      print(context["pretty_arguments"][arg_hash(context)])
       print()
 
 
@@ -205,6 +222,7 @@ def run_dir_prolog(output, context):
   except Exception as e:
     print(e)
 
+
 def run_national_prolog(context):
   try:
     facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], opt=context["opt_target"])
@@ -215,6 +233,7 @@ def run_national_prolog(context):
     print()
   except Exception as e:
     print(e)
+
 
 def suggest_facts(context):
   if not context["country_target"] or not context["right_target"] or not context["person_id"]:
@@ -251,7 +270,7 @@ def llm_response(input_text, context, memory):
 
 def main():
 
-    st.title("Chat with CrossJustice!")
+    #st.title("Chat with CrossJustice!")
 
     dirs = ["directive_2010_64", "directive_2013_48"]
     selected_dir = st.sidebar.selectbox('Choose a directive:', dirs)
@@ -284,6 +303,7 @@ def main():
         "opt_target" : "",
         "target" : {},
         "arguments" : {},
+        "pretty_arguments" : {},
         "suggestions" : set()
       }
       st.session_state.chat_message = []
