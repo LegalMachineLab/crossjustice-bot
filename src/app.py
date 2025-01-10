@@ -131,7 +131,8 @@ def select_prompt(context):
 
       {context["pretty_arguments"][arg_hash(context)]}
 
-      These are some specific and additional facts required by the national implementation: {context["suggestions"]}
+      These are some specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
+      Tell the user these facts may be needed for the national law to apply in this specific scenario.
 
     """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
 
@@ -175,7 +176,9 @@ def run_argumentation(context):
           - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
           - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
 
-        If there's no or partial conformity, evaluate the conditions required by the national implementation of the EU right.
+        If there's full conformity, no other actions are required.
+        If there's no conformity, tell the user the right is not granted under national law.
+        If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights.
         Analyze the key differences between the two.
 
         Details on national implementation:
