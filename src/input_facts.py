@@ -852,7 +852,193 @@ proceeding_matter(PersonId, identity_parade).
 %
 
 person_request_submitted(PersonId, communicate_consul).
+"""
 
+facts_dir_2010_64_nl = """
+
+%% person_status(PersonId, _requested)
+%
+% The person is requested under an european arrest warrant
+%
+person_status(PersonId, requested).
+
+%% proceeding_matter(PersonId, police_custody)
+%
+% The person was issued an order to be taken into police custody
+%
+proceeding_matter(PersonId, police_custody) 
+
+%% proceeding_matter(PersonId, pretrial_detention)
+%
+% The person was issued an order to be taken into pre trial detention
+%
+proceeding_matter(PersonId, pretrial_detention) 
+
+%% proceeding_matter(PersonId, _questioning)
+%
+% The proceedings concern the questioning of the defendant
+%
+proceeding_matter(PersonId, questioning).
+
+%% person_document(PersonId, _penal_order)
+%
+% The defendant has been given a penal order.
+%
+person_document(PersonId, penal_order).
+
+
+%% proceeding_matter(PersonId, _minor_offence)
+%
+% The proceedings concern a minor offence
+%
+proceeding_matter(PersonId, minor_offence).
+
+%% proceeding_matter(PersonId, _summoned_court)
+%
+% The proceedings concern the summon to court of the person
+%
+proceeding_matter(PersonId, summoned_court).
+"""
+
+facts_dir_2010_64_bg = """
+
+%% person_document(PersonId, decree_constitution)
+%
+% The person is associated with a document indicating the decree of constitution.
+%
+person_document(PersonId, decree_constitution).
+
+%% person_document(PersonId, remand_measure)
+%
+% The person is associated with a document concerning a remand measure.
+%
+person_document(PersonId, remand_measure).
+
+%% person_document(PersonId, indictment)
+%
+% The person is associated with a document specifying an indictment.
+%
+person_document(PersonId, indictment).
+
+%% person_document(PersonId, conviction)
+%
+% The person is associated with a document indicating a conviction.
+%
+person_document(PersonId, conviction).
+
+%% person_document(PersonId, appeal)
+%
+% The person is associated with a document related to an appeal.
+%
+person_document(PersonId, appeal).
+
+%% proceeding_matter(PersonId, interrogation)
+%
+% The proceedings involve the interrogation of the person.
+%
+proceeding_matter(PersonId, interrogation).
+"""
+
+facts_dir_2010_64_it = """
+
+%% person_document(PersonId, notice_of_investigation)
+%
+% The person is associated with a notice of investigation document.
+%
+person_document(PersonId, notice_of_investigation).
+
+%% person_document(PersonId, notice_of_right_to_defence)
+%
+% The person is associated with a document informing them of their right to defence.
+%
+person_document(PersonId, notice_of_right_to_defence).
+
+%% person_document(PersonId, decision_precautionary_measure)
+%
+% The person is associated with a document detailing a decision on a precautionary measure.
+%
+person_document(PersonId, decision_precautionary_measure).
+
+%% person_document(PersonId, notice_conclusion_investigation)
+%
+% The person is associated with a document notifying the conclusion of an investigation.
+%
+person_document(PersonId, notice_conclusion_investigation).
+
+%% person_document(PersonId, decree_preliminary_hearing)
+%
+% The person is associated with a document for a decree on a preliminary hearing.
+%
+person_document(PersonId, decree_preliminary_hearing).
+
+%% person_document(PersonId, decree_trial_summons)
+%
+% The person is associated with a document summoning them to trial.
+%
+person_document(PersonId, decree_trial_summons).
+
+%% person_document(PersonId, decree_conviction)
+%
+% The person is associated with a document indicating a decree of conviction.
+%
+person_document(PersonId, decree_conviction).
+
+%% proceeding_matter(PersonId, temporary_detention)
+%
+% The proceedings involve the temporary detention of the person.
+%
+proceeding_matter(PersonId, temporary_detention).
+
+%% proceeding_matter(PersonId, arrest)
+%
+% The proceedings involve the arrest of the person.
+%
+proceeding_matter(PersonId, arrest).
+
+%% proceeding_matter(PersonId, precautionary_detention)
+%
+% The proceedings involve the precautionary detention of the person.
+%
+proceeding_matter(PersonId, precautionary_detention).
+"""
+
+facts_dir_2010_64_pl = """
+
+%% person_status(PersonId, informed_about_charge)
+%
+% The person has been informed about the charge against them.
+%
+person_status(PersonId, informed_about_charge).
+
+%% person_document(PersonId, request_discontinuation_proceedings)
+%
+% The person is associated with a request to discontinue the proceedings.
+%
+person_document(PersonId, request_discontinuation_proceedings).
+
+%% familiarise_with_evidence_content(PersonId, translation)
+%
+% The person familiarises themselves with the content of evidence through a translation.
+%
+familiarise_with_evidence_content(PersonId, translation).
+
+%% proceeding_matter(PersonId, arrest)
+%
+% The proceedings involve the arrest of the person.
+%
+proceeding_matter(PersonId, arrest).
+
+%% person_document(PersonId, decision_supplementing_charge)
+%
+% The person is associated with a document concerning a decision to supplement the charge.
+%
+person_document(PersonId, decision_supplementing_charge).
+
+%% person_document(PersonId, decision_changing_charge)
+%
+% The person is associated with a document concerning a decision to change the charge.
+%
+person_document(PersonId, decision_changing_charge).
 
 """
 
