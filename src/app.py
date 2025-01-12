@@ -72,12 +72,10 @@ def select_prompt(context):
       Assist the user in building a comprehensive case description by extracting relevant Prolog facts, while conversing with the user.
       There are certain facts which are essential and must always apply, unless explicitly stated otherwise: '''{input_facts.facts}'''.
 
-      There are other conditions which you shall evaluate whether these facts can reasonably apply to the given scenario,
-      considering any relevant conditions and context :'''{input_facts.dir_facts[context["directive_target"]]}'''.
-
-      Use the fact to verify if it is possible it may apply to the given scenario.
+      Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]}'''.
+      Evaluate whether these facts can reasonably apply to the given scenario,
       You can assume that some facts are present if similar or connected facts apply.
-      Avoid asking yes or no questions.
+      Avoid asking yes or no questions. Just ask a few questions on the general state.
 
       Respect the following instructions:
       - DO NOT create new facts.
@@ -99,10 +97,11 @@ def select_prompt(context):
     """ + (f"""
       Phase 2: Presenting the rights computed by the symbolic engine.
 
-      Rights granted at the EUROPEAN level:
+      Rights granted at the European level:
 
       {"\n".join(pretty_rights(context))}
 
+      Tell the user the applicable rights in natural language.
       Ask if the user wants to know more details any of these rights.
 
     """ if context["state"] == "2" else "") + (f"""
@@ -133,6 +132,7 @@ def select_prompt(context):
 
       These are some specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
       Tell the user these facts may be needed for the national law to apply in this specific scenario.
+      Provide the user a brief explanation of these facts in natural language.
 
     """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
 
@@ -176,7 +176,7 @@ def run_argumentation(context):
           - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
           - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
 
-        If there's full conformity, no other actions are required.
+        If there's full conformity, tell the user the right is granted.
         If there's no conformity, tell the user the right is not granted under national law.
         If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights.
         Analyze the key differences between the two.
