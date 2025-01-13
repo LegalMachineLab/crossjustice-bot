@@ -132,7 +132,7 @@ def select_prompt(context):
       {context["pretty_arguments"][arg_hash(context)]}
 
       These are some specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
-      Tell the user these facts may be needed for the national law to apply in this specific scenario.
+      Tell the user these facts may be needed for the national law to apply in this specific scenario. If there are no facts, tell the user such.
       Provide the user a brief explanation of these facts in natural language.
 
     """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")

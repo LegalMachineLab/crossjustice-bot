@@ -53,7 +53,6 @@ proceeding_status(PersonId, started).
 """
 
 facts_dir_2010_64 = """
-Directive 2010_64
 %% person_document(PersonId, _europeanArrestWarrant)
 %
 % The document issued is the european arrest warrant
