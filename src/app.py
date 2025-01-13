@@ -88,7 +88,7 @@ def select_prompt(context):
       - DO NOT ask similar questions more than once.
 
       Format of the output:
-      - Include the list of Prolog facts extracted inside a single markdown block.
+      - INCLUDE THE LIST OF PROLOG FACTS EXTRACTED inside a single markdown block.
       - DO NOT create more than one block. Keep all facts in a single one.
       - DO NOT put comments inside the markdown block.
       - All variables must be lower letter for a fact to be valid.
@@ -122,22 +122,21 @@ def select_prompt(context):
       The right has a label, a corresponding article, and an option (specific application).
       One right can have multiple options. Show all the options.
 
-      For each right, follow these instructions:
+      RESPECT this format to explain the right:
       - Explain what each right refers to.
       - Tell the user the article and source of origin.
       - Give a summary of the conditions for the application of the specific right.
 
-      Ask if the user wants to know about the conformity evaluation with the European country about any right.
-
-      Respect the following instructions:
+      RESPECT the following instructions:
       - DO NOT create new rights.
       - DO NOT provide legal advice.
 
+      Ask if the user wants to know about the conformity evaluation with the European country about any right.
       Questions on conformity can only be answered based on the following text. Do not add anything.
 
       {context["pretty_arguments"][arg_hash(context)]}
 
-      Folllowing is the list of rights for different options in the national implementation:
+      Following is the list of rights for different options in the national implementation:
 
       {filter_target_inverse(context["target"], context)}
 
