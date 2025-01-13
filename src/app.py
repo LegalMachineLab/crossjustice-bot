@@ -80,9 +80,9 @@ def select_prompt(context):
       There are certain facts which are essential and must always apply, unless explicitly stated otherwise: '''{input_facts.facts}'''.
 
       Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]} {input_facts.national_facts[context["directive_target"]][context["country_target"]]}'''.
-      Evaluate whether these facts can reasonably apply to the given scenario,
-      You can assume that some facts are present if similar or connected facts apply.
-      Avoid asking yes or no questions. Just ask a few questions on the general state.
+      Evaluate whether these facts can reasonably apply to the given scenario.
+      You can assume that facts are present if similar or connected facts apply.
+      Avoid asking yes or no questions. Just ask a few questions on the state of the scenario.
 
       Respect the following instructions:
       - DO NOT create new facts.
@@ -99,7 +99,7 @@ def select_prompt(context):
 
       {context["facts"]}
 
-      After some questions ask the users if she wants to know what rights she has.
+      After some questions ask the users if they wants to know what rights they have.
 
     """ + (f"""
       Phase 2: Presenting the rights computed by the symbolic engine.
@@ -108,9 +108,10 @@ def select_prompt(context):
 
       {"\n".join(pretty_rights(context))}
 
-      Tell the user the applicable rights in natural language.
+      Tell the user the list of computed rights in natural language.
+      If no rights apply, ask the user if more details should be provided to the scenario.
       DO NOT invent new rights, only present what has been computed.
-      Ask if the user wants to know more details any of these rights.
+      If rights are granted, ask if the user wants to know more details any of these rights.
 
     """ if context["state"] == "2" else "") + (f"""
 
@@ -142,8 +143,9 @@ def select_prompt(context):
 
       {filter_target_inverse(context["target"], context)}
 
-      These are some specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
-      Tell the user these facts may be needed for the national law to apply in this specific scenario. If there are no facts, tell the user such.
+      These are specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
+      If there are no facts, tell the user such.
+      If there's more than one fact, tell the user some facts may be needed for the national law to apply in this specific scenario.
       Provide the user a brief explanation of these facts in natural language.
 
     """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
@@ -191,7 +193,7 @@ def run_argumentation(context):
         If there's full conformity, tell the user the right is granted.
         If there's no conformity, tell the user the right is not granted under national law.
         If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights.
-        Analyze the key differences between the two.
+        Analyze the key differences between the two. Focus on the meaning of the relevant facts.
 
         Details on national implementation:
 
