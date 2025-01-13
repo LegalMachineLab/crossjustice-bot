@@ -72,7 +72,7 @@ def select_prompt(context):
       Assist the user in building a comprehensive case description by extracting relevant Prolog facts, while conversing with the user.
       There are certain facts which are essential and must always apply, unless explicitly stated otherwise: '''{input_facts.facts}'''.
 
-      Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]}'''.
+      Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]} {input_facts.national_facts[context["directive_target"]][context["country_target"]]}'''.
       Evaluate whether these facts can reasonably apply to the given scenario,
       You can assume that some facts are present if similar or connected facts apply.
       Avoid asking yes or no questions. Just ask a few questions on the general state.

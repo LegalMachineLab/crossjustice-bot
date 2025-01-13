@@ -1046,3 +1046,18 @@ dir_facts = {
     "directive_2010_64" : facts_dir_2010_64,
     "directive_2013_48" : facts_dir_2013_48
 }
+
+national_facts = {
+    "directive_2010_64" : {
+        "it" : facts_dir_2010_64_it,
+        "pl" : facts_dir_2010_64_pl,
+        "nl" : facts_dir_2010_64_nl,
+        "bg" : facts_dir_2010_64_bg
+    },
+    "directive_2013_48" : {
+        "it" : facts_dir_2013_48_it,
+        "pl" : "",
+        "nl" : facts_dir_2013_48_nl,
+        "bg" : ""
+    }
+}
