@@ -3,7 +3,7 @@ import streamlit as st
 from groq import Groq
 import time
 
-from langchain.chains import ConversationChain, LLMChain
+from langchain.chains import LLMChain
 from langchain_core.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -12,11 +12,9 @@ from langchain_core.prompts import (
 from langchain_core.messages import SystemMessage
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_groq import ChatGroq
-from langchain.prompts import PromptTemplate
 
-from swi_interface import generate_response, prettify_response
 import input_facts
-
+from swi_interface import query
 from argumentation.arg_interface import get_full_theory, run_reasoner
 
 
@@ -230,10 +228,9 @@ def run_dir_prolog(output, context):
     user_facts = parse_output(output)
     if user_facts:
       context["person_id"] = re.search(r"person_status\((.+),", "\n".join(user_facts)).group(1).strip()
-      facts, prolog_response = generate_response(context["person_id"], user_facts, ["dir"], [context["directive_target"]])
-      pretty = prettify_response(prolog_response, facts)
+      response = query(context["person_id"], user_facts, ["dir"], [context["directive_target"]])
       context["facts"] = user_facts
-      context["rights"] = pretty
+      context["rights"] = response
       print("Dir rights:")
       print(context["person_id"])
       print(context["facts"])
@@ -245,11 +242,10 @@ def run_dir_prolog(output, context):
 
 def run_national_prolog(context):
   try:
-    facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"]) # opt=context["opt_target"]
-    pretty = prettify_response(prolog_response, facts)
-    context["target"] = pretty
+    response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"]) # opt=context["opt_target"]
+    context["target"] = response
     print("National result:")
-    print(pretty)
+    print(context["target"])
     print()
   except Exception as e:
     print(e)
@@ -259,12 +255,11 @@ def suggest_facts(context):
   if not context["country_target"] or not context["right_target"] or not context["person_id"]:
      return
   try:
-      facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True) # opt=context["opt_target"]
-      pretty = prettify_response(prolog_response, facts)
-      abduced = set([y for _, v in pretty[context["right_target"]].items() for x in v for y in x["abduced"]])
+      response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True) # opt=context["opt_target"]
+      abduced = set([y for _, v in response[context["right_target"]].items() for x in v for y in x["abduced"]])
       context["suggestions"] = abduced
       print("Abduction result:")
-      print(abduced)
+      print(context["suggestions"])
       print()
   except Exception as e:
     print(e)

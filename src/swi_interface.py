@@ -174,8 +174,7 @@ def right_to(
     )
 
 def generate_response(personId, facts, laws, modules, right="Right", opt="Opt", abduce=False):
-
-    return facts, [
+    return [
         {
             "right": item[4],
             "law": item[1],
@@ -310,6 +309,12 @@ def prettify_response(response, facts):
 
     return group
 
+def query(personId, facts, laws, modules, right="Right", opt="Opt", abduce=False):
+    f = facts + [f"person_made_aware({personId}, personStatus)", f"proceeding_status({personId}, started)"]
+    f = list(set([x.replace(".", "").strip() for x in f]))
+    response = generate_response(personId, f, laws, modules, right=right, opt=opt, abduce=abduce)
+    return prettify_response(response, f)
+
 if __name__ == "__main__":
 
     def test_facts():
@@ -333,7 +338,7 @@ if __name__ == "__main__":
             "person_status(mario, deprived_of_liberty)",
             "proceeding_status(mario, started)"
         ]
-    
+
     def n():
         return ['proceeding_type(alessandro, criminal)', 'person_status(alessandro, suspect)', 'person_made_aware(alessandro, personStatus)', 'person_status(alessandro, deprived_of_liberty)', "proceeding_country(alessandro, 'netherlands')", "person_nationality(alessandro, 'italy')", 'person_nominate(alessandro, giulio)']
 
