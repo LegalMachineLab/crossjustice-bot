@@ -139,9 +139,12 @@ def select_prompt(context):
 
       {context["pretty_arguments"][arg_hash(context)]}
 
-      More rights for different options in the national implementation:
+      Folllowing is the list of rights for different options in the national implementation:
 
       {filter_target_inverse(context["target"], context)}
+
+      If there is no list, tell the user no rights are granted.
+      If there are rights, tell the user the list of rights in natural language.
 
       These are specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
       If there are no facts, tell the user such.
@@ -185,10 +188,10 @@ def run_argumentation(context):
 
         {context["arguments"][arg_hash(context)]}
 
-        There are three levels of conformity:
-          - Full Conformity ((conformity(COUNTRY, ART)): All rights and conditions are identical between EU and national implementation.
-          - No Conformity ('-'(conformity(COUNTRY, ART)): No rights are granted under the national implementation.
-          - Partial Conformity (partial_conformity(COUNTRY, ART)): Rights are granted, but under different conditions than the european source.
+        There are three levels of conformity, to extract the conformity analyze the IN arguments provided:
+          - ((conformity(COUNTRY, ART)) leads to Full Conformity: All rights and conditions are identical between EU and national implementation.
+          - ('-'(conformity(COUNTRY, ART)) leads to No Conformity: No rights are granted under the national implementation.
+          - (partial_conformity(COUNTRY, ART)) leads to Partial Conformity: Rights are granted, but under different conditions than the european source.
 
         If there's full conformity, tell the user the right is granted.
         If there's no conformity, tell the user the right is not granted under national law.
