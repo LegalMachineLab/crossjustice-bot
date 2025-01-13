@@ -102,6 +102,7 @@ def select_prompt(context):
       {"\n".join(pretty_rights(context))}
 
       Tell the user the applicable rights in natural language.
+      DO NOT invent new rights, only present what has been computed.
       Ask if the user wants to know more details any of these rights.
 
     """ if context["state"] == "2" else "") + (f"""
