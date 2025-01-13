@@ -63,6 +63,13 @@ def filter_target(rights, context):
       return {}
    return {k : [i for i in v if i["option"] == context["opt_target"]] for k, v in rights[context["right_target"]].items()}
 
+
+def filter_target_inverse(rights, context):
+   if context["right_target"] not in rights:
+      return {}
+   return {k : [i for i in v if i["option"] != context["opt_target"]] for k, v in rights[context["right_target"]].items()}
+
+
 def select_prompt(context):
 
     return f"""
@@ -131,6 +138,10 @@ def select_prompt(context):
 
       {context["pretty_arguments"][arg_hash(context)]}
 
+      More rights for different options in the national implementation:
+
+      {filter_target_inverse(context["target"], context)}
+
       These are some specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
       Tell the user these facts may be needed for the national law to apply in this specific scenario. If there are no facts, tell the user such.
       Provide the user a brief explanation of these facts in natural language.
@@ -184,7 +195,7 @@ def run_argumentation(context):
 
         Details on national implementation:
 
-        {context["target"]}
+        {filter_target(context["target"], context)}
 
         Details on european implementation:
 
@@ -229,7 +240,7 @@ def run_dir_prolog(output, context):
 
 def run_national_prolog(context):
   try:
-    facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], opt=context["opt_target"])
+    facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"]) # opt=context["opt_target"]
     pretty = prettify_response(prolog_response, facts)
     context["target"] = pretty
     print("National result:")
@@ -243,7 +254,7 @@ def suggest_facts(context):
   if not context["country_target"] or not context["right_target"] or not context["person_id"]:
      return
   try:
-      facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], opt=context["opt_target"], abduce=True)
+      facts, prolog_response = generate_response(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True) # opt=context["opt_target"]
       pretty = prettify_response(prolog_response, facts)
       abduced = set([y for _, v in pretty[context["right_target"]].items() for x in v for y in x["abduced"]])
       context["suggestions"] = abduced
