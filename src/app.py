@@ -10,7 +10,7 @@ from langchain_core.prompts import (
     MessagesPlaceholder,
 )
 from langchain_core.messages import SystemMessage
-from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory, ConversationSummaryBufferMemory
 from langchain_groq import ChatGroq
 
 import input_facts
@@ -269,11 +269,7 @@ def suggest_facts(context):
 
 def llm_response(input_text, context, memory):
   return LLMChain(
-      llm=ChatGroq(
-          groq_api_key='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',
-          model_name="llama3-70b-8192",
-          temperature=0.5
-      ),
+      llm=memory.llm,
       prompt=ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=select_prompt(context)),
@@ -337,7 +333,12 @@ def main():
         "suggestions" : set()
       }
       st.session_state.chat_message = []
-      st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
+      # st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
+      st.session_state.memory = ConversationSummaryBufferMemory(llm=ChatGroq(
+          groq_api_key='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',
+          model_name="llama3-70b-8192",
+          temperature=0.5
+      ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
 
     for message in st.session_state.chat_message:
         with st.chat_message(message["role"]):
