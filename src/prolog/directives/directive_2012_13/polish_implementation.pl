@@ -173,12 +173,12 @@ auxiliary_right(art263_8, PersonId, language, comprehensible).
 has_right(art612_2, PersonId, right_to_information, consul):-
     person_status(PersonId, arrested),
     person_request_submitted(PersonId, communicate_consul),
-    \+ person_nationality(PersonId, polish).
+    \+ person_nationality(PersonId, poland).
 
 has_right(art612_2, PersonId, right_to_information, diplomat):-
     person_status(PersonId, arrested),
     person_request_submitted(PersonId, diplomat),
-    \+ person_nationality(PersonId, polish).
+    \+ person_nationality(PersonId, poland).
 
 has_right(art612_2, PersonId, right_to_information, diplomat):-
     person_status(PersonId, arrested),

@@ -145,8 +145,7 @@ has_right(art74_2_2, PersonId, right_to_information, legal_grounds) :-
 % (1) Participation of the defence counsel in criminal proceedings shall be mandatory in cases where:
 % 1. The accused party is underage;
 proceeding_matter(PersonId, lawyer_presence_required) :-
-    person_age(PersonId, X),
-    X < 18.
+    person_age(PersonId, minor).
 
 %% proceeding_matter(PersonId, _lawyer_presence_required)
 %
@@ -354,7 +353,7 @@ has_right(art15_1, PersonId, right_to_information, telephone_call) :-
 % 5. contact the consular authorities of the respective state in case he/she is not a Bulgarian national;
 has_right(art15_1, PersonId, right_to_information, access_consul) :-
     person_status(PersonId, detained),
-    \+ person_nationality(PersonId, bulgarian).
+    \+ person_nationality(PersonId, bulgaria).
 
 %% has_right(_art15_1, PersonId, _right_to_information, _)
 %

@@ -230,7 +230,7 @@ proceeding_danger(PersonId, substantially_jeopardised).
 
 %% proceeding_country(PersonId, Country)
 %
-% The proceedings are located in country X
+% The proceedings are located in a [Country]
 %
 
 proceeding_country(PersonId, Country).
