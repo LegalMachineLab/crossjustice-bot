@@ -196,11 +196,11 @@ def run_argumentation(context):
         Read the IN arguments to define the level of conformity.
         There are three levels of conformity:
           - if you read in the IN arguments ((conformity(COUNTRY, ART)) it means there is Full Conformity: All rights and conditions are identical between EU and national implementation.
-          - if you read in the IN arguments ('-'(conformity(COUNTRY, ART)) it means there is No Conformity: No rights are granted under the national implementation.
+          - if you read in the IN arguments ('-'(conformity(COUNTRY, ART)) it means there is No Conformity: That specific right is not granted under the national implementation.
           - if you read in the IN arguments (partial_conformity(COUNTRY, ART)) it means there is Partial Conformity: Rights are granted, but under different conditions than the european source.
 
-        If there's full conformity, tell the user the right is granted.
-        If there's no conformity, tell the user the right is not granted under national law.
+        If there's full conformity, tell the user the right is granted and perfectly recognised under the national law.
+        If there's no conformity, tell the user the right is not granted under national law. There may be similar ones.
         If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights.
         Analyze the key differences between the two. Focus on the meaning of the relevant facts.
 
