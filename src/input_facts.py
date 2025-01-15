@@ -41,9 +41,10 @@ person_status(PersonId, accused).
 
 proceeding_language(PersonId, Language).
 
+
 %% person_status(PersonId, _deprived_of_liberty)
 %
-% The person has been deprived of liberty
+% The person has been deprived of liberty. A person is deprived by arrest or detention.
 %
 
 person_status(PersonId, deprived_of_liberty).
@@ -786,7 +787,7 @@ proceeding_event(PersonId, superseding_interest).
 
 %% person_status(PersonId, detained)
 %
-% PersonId is currently detained and awaiting further legal actions.
+% The defendant is currently detained.
 %
 
 person_status(PersonId, detained).
