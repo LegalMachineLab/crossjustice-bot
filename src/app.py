@@ -18,7 +18,7 @@ from swi_interface import query
 from argumentation.arg_interface import get_full_theory, run_reasoner
 
 
-def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.5):
+def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
   client = Groq(
       api_key='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',
   )
@@ -79,7 +79,7 @@ def select_prompt(context):
 
       Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]} {input_facts.national_facts[context["directive_target"]][context["country_target"]]}'''.
       Evaluate whether these facts can reasonably apply to the given scenario.
-      You can assume that facts are present if similar or connected facts apply.
+      You can extract all facts that are present, if similar or equivalent facts apply.
       Avoid asking yes or no questions. Just ask a few questions on the state of the scenario.
 
       Respect the following instructions:
@@ -106,9 +106,13 @@ def select_prompt(context):
 
       {"\n".join(pretty_rights(context))}
 
+      Respect this instruction:
+      DO NOT invent any rights, only present what has been computed.
+
+      Format of the answer:
       Tell the user the list of computed rights in natural language.
       If no rights apply, ask the user if more details should be provided to the scenario.
-      DO NOT invent new rights, only present what has been computed.
+
       If rights are granted, ask if the user wants to know more details any of these rights.
 
     """ if context["state"] == "2" else "") + (f"""
@@ -119,6 +123,9 @@ def select_prompt(context):
 
       {filter_target(context["rights"], context)}
 
+      Respect this instruction:
+      DO NOT invent any rights, only present what has been computed.
+
       The right has a label, a corresponding article, and an option (specific application).
       One right can have multiple options. Show all the options.
 
@@ -126,10 +133,6 @@ def select_prompt(context):
       - Explain what each right refers to.
       - Tell the user the article and source of origin.
       - Give a summary of the conditions for the application of the specific right.
-
-      RESPECT the following instructions:
-      - DO NOT create new rights.
-      - DO NOT provide legal advice.
 
       Ask if the user wants to know about the conformity evaluation with the European country about any right.
       Questions on conformity can only be answered based on the following text. Do not add anything.
@@ -140,8 +143,8 @@ def select_prompt(context):
 
       {filter_target_inverse(context["target"], context)}
 
-      If there is no list, tell the user no rights are granted.
-      If there are rights, tell the user the list of rights in natural language.
+      If there is no list, tell the user no rights are granted in the specific EU state.
+      If there are rights, tell the user the list of national rights in natural language.
 
       These are specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
       If there are no facts, tell the user such.

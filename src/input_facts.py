@@ -34,21 +34,19 @@ person_status(PersonId, suspect).
 
 person_status(PersonId, accused).
 
-
-%% person_made_aware(PersonId, _personStatus)
+%% proceeding_language(PersonId, Language)
 %
-% The person has been made aware of his status
-%
-
-person_made_aware(PersonId, personStatus).
-
-
-%% proceeding_status(PersonId, _started)
-%
-% The proceedings have started
+% The language of the proceedings is X
 %
 
-proceeding_status(PersonId, started).
+proceeding_language(PersonId, Language).
+
+%% person_status(PersonId, _deprived_of_liberty)
+%
+% The person has been deprived of liberty
+%
+
+person_status(PersonId, deprived_of_liberty).
 
 """
 
@@ -129,13 +127,6 @@ person_understands(PersonId, Language).
 
 lawyer_language(PersonId, Language).
 
-
-%% proceeding_language(PersonId, Language)
-%
-% The language of the proceedings is X
-%
-
-proceeding_language(PersonId, Language).
 """
 
 facts_dir_2013_48 = """
