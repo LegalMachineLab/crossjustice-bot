@@ -1009,7 +1009,7 @@ person_document(PersonId, request_discontinuation_proceedings).
 
 %% familiarise_with_evidence_content(PersonId, translation)
 %
-% The person familiarises themselves with the content of evidence through a translation.
+% The person needs to familiarise themselves with the content of evidence through a translation, as he is not aware of such.
 %
 familiarise_with_evidence_content(PersonId, translation).
 
