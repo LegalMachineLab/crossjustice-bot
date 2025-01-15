@@ -40,7 +40,6 @@ def source_path(directive, implementation):
     dict = {
         "pl": "polish_implementation",
         "it": "italian_implementation",
-        "es": "spanish_implementation",
         "nl": "dutch_implementation",
         "bg": "bulgarian_implementation",
         "dir": directive,
@@ -57,7 +56,6 @@ def nationality(law):
         "_it": "it",
         "_pl": "pl",
         "_nl": "nl",
-        "_es": "es",
         "_bg": "bg",
         "": "directive",
     }
@@ -88,7 +86,7 @@ def _generate_interpreter():
 
     return (
         swipl,
-        _add_directive(swipl, root, "directive_2010_64", ["it", "es", "nl", "pl", "bg"])
+        _add_directive(swipl, root, "directive_2010_64", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_800", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])

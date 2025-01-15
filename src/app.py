@@ -292,7 +292,7 @@ def main():
     dirs = ["directive_2010_64", "directive_2013_48"]
     selected_dir = st.sidebar.selectbox('Choose a directive:', dirs)
 
-    laws = ["it", "nl", "bg", "dir"]
+    laws = ["it", "nl", "bg", "pl"]
     selected_law = st.sidebar.selectbox('Choose a law:', laws)
 
     st.sidebar.markdown("""
@@ -305,7 +305,20 @@ def main():
       2. The selected option will be used by  the bot.
 
       ### Talk with me:
-      - Lets go to Phase 2 together!!!
+      To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:  
+
+      1. Their **name**.
+      2. The **proceeding language**.
+      3. The **location** of the proceedings.
+      4. Their **nationality**.
+      5. Their **spoken language(s)**.
+      6. Their **status** (e.g., suspect or accused).
+      7. Whether they were **arrested/detained** by authorities.
+      8. The **stage** of the proceedings (e.g., investigation, trial).
+      9. Details of any **investigative events** (e.g., searches, interrogations).
+      10. Any other **relevant information** about the case.
+
+      Providing clear, complete information ensures tailored and effective legal guidance.
     """)
 
     if "chat_message" not in st.session_state:
