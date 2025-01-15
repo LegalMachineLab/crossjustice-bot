@@ -109,6 +109,9 @@ def select_prompt(context):
       Respect this instruction:
       DO NOT invent any rights, only present what has been computed.
 
+      The right has a label, a corresponding article, and an option (specific application).
+      One right can have multiple options. Show that all the options refer to the same right.
+
       Format of the answer:
       Tell the user the list of computed rights in natural language.
       If no rights apply, ask the user if more details should be provided to the scenario.
