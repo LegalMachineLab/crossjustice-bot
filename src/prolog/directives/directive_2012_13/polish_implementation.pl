@@ -261,15 +261,15 @@ auxiliary_right(art607l_4, PersonId, language, comprehensible).
 % counsel within 14 days.
 % § 4. The statement of reasons should clarify in particular on what facts and evidence the charges are based.
 
-person_status(PersonId, art313):-
-    %person_status(PersonId, suspect),
-    person_status(PersonId, raise_suspicion).
+% person_status(PersonId, art313):-
+%    person_status(PersonId, suspect),
+%    person_status(PersonId, raise_suspicion).
 
-has_right(art313, PersonId, right_to_information, rights):-
-    person_status(PersonId, art313).
+% has_right(art313, PersonId, right_to_information, rights):-
+%    person_status(PersonId, art313).
 
-has_right(art313, PersonId, right_to_information, accusation):-
-    person_status(PersonId, art313).
+% has_right(art313, PersonId, right_to_information, accusation):-
+%    person_status(PersonId, art313).
 
 %Article 338(1) code of criminal procedure
 %If the act of indictment meets the formal requirements, the president of the court or the court referendary immediately

@@ -141,9 +141,9 @@ has_right(art78_2, PersonId, right_to_information, accusation) :-
 %%Article 258 code of criminal procedure
 %The case shall be brought before the court by means of a summons served on behalf of the public prosecutor on the suspect; the start
 %of the trial proceedings is thus initiated.
-proceeding_status(PersonId, started) :-
-    person_status(PersonId, suspect),
-    proceeding_matter(PersonId, summoned_court).
+% proceeding_status(PersonId, started) :-
+%    person_status(PersonId, suspect),
+%    proceeding_matter(PersonId, summoned_court).
 
 %The presiding judge of the District Court shall determine, on application and recommendation of the public prosecutor, the date and
 %time of the court session. In the determination of the date and time of the court session or later, he may order that the suspect

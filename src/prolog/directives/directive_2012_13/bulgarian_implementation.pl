@@ -247,11 +247,11 @@ auxiliary_right(art128, PersonId, record, evidence_gathering_act).
 % to the prosecutor and issue a decree to constitute the person as accused party.
 % (2) The investigative body may also constitute the accused party in this particular capacity upon drafting the record for the first
 % investigative action against him/her, of which it shall report to the prosecutor.
-person_status(PersonId, accused) :-
-    person_status(PersonId, raise_suspicion).
+% person_status(PersonId, accused) :-
+%    person_status(PersonId, raise_suspicion).
 
-person_status(PersonId, accused) :-
-    proceeding_matter(PersonId, evidence_gathering_act).
+% person_status(PersonId, accused) :-
+%    proceeding_matter(PersonId, evidence_gathering_act).
 
 %% has_right(_art219_3_6, PersonId, _right_to_information, Right)
 %

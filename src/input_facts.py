@@ -857,13 +857,13 @@ person_status(PersonId, requested).
 %
 % The person was issued an order to be taken into police custody
 %
-proceeding_matter(PersonId, police_custody) 
+proceeding_matter(PersonId, police_custody)
 
 %% proceeding_matter(PersonId, pretrial_detention)
 %
 % The person was issued an order to be taken into pre trial detention
 %
-proceeding_matter(PersonId, pretrial_detention) 
+proceeding_matter(PersonId, pretrial_detention)
 
 %% proceeding_matter(PersonId, _questioning)
 %
@@ -1033,10 +1033,364 @@ person_document(PersonId, decision_changing_charge).
 
 """
 
+facts_dir_2012_13 = """
+%% person_status(PersonId, _requested)
+%
+% The person is requested under an european arrest warrant
+%
+
+person_status(PersonId, requested).
+
+
+%% proceeding_matter(PersonId, _minor_offence)
+%
+% The proceedings concern a minor offence
+%
+
+proceeding_matter(PersonId, minor_offence).
+
+
+%% person_status(PersonId, _arrested)
+%
+% The person has been arrested
+%
+
+person_status(PersonId, arrested).
+
+
+%% person_status(PersonId, _detained)
+%
+% The person has been detained
+%
+
+person_status(PersonId, detained).
+
+
+%% person_document(PersonId, _new_evidence)
+%
+% The document issued provides new evidence to the case
+%
+
+person_document(PersonId, new_evidence).
+
+%% person_document(PersonId, challenge_arrest)
+%
+% The document issued is needed to challenge the arrest
+%
+
+person_document(PersonId, challenge_arrest).
+
+%% person_document(PersonId, challenge_detention)
+%
+% The document issued is needed to challenge the detention
+%
+
+person_document(PersonId, challenge_detention).
+
+
+%% authority_decision(PersonId, _essential_document)
+%
+% The authority has decreed any document to be essential
+%
+
+authority_decision(PersonId, essential_document).
+
+
+%% person_danger(PersonId, _life)
+%
+% There is need to avoid damage to a person's life
+%
+
+person_danger(PersonId, life).
+
+
+%% person_danger(PersonId, _fundamental_rights)
+%
+% There is need to avoid damage to the fundamental rights of any person
+%
+
+person_danger(PersonId, fundamental_rights).
+
+
+%% person_danger(PersonId, _public_interest)
+%
+% There is a need to secure the public interest of the proceedings
+%
+
+person_danger(PersonId, public_interest).
+
+"""
+
+facts_dir_2012_13_bg = """
+%% person_document(PersonId, decree_for_constitution)
+%
+% The person is associated with a document concerning a decree for constitution.
+%
+person_document(PersonId, decree_for_constitution).
+
+%% person_document(PersonId, remand_measure)
+%
+% The person is associated with a document concerning a remand measure.
+%
+person_document(PersonId, remand_measure).
+
+%% person_document(PersonId, indictment)
+%
+% The person is associated with a document concerning an indictment.
+%
+person_document(PersonId, indictment).
+
+%% person_document(PersonId, _indictment)
+%
+% The document issued is an indictment
+%
+person_document(PersonId, indictment).
+
+%% person_document(PersonId, _judgement)
+%
+% The document issued is a judgement.
+%
+person_document(PersonId, judgement).
+
+%% proceeding_matter(PersonId, pre_trial)
+%
+% The legal proceeding has not yet reached the phase of the trial.
+%
+proceeding_matter(PersonId, pre_trial).
+
+%% proceeding_matter(PersonId, evidence_gathering_act)
+%
+% The proceeding matter involves evidence gathering.
+%
+proceeding_matter(PersonId, evidence_gathering_act).
+
+%% proceeding_matter(PersonId, custody_in_remand)
+%
+% The proceeding matter involves custody in remand.
+%
+proceeding_matter(PersonId, custody_in_remand).
+
+%% proceeding_matter(PersonId, punishment_deprivation_liberty_no_less_ten_years)
+%
+% The proceeding matter involves punishment of deprivation of liberty for no less than ten years.
+%
+proceeding_matter(PersonId, punishment_deprivation_liberty_no_less_ten_years).
+
+%% proceeding_matter(PersonId, trial_in_absentia)
+%
+% The trial has proceeded in absentia, meaning the defendant was not physically present without a valid reason.
+%
+proceeding_matter(PersonId, trial_in_absentia).
+
+%% person_event(PersonId, waive_right)
+%
+% The person has waived his defence rights.
+%
+person_event(PersonId, waive_right).
+
+%% person_status(PersonId, cannot_afford_lawyer)
+%
+% The person cannot afford a lawyer
+%
+person_status(PersonId, cannot_afford_lawyer).
+
+%% person_status(PersonId, physical_mental_deficiencies)
+%
+% The person has physical or mental deficiencies
+%
+person_status(PersonId, physical_mental_deficiencies).
+"""
+
+facts_dir_2012_13_nl = """
+%% proceeding_matter(PersonId, detention)
+%
+% The proceeding matter involves detention
+%
+proceeding_matter(PersonId, detention).
+
+%% proceeding_matter(PersonId, pre_trial)
+%
+% The legal proceeding has not yet reached the phase of the trial.
+%
+proceeding_matter(PersonId, pre_trial).
+
+%% proceeding_matter(PersonId, _detention)
+%
+% The proceedings concern detention
+%
+proceeding_matter(PersonId, detention).
+
+%% person_request_submitted(PersonId, medical_assistance)
+%
+% The person has submitted a request for medical assistance
+%
+person_request_submitted(PersonId, medical_assistance).
+
+%% person_status(PersonId, need_medical_assistance)
+%
+% The person needs medical assistance
+%
+person_status(PersonId, need_medical_assistance).
+"""
+
+facts_dir_2012_13_it = """
+%% physical_presence_required(PersonId, lawyer)
+%
+% The physical presence of a lawyer is required for the person
+%
+physical_presence_required(PersonId, lawyer).
+
+%% proceeding_matter(PersonId, precautionary_detention)
+%
+% The proceeding matter involves precautionary detention
+%
+proceeding_matter(PersonId, precautionary_detention).
+
+%% proceeding_matter(PersonId, questioning)
+%
+% The proceeding matter involves questioning
+%
+proceeding_matter(PersonId, questioning).
+
+%% proceeding_matter(PersonId, precautionary_measure)
+%
+% The proceeding matter involves a precautionary measure
+%
+proceeding_matter(PersonId, precautionary_measure).
+
+%% proceeding_matter(PersonId, investigative_questioning)
+%
+% The proceeding matter involves investigative questioning
+%
+proceeding_matter(PersonId, investigative_questioning).
+
+%% proceeding_matter(PersonId, inspection)
+%
+% The proceeding matter involves an inspection
+%
+proceeding_matter(PersonId, inspection).
+
+%% proceeding_matter(PersonId, informal_identification)
+%
+% The proceeding matter involves informal identification
+%
+proceeding_matter(PersonId, informal_identification).
+
+%% proceeding_matter(PersonId, search)
+%
+% The proceeding matter involves a search
+%
+proceeding_matter(PersonId, search).
+
+%% proceeding_matter(PersonId, seizure)
+%
+% The proceeding matter involves a seizure
+%
+proceeding_matter(PersonId, seizure).
+
+%% proceeding_matter(PersonId, technical_ascertainment)
+%
+% The proceeding matter involves technical ascertainment
+%
+proceeding_matter(PersonId, technical_ascertainment).
+
+%% proceeding_matter(PersonId, preliminary_investigation)
+%
+% The proceeding matter involves a preliminary investigation
+%
+proceeding_matter(PersonId, preliminary_investigation).
+
+%% proceeding_matter(PersonId, committal_to_trial)
+%
+% The proceeding matter involves committal to trial
+%
+proceeding_matter(PersonId, committal_to_trial).
+
+%% proceeding_matter(PersonId, summoned_court)
+%
+% The person is summoned to court
+%
+proceeding_matter(PersonId, summoned_court).
+
+%% authority_decision(PersonId, access_materials)
+%
+% An authority has decided to allow the defendant access to the materials of the case
+%
+authority_decision(PersonId, access_materials).
+
+%% person_request_submitted(PersonId, access_materials)
+%
+% The person, or his lawyer, have submitted a request for access to the investigative materials of the case
+%
+person_request_submitted(PersonId, access_materials).
+"""
+facts_dir_2012_13_pl = """
+
+%% person_status(PersonId, _arrested)
+%
+% The person is arrested
+%
+person_status(PersonId, arrested).
+
+%% proceeding_matter(PersonId, interrogation)
+%
+% The proceeding matter involves interrogation
+%
+proceeding_matter(PersonId, interrogation).
+
+%% proceeding_matter(PersonId, detention_on_remand)
+%
+% The proceeding matter involves detention on remand
+%
+proceeding_matter(PersonId, detention_on_remand).
+
+%% proceeding_matter(PersonId, investigation)
+%
+% The proceeding matter involves investigation
+%
+proceeding_matter(PersonId, investigation).
+
+%% proceeding_matter(PersonId, court_hearing)
+%
+% The proceeding matter involves a court hearing
+%
+proceeding_matter(PersonId, court_hearing).
+
+%% proceeding_matter(PersonId, preparatory_proceedings)
+%
+% The proceeding matter involves preparatory proceedings
+%
+proceeding_matter(PersonId, preparatory_proceedings).
+
+%% proceeding_matter(PersonId, grounds_close_investigation)
+%
+% The proceeding matter involves grounds for closing an investigation
+%
+proceeding_matter(PersonId, grounds_close_investigation).
+
+%% person_request_submitted(PersonId, communicate_consul)
+%
+% The person has submitted a request to communicate with a consul
+%
+person_request_submitted(PersonId, communicate_consul).
+
+%% person_request_submitted(PersonId, diplomat)
+%
+% The person has submitted a request to communicate with a diplomat
+%
+person_request_submitted(PersonId, diplomat).
+
+%% person_request_submitted(PersonId, access_materials)
+%
+% The person, or his lawyer, have submitted a request for access to the investigative materials of the case
+%
+person_request_submitted(PersonId, access_materials).
+"""
 
 dir_facts = {
     "directive_2010_64" : facts_dir_2010_64,
-    "directive_2013_48" : facts_dir_2013_48
+    "directive_2013_48" : facts_dir_2013_48,
+    "directive_2012_13" : facts_dir_2012_13
 }
 
 national_facts = {
@@ -1051,5 +1405,11 @@ national_facts = {
         "pl" : "",
         "nl" : facts_dir_2013_48_nl,
         "bg" : ""
+    },
+    "directive_2012_13" : {
+        "it" : facts_dir_2012_13_it,
+        "pl" : facts_dir_2012_13_pl,
+        "nl" : facts_dir_2012_13_nl,
+        "bg" : facts_dir_2012_13_bg
     }
 }

@@ -458,8 +458,8 @@ has_right(art64_3_b, PersonId, right_to_remain_silent, trial) :-
 % warn him that, following such statements, investigations may be carried out on him, and advise him to appoint a lawyer.
 % Such statements shall not be used against the person who has made them.
 % 2. If the person should have been heard as an accused or a suspect from the beginning, his statements shall not be used.
-person_status(PersonId, suspect):-
-    person_status(PersonId, raise_suspicion).
+% person_status(PersonId, suspect):-
+%    person_status(PersonId, raise_suspicion).
 
 %Article 294(1-bis) code of criminal procedure
 %1. In the stages of the proceedings prior to the opening of the trial, the court that has decided on the application
