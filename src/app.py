@@ -188,6 +188,10 @@ def run_argumentation(context):
 
         {context["arguments"][arg_hash(context)]}
 
+        Arguments are either IN or OUT:
+         - If IN they are accepted according to Dung's grounded semantics;
+         - If OUT they are rejected according to Dung's grounded semantics;
+
         There are three levels of conformity, to extract the conformity analyze the IN arguments provided:
           - ((conformity(COUNTRY, ART)) leads to Full Conformity: All rights and conditions are identical between EU and national implementation.
           - ('-'(conformity(COUNTRY, ART)) leads to No Conformity: No rights are granted under the national implementation.
@@ -222,7 +226,7 @@ def parse_output(user_text):
     blocks = extract_md_blocks(completion)
     return blocks[0] if blocks else ""
 
-  return [x for x in _extract_code(user_text).replace(".", "").split("\n") if x]
+  return [x for x in [y.strip().split("%")[0] for y in _extract_code(user_text).replace(".", "").split("\n")] if x]
 
 
 def run_dir_prolog(output, context):
@@ -285,7 +289,7 @@ def main():
 
     #st.title("Chat with CrossJustice!")
 
-    dirs = ["directive_2010_64", "directive_2013_48"]
+    dirs = ["directive_2010_64", "directive_2012_13", "directive_2016_343", "directive_2013_48"]
     selected_dir = st.sidebar.selectbox('Choose a directive:', dirs)
 
     laws = ["it", "nl", "bg", "pl"]
@@ -301,7 +305,7 @@ def main():
       2. The selected option will be used by  the bot.
 
       ### Talk with me:
-      To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:  
+      To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
 
       1. Their **name**.
       2. The **proceeding language**.

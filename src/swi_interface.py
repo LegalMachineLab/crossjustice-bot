@@ -88,8 +88,8 @@ def _generate_interpreter():
         swipl,
         _add_directive(swipl, root, "directive_2010_64", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_800", ["it", "nl", "pl", "bg"])
-        # + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
-        # + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])
+        + _add_directive(swipl, root, "directive_2012_13", ["it", "nl", "pl", "bg"])
+        + _add_directive(swipl, root, "directive_2016_343", ["it", "nl", "pl", "bg"])
         + _add_directive(swipl, root, "directive_2013_48", ["it", "nl", "pl", "bg"])
         # + _add_directive(swipl, root, "directive_2016_1919", ["it", "nl", "pl", "bg"]),
     )
@@ -140,11 +140,11 @@ def _with_explanation(module, query, explanation=True):
 def right_to(
     person,
     facts,
-    laws=["it", "nl", "bg", "dir"],
-    modules=["directive_2010_64", "directive_2013_48"],
-    right="Right",
-    opt="Opt",
-    explanation=False,
+    laws,
+    modules,
+    right,
+    opt,
+    explanation,
 ):
     modules = [m if l == "dir" else f"{m}_{l}" for m in modules for l in laws]
     return set(
