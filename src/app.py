@@ -192,10 +192,12 @@ def run_argumentation(context):
          - If IN they are accepted according to Dung's grounded semantics;
          - If OUT they are rejected according to Dung's grounded semantics;
 
-        There are three levels of conformity, to extract the conformity analyze the IN arguments provided:
-          - ((conformity(COUNTRY, ART)) leads to Full Conformity: All rights and conditions are identical between EU and national implementation.
-          - ('-'(conformity(COUNTRY, ART)) leads to No Conformity: No rights are granted under the national implementation.
-          - (partial_conformity(COUNTRY, ART)) leads to Partial Conformity: Rights are granted, but under different conditions than the european source.
+        To extract the conformity analyze the IN arguments provided, ignore the OUT arguments.
+        Read the IN arguments to define the level of conformity.
+        There are three levels of conformity:
+          - if you read in the IN arguments ((conformity(COUNTRY, ART)) it means there is Full Conformity: All rights and conditions are identical between EU and national implementation.
+          - if you read in the IN arguments ('-'(conformity(COUNTRY, ART)) it means there is No Conformity: No rights are granted under the national implementation.
+          - if you read in the IN arguments (partial_conformity(COUNTRY, ART)) it means there is Partial Conformity: Rights are granted, but under different conditions than the european source.
 
         If there's full conformity, tell the user the right is granted.
         If there's no conformity, tell the user the right is not granted under national law.
@@ -290,10 +292,10 @@ def main():
     #st.title("Chat with CrossJustice!")
 
     dirs = ["directive_2010_64", "directive_2012_13", "directive_2016_343", "directive_2013_48"]
-    selected_dir = st.sidebar.selectbox('Choose a directive:', dirs)
+    selected_dir = st.sidebar.selectbox('Choose from the list the relevant directives: Directive 2010/64 on right to interpretation and translation; 2012/13 on the right to information, 2016/343 on the presumption of innocence; 2013/48 on the right of access to a lawyer', dirs)
 
     laws = ["it", "nl", "bg", "pl"]
-    selected_law = st.sidebar.selectbox('Choose a law:', laws)
+    selected_law = st.sidebar.selectbox('Choose the country where the proceedings are taking place, therefore the applicable national law:', laws)
 
     st.sidebar.markdown("""
       ## Welcome to the Tutorial
