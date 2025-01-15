@@ -641,8 +641,8 @@ has_right(art62_1, PersonId, right_to_inform, relatives) :-
 
 has_right(art62_3, PersonId, right_to_inform, consular_authority) :-
     person_status(PersonId, detained),
-    person_nationality(PersonId, Country),
-    proceeding_location(PersonId, Country).
+    proceeding_location(PersonId, Country),
+    \+ person_nationality(PersonId, Country).
 
 %%% Decree no 448 of the President of the Republic of 22 settembre 1988 %%%
 
