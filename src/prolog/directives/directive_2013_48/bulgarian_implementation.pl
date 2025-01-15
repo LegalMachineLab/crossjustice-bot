@@ -27,7 +27,7 @@ has_right(art30_4, PersonId, right_to_legal_counsel, proceedings) :-
 % authorities he/she wishes to contact.
 has_right(art243_3, PersonId, right_to_inform, consular_authority) :-
     person_status(PersonId, detained),
-    \+ person_nationality(PersonId, bulgarian).
+    \+ person_nationality(PersonId, bulgaria).
 
 %% auxiliary_right(_art254, PersonId, _private_communication, _lawyer)
 %
@@ -108,7 +108,7 @@ has_right(art13_2, PersonId, right_to_information, legal_grounds) :-
 % (2) (...) Where the person arrested is a foreign national, the consular authorities of the state of which he/she is a citizen shall be immediately notified, at his/her request, through the Ministry of Foreign Affairs. (...)
 has_right(art13_2, PersonId, right_to_information, notification) :-
     person_status(PersonId, arrested),
-    \+ person_nationality(PersonId, bulgarian).
+    \+ person_nationality(PersonId, bulgaria).
 
 %%%%% Extradition and European Arrest Warrant Act %%%%%
 

@@ -238,7 +238,7 @@ proceeding_country(PersonId, Country).
 
 %% person_nationality(PersonId, Country)
 %
-% The person is of nationality X
+% The person is a national of [Country].
 %
 
 person_nationality(PersonId, Country).
@@ -566,7 +566,7 @@ Italian Code of Criminal Procedure
 
 %% proceeding_matter(PersonId, _precautionary_detention)
 %
-% The person is detained for precautionary detention.
+% The proceedings concern precautionary detention
 %
 
 proceeding_matter(PersonId, precautionary_detention).
@@ -574,7 +574,7 @@ proceeding_matter(PersonId, precautionary_detention).
 
 %% person_status(PersonId, _detained)
 %
-% The person is currently detained.
+% The person has been detained
 %
 
 person_status(PersonId, detained).
@@ -844,6 +844,123 @@ proceeding_matter(PersonId, identity_parade).
 
 person_request_submitted(PersonId, communicate_consul).
 """
+
+facts_dir_2013_48_bg = """
+
+%% person_status(PersonId, _detained)
+%
+% The person has been detained
+%
+
+person_status(PersonId, detained).
+
+
+%% proceeding_matter(PersonId, _arrest)
+%
+% The proceedings concern an arrest
+%
+
+proceeding_matter(PersonId, arrest).
+
+
+%% proceeding_matter(PersonId, _breach_of_rights)
+%
+% The proceedings concern a breach of the rights of the defendant
+%
+
+proceeding_matter(PersonId, breach_of_rights).
+
+
+%% proceeding_matter(PersonId, _lawyer_presence_required)
+%
+% The proceedings concern a case where the presence of the lawyer is required
+%
+
+proceeding_matter(PersonId, lawyer_presence_required).
+
+
+%% person_event(PersonId, _waive_right)
+%
+% The person has decided to waive a right
+%
+
+person_event(PersonId, waive_right).
+
+
+%% person_status(PersonId, _waive_right)
+%
+% The person has decided to waive a right
+%
+
+person_status(PersonId, waive_right)
+
+
+%% proceeding_matter(PersonId, _interrogation)
+%
+% The proceedings concern an interrogation
+%
+
+proceeding_matter(PersonId, interrogation).
+
+"""
+
+
+
+
+facts_dir_2013_48_pl = """
+
+%% proceeding_matter(PersonId, _detention_on_remand)
+%
+% The proceedings concern detention on remand
+%
+
+proceeding_matter(PersonId, detention_on_remand).
+
+
+%% proceeding_matter(PersonId, _preparatory_proceedings)
+%
+% The proceedings are of preparatory nature
+%
+
+proceeding_matter(PersonId, preparatory_proceedings).
+
+
+%% person_request_submitted(PersonId, _defence_counsel)
+%
+% The person has submitted a request to communicate with his defence counsel
+%
+
+person_request_submitted(PersonId, defence_counsel).
+
+
+%% person_request_submitted(PersonId, _new_notice)
+%
+% The person has submitted a request to notify a new person of the decision on detention
+%
+
+person_request_submitted(PersonId, new_notice).
+
+
+%% proceeding_type(PersonId, _accelerated_proceedings)
+%
+% The proceedings are accelerated
+%
+
+proceeding_type(PersonId, accelerated_proceedings).
+
+
+%% person_nationality(PersonId, _none)
+%
+% The person does not have a citizenship
+%
+
+person_nationality(PersonId, none).
+
+
+"""
+
+
+
 
 facts_dir_2010_64_nl = """
 
