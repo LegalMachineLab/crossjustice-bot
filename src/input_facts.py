@@ -879,11 +879,10 @@ proceeding_matter(PersonId, breach_of_rights).
 proceeding_matter(PersonId, lawyer_presence_required).
 
 
-%% person_event(PersonId, _waive_right)
+%% person_event(PersonId, waive_right)
 %
-% The person has decided to waive a right
+% The person has waived his defence rights.
 %
-
 person_event(PersonId, waive_right).
 
 
@@ -1504,10 +1503,151 @@ person_request_submitted(PersonId, diplomat).
 person_request_submitted(PersonId, access_materials).
 """
 
+facts_dir_2016_343 = """
+%% person_event(PersonId, cannot_be_located)
+%
+% The person cannot be located
+%
+person_event(PersonId, cannot_be_located).
+
+%% person_danger(PersonId, proper_conduct_proceedings)
+%
+% The person poses a danger to the proper conduct of proceedings
+%
+person_danger(PersonId, proper_conduct_proceedings).
+"""
+
+facts_dir_2016_343_bg = """
+
+%% proceeding_matter(PersonId, pre_trial)
+%
+% The legal proceeding has not yet reached the phase of the trial.
+%
+proceeding_matter(PersonId, pre_trial).
+
+%% proceeding_matter(PersonId, detention_on_remand)
+%
+% The proceeding matter involves detention on remand.
+%
+proceeding_matter(PersonId, detention_on_remand).
+
+%% proceeding_matter(PersonId, hearing)
+%
+% The proceeding matter involves a hearing
+%
+proceeding_matter(PersonId, hearing).
+"""
+
+facts_dir_2016_343_nl = """
+%% proceeding_matter(PersonId, questioning)
+%
+% The proceeding matter involves questioning of the defendant
+%
+proceeding_matter(PersonId, questioning).
+
+%% person_event(PersonId, make_statements)
+%
+% The person has made statements to the investigative authorities during the course of the proceedings
+%
+person_event(PersonId, make_statements).
+
+%% person_status(PersonId, witness)
+%
+% The person has the status of a witness
+%
+person_status(PersonId, witness).
+
+%% person_event(PersonId, not_appear_hearing)
+%
+% The person did not appear at the hearing
+%
+person_event(PersonId, not_appear_hearing).
+"""
+
+facts_dir_2016_343_it = """
+
+%% proceeding_matter(PersonId, investigation)
+%
+% The proceeding matter involves an investigation
+%
+proceeding_matter(PersonId, investigation).
+
+%% proceeding_matter(PersonId, interrogation)
+%
+% The proceeding matter involves an interrogation
+%
+proceeding_matter(PersonId, interrogation).
+
+%% proceeding_matter(PersonId, preliminary_hearing)
+%
+% The proceeding matter involves a preliminary hearing
+%
+proceeding_matter(PersonId, preliminary_hearing).
+
+%% person_event(PersonId, waive_right)
+%
+% The person has waived his defence rights.
+%
+person_event(PersonId, waive_right).
+
+%% person_event(PersonId, not_appear_hearing)
+%
+% The person did not appear at the hearing
+%
+person_event(PersonId, not_appear_hearing).
+
+%% person_circumstances(PersonId, inculpable_absence)
+%
+% The person was absent due to inculpable circumstances
+%
+person_circumstances(PersonId, inculpable_absence).
+"""
+
+facts_dir_2016_343_pl = """
+
+%% proceeding_matter(PersonId, irresolvable_doubts)
+%
+% The proceeding matter involves irresolvable doubts
+%
+proceeding_matter(PersonId, irresolvable_doubts).
+
+%% proceeding_matter(PersonId, external_examination_body)
+%
+% The proceeding matter involves external examination of the body and other tests not infringing his bodily integrity.
+%
+proceeding_matter(PersonId, external_examination_body).
+
+%% proceeding_matter(PersonId, evidentiary_procedure)
+%
+% The proceeding matter involves an evidentiary procedure
+%
+proceeding_matter(PersonId, evidentiary_procedure).
+
+%% proceeding_matter(PersonId, summary_offences)
+%
+% The proceeding matter involves summary offences
+%
+proceeding_matter(PersonId, summary_offences).
+
+%% person_danger(PersonId, inhibit_explanations_coaccused)
+%
+% The person poses a danger by inhibiting explanations from co-accused individuals
+%
+person_danger(PersonId, inhibit_explanations_coaccused).
+
+%% person_danger(PersonId, inhibit_testimonies)
+%
+% The person poses a danger by inhibiting testimonies
+%
+person_danger(PersonId, inhibit_testimonies).
+"""
+
+
 dir_facts = {
     "directive_2010_64" : facts_dir_2010_64,
     "directive_2013_48" : facts_dir_2013_48,
-    "directive_2012_13" : facts_dir_2012_13
+    "directive_2012_13" : facts_dir_2012_13,
+    "directive_2016_343": facts_dir_2016_343
 }
 
 national_facts = {
@@ -1528,5 +1668,11 @@ national_facts = {
         "pl" : facts_dir_2012_13_pl,
         "nl" : facts_dir_2012_13_nl,
         "bg" : facts_dir_2012_13_bg
+    },
+    "directive_2016_343" : {
+        "it" : facts_dir_2016_343_it,
+        "pl" : facts_dir_2016_343_pl,
+        "nl" : facts_dir_2016_343_nl,
+        "bg" : facts_dir_2016_343_bg
     }
 }
