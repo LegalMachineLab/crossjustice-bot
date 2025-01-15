@@ -741,7 +741,7 @@ person_request_submitted(PersonId, waive_right).
 
 %% person_status(PersonId, _informed_consequences)
 %
-% PersonId has been informed of the consequences of waiving their rights to legal assistance.
+% The defendant has waived their right to legal assistance and has been informed of the consequences of doing so.
 %
 
 person_status(PersonId, informed_consequences).
