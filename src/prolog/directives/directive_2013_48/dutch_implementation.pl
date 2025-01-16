@@ -87,7 +87,7 @@ has_right(art28, PersonId, right_to_access_lawyer, trial):-
 
 has_right(art28b_1, PersonId, right_to_access_lawyer, trial):-
     person_status(PersonId, suspect),
-    person_status(PersonId, detention),
+    person_status(PersonId, detained),
     person_status(PersonId, vulnerable),
     \+ exception(has_right(art28b_1, PersonId, right_to_access_lawyer, trial), _).
 

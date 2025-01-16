@@ -695,12 +695,12 @@ person_status(PersonId, raise_suspicion).
 
 
 
-%% person_status(PersonId, _detention)
+%% person_status(PersonId, _detained)
 %
 % The detention of the person has been ordered for investigation at the arraignment.
 %
 
-person_status(PersonId, detention).
+person_status(PersonId, detained).
 
 
 
