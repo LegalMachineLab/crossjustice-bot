@@ -48,12 +48,18 @@ def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
       time.sleep(3)
 
 
-def arg_hash(context):
+def facts_hash(context):
+  return hash(f"{context["facts"]}")
+
+
+def target_hash(context):
   return hash(f"{context["right_target"]} - {context["country_target"]} - {context["opt_target"]} - {context["facts"]}")
 
 
 def pretty_rights(context):
-   return [i["article"] + " - " + i["right"] + " - " + i["option"] for _, v in context["rights"].items() for i in v["directive"]]
+   if facts_hash(context) not in context["rights"]:
+      return ""
+   return [i["article"] + " - " + i["right"] + " - " + i["option"] for _, v in context["rights"][facts_hash(context)].items() for i in v["directive"]]
 
 
 def filter_target(rights, context):
@@ -118,7 +124,7 @@ def select_prompt(context):
 
       These are the details on {context["right_target"]} - {context["opt_target"]}:
 
-      {natural_language(filter_target(context["rights"], context))}
+      {natural_language(filter_target(context["rights"][facts_hash(context)], context))}
 
       Respect this instruction:
       DO NOT invent any rights, only present what has been computed.
@@ -127,11 +133,11 @@ def select_prompt(context):
 
       Questions on conformity can only be answered based on the following text. Do not add anything.
 
-      {context["pretty_arguments"][arg_hash(context)]}
+      {context["pretty_arguments"][target_hash(context)]}
 
       Following is the list of rights for different options in the national implementation:
 
-      {natural_language(filter_target_inverse(context["target"], context))}
+      {natural_language(filter_target_inverse(context["target"][target_hash(context)], context))}
 
       If there is no list, tell the user no rights are granted in the specific EU state.
       If there are rights, tell the user the list of national rights in natural language.
@@ -141,23 +147,24 @@ def select_prompt(context):
       If there's more than one fact, tell the user what facts are needed for the national law to apply in this specific scenario.
       Provide the user a brief explanation of these facts in natural language.
 
-    """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
+    """ if context["right_target"] and target_hash(context) in context["pretty_arguments"] else "")
 
 
 def select_state(messages, context):
     res = prompt_model(f"""
+        In the context of a system assisting a user in building a comprehensive case description and providing info on the rights applicable to the case.
         According to the following input, what does the user want to do?
 
-        0. None of the following
-        1. Input new facts into the system;
+        0. None of the following;
+        1. Provide new details to the scenario;
         2. Know which rights are deducible from her scenario;
         3. Know about one of this specific rights: {pretty_rights(context)}
 
-        Reply "1" if 1, "2" if 2, and "3 - article - right - option (from the list)" if 3.
+        Reply "0" if 0, "1" if 1, "2" if 2, and "3 - article - right - option (from the list)" if 3.
         Do not include anything else in your output.
 
         {messages[-2:]}
-    """)
+    """, temperature=0.01)
 
     print("Selecting State:")
     print(res)
@@ -170,14 +177,14 @@ def select_state(messages, context):
 
 
 def run_argumentation(context):
-    if context["right_target"] and context["country_target"] and arg_hash(context) not in context["arguments"]:
-      rules = [x["arg_rule"] for x in filter_target(context["rights"], context)] + [x["arg_rule"] for x in filter_target(context["target"], context)]
+    if context["right_target"] and context["country_target"] and target_hash(context) not in context["arguments"]:
+      rules = [x["arg_rule"] for x in filter_target(context["rights"][facts_hash(context)], context)] + [x["arg_rule"] for x in filter_target(context["target"][target_hash(context)], context)]
       theory = get_full_theory("\n".join(rules), [context["country_target"]])
-      context["arguments"][arg_hash(context)] = run_reasoner(theory)
-      context["pretty_arguments"][arg_hash(context)] = prompt_model(f"""
+      context["arguments"][target_hash(context)] = run_reasoner(theory)
+      context["pretty_arguments"][target_hash(context)] = prompt_model(f"""
         Arguments on conformity with national implementations [{context["country_target"]}]:
 
-        {context["arguments"][arg_hash(context)]}
+        {context["arguments"][target_hash(context)]}
 
         Arguments are either IN or OUT:
          - If IN they are accepted according to Dung's grounded semantics;
@@ -197,19 +204,19 @@ def run_argumentation(context):
 
         Details on national implementation:
 
-        {filter_target(context["target"], context)}
+        {filter_target(context["target"][target_hash(context)], context)}
 
         Details on european implementation:
 
-        {filter_target(context["rights"], context)}
+        {filter_target(context["rights"][facts_hash(context)], context)}
 
         Explain if there is conformity and why.
       """)
       print("Argumentation result:")
-      print(context["arguments"][arg_hash(context)])
+      print(context["arguments"][target_hash(context)])
       print()
       print("Argumentation parsed:")
-      print(context["pretty_arguments"][arg_hash(context)])
+      print(context["pretty_arguments"][target_hash(context)])
       print()
 
 
@@ -236,7 +243,7 @@ def extract_facts(user_text, context):
     - If the input is not relevant do not extract any fact
 
     Format of the output:
-    - INCLUDE THE LIST OF PROLOG FACTS EXTRACTED inside a single markdown block.
+    - INCLUDE THE EXTRACTED PROLOG FACTS inside a single markdown block.
     - DO NOT create more than one block. Keep all facts in a single one.
     - DO NOT put comments inside the markdown block.
     - All variables must be lower letter for a fact to be valid.
@@ -246,7 +253,7 @@ def extract_facts(user_text, context):
     Here is the user input:
 
     {user_text}
-  """, temperature=0.5)
+  """, temperature=0.01)
 
   print(user_text)
   print()
@@ -255,13 +262,16 @@ def extract_facts(user_text, context):
 
 
 def add_facts(messages, context):
-  extr = extract_facts(messages[-1]["content"], context)
-  context["facts"] = list(set(context["facts"] + extr))
-  context["person_id"] = re.search(r"person_status\((.+),", "\n".join(context["facts"])).group(1).strip()
+  extr = extract_facts("\n".join([x["content"] for x in messages if x["role"] == "user"]), context)
+  if set(extr) == set(context["facts"]):
+    return False
+  context["facts"] = list(set(extr))
+  id = re.search(r"person_status\((.+),", "\n".join(context["facts"]))
+  context["person_id"] = id.group(1).strip() if id else context["person_id"]
   print(context["person_id"])
   print(context["facts"])
   print()
-  return len(extr) > 0
+  return True
 
 
 def prettify_prolog(input):
@@ -283,32 +293,34 @@ def prettify_prolog(input):
   for _, v in input.items():
     for _, r in v.items():
        for x in r:
-          x["pretty_explanation"] = _prettify(x["explanation"])
+          x["pretty_explanation"] = _prettify(x)
 
 def run_dir_prolog(context):
+  if facts_hash(context) in context["rights"]:
+     return
   try:
-    context["rights"] = query(context["person_id"], context["facts"], ["dir"], [context["directive_target"]])
-    prettify_prolog(context["rights"])
+    context["rights"][facts_hash(context)] = query(context["person_id"], context["facts"], ["dir"], [context["directive_target"]])
+    prettify_prolog(context["rights"][facts_hash(context)])
     print("Dir rights:")
-    print(context["rights"])
+    print(context["rights"][facts_hash(context)])
     print()
   except Exception as e:
     print(e)
 
 
 def run_national_prolog(context):
+  if target_hash(context) in context["target"]:
+     return
   try:
-    context["target"] = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"])
-    prettify_prolog(context["target"])
+    context["target"][target_hash(context)] = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"])
+    prettify_prolog(context["target"][target_hash(context)])
     print("National result:")
-    print(context["target"])
+    print(context["target"][target_hash(context)])
     print()
   except Exception as e:
     print(e)
 
 def suggest_facts(context):
-  if not context["country_target"] or not context["right_target"] or not context["person_id"]:
-     return
   try:
       response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True)
       context["suggestions"] = set([y for _, v in response[context["right_target"]].items() for x in v for y in x["abduced"]])
@@ -375,9 +387,6 @@ def main():
       3. ask me an explanation of the right you are interested in;
       4. Describe the conformity of the national implementation to the EU legislation on the specific right.
 
-      ## Extracted Facts:
-      {"\n".join(["**" + x + "**" for x in st.session_state.context["facts"]])}
-
       ### Talk with me:
       To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
 
@@ -411,9 +420,15 @@ def main():
 
         select_state(st.session_state.chat_message, st.session_state.context)
 
-        if True or st.session_state.context["state"] == "1":
+        if st.session_state.context["state"] == "1":
           if add_facts(st.session_state.chat_message, st.session_state.context):
             run_dir_prolog(st.session_state.context)
+
+        st.sidebar.markdown(f"## State: {st.session_state.context["state"]}")
+        st.sidebar.markdown(f"""
+          ## Extracted Facts:
+          {"".join(["\n\n- **" + x + "**" for x in st.session_state.context["facts"]])}
+        """)
 
         if st.session_state.context["state"] == "3":
           run_national_prolog(st.session_state.context)
