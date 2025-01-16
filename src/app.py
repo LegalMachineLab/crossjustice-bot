@@ -20,7 +20,7 @@ from argumentation.arg_interface import get_full_theory, run_reasoner
 
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
   client = Groq(
-      api_key='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',
+      api_key='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',
   )
 
   while True:
@@ -305,9 +305,11 @@ def main():
 
       This is a simple tutorial on how to use the bot.
 
-      ### Select dir and law:
-      1. Select an option from the dropdown in the sidebar.
-      2. The selected option will be used by  the bot.
+      ## How to use me:
+      1. Describe the scenario;
+      2. when you are satisfied of the scenario, ask me to provide the rights that apply to your scenario;
+      3. ask me an explanation of the right you are interested in;
+      4. Describe the conformity of the national implementation to the EU legislation on the specific right.
 
       ### Talk with me:
       To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
@@ -344,7 +346,7 @@ def main():
       st.session_state.chat_message = []
       # st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
       st.session_state.memory = ConversationSummaryBufferMemory(llm=ChatGroq(
-          groq_api_key='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',
+          groq_api_key='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',
           model_name="llama3-70b-8192",
           temperature=0.5
       ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
