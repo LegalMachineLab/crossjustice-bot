@@ -151,7 +151,7 @@ def select_prompt(context):
 
       These are specific and additional facts required by the national implementation: '''{context["suggestions"]}'''.
       If there are no facts, tell the user such.
-      If there's more than one fact, tell the user some facts may be needed for the national law to apply in this specific scenario.
+      If there's more than one fact, tell the user what facts are needed for the national law to apply in this specific scenario.
       Provide the user a brief explanation of these facts in natural language.
 
     """ if context["right_target"] and arg_hash(context) in context["pretty_arguments"] else "")
