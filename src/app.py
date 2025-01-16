@@ -59,14 +59,16 @@ def pretty_rights(context):
 def filter_target(rights, context):
    if context["right_target"] not in rights:
       return {}
-   return {k : [i for i in v if i["option"] == context["opt_target"]] for k, v in rights[context["right_target"]].items()}
+   return [x for _, v in rights[context["right_target"]].items() for x in v if x["option"] == context["opt_target"]]
 
 
 def filter_target_inverse(rights, context):
    if context["right_target"] not in rights:
       return {}
-   return {k : [i for i in v if i["option"] != context["opt_target"]] for k, v in rights[context["right_target"]].items()}
+   return [x for _, v in rights[context["right_target"]].items() for x in v if x["option"] != context["opt_target"]]
 
+def natural_language(rights):
+   return [x["pretty_explanation"] for x in rights]
 
 def select_prompt(context):
 
@@ -79,19 +81,11 @@ def select_prompt(context):
 
       Consider also if any of the following conditions may be relevant :'''{input_facts.dir_facts[context["directive_target"]]} {input_facts.national_facts[context["directive_target"]][context["country_target"]]}'''.
       Evaluate whether these facts can reasonably apply to the given scenario.
-      You can extract all facts that are present, if similar or equivalent facts apply.
       Avoid asking yes or no questions. Just ask a few questions on the state of the scenario.
 
       Respect the following instructions:
-      - DO NOT create new facts.
       - DO NOT tell the user what rights may apply.
       - DO NOT ask similar questions more than once.
-
-      Format of the output:
-      - INCLUDE THE LIST OF PROLOG FACTS EXTRACTED inside a single markdown block.
-      - DO NOT create more than one block. Keep all facts in a single one.
-      - DO NOT put comments inside the markdown block.
-      - All variables must be lower letter for a fact to be valid.
 
       These are the facts the user provided so far:
 
@@ -124,27 +118,20 @@ def select_prompt(context):
 
       These are the details on {context["right_target"]} - {context["opt_target"]}:
 
-      {filter_target(context["rights"], context)}
+      {natural_language(filter_target(context["rights"], context))}
 
       Respect this instruction:
       DO NOT invent any rights, only present what has been computed.
 
-      The right has a label, a corresponding article, and an option (specific application).
-      One right can have multiple options. Show all the options.
-
-      RESPECT this format to explain the right:
-      - Explain what each right refers to.
-      - Tell the user the article and source of origin.
-      - Give a summary of the conditions for the application of the specific right.
-
       Ask if the user wants to know about the conformity evaluation with the European country about any right.
+
       Questions on conformity can only be answered based on the following text. Do not add anything.
 
       {context["pretty_arguments"][arg_hash(context)]}
 
       Following is the list of rights for different options in the national implementation:
 
-      {filter_target_inverse(context["target"], context)}
+      {natural_language(filter_target_inverse(context["target"], context))}
 
       If there is no list, tell the user no rights are granted in the specific EU state.
       If there are rights, tell the user the list of national rights in natural language.
@@ -161,6 +148,7 @@ def select_state(messages, context):
     res = prompt_model(f"""
         According to the following input, what does the user want to do?
 
+        0. None of the following
         1. Input new facts into the system;
         2. Know which rights are deducible from her scenario;
         3. Know about one of this specific rights: {pretty_rights(context)}
@@ -178,12 +166,12 @@ def select_state(messages, context):
     context["right_target"] = [x.strip() for x in res.split("-")][2] if "3" in res else context["right_target"]
     context["opt_target"] = [x.strip() for x in res.split("-")][3] if "3" in res else context["opt_target"]
     raw_state = [x.strip() for x in res.split("-")][0]
-    context["state"] = "1" if "1" in raw_state else "2" if "2" in raw_state else "3"
+    context["state"] = "0" if "0" in raw_state else "1" if "1" in raw_state else "2" if "2" in raw_state else "3"
 
 
 def run_argumentation(context):
     if context["right_target"] and context["country_target"] and arg_hash(context) not in context["arguments"]:
-      rules = [x["arg_rule"] for _, v in filter_target(context["rights"], context).items() for x in v] + [x["arg_rule"] for _, v in filter_target(context["target"], context).items() for x in v]
+      rules = [x["arg_rule"] for x in filter_target(context["rights"], context)] + [x["arg_rule"] for x in filter_target(context["target"], context)]
       theory = get_full_theory("\n".join(rules), [context["country_target"]])
       context["arguments"][arg_hash(context)] = run_reasoner(theory)
       context["pretty_arguments"][arg_hash(context)] = prompt_model(f"""
@@ -225,50 +213,105 @@ def run_argumentation(context):
       print()
 
 
-def parse_output(user_text):
+def extract_facts(user_text, context):
   def _extract_code(completion):
     from mdextractor import extract_md_blocks
     blocks = extract_md_blocks(completion)
     return blocks[0] if blocks else ""
 
-  return [x for x in [y.strip().split("%")[0] for y in _extract_code(user_text).replace(".", "").split("\n")] if x]
+  res = prompt_model(f"""
+    Assist the user in building a comprehensive case description by extracting relevant Prolog facts.
+    The list of prolog facts follows:
+
+    '''
+    {input_facts.facts}
+    {input_facts.dir_facts[context["directive_target"]]}
+    {input_facts.national_facts[context["directive_target"]][context["country_target"]]}
+    '''
+
+    Evaluate whether these facts can reasonably apply to the given scenario.
+
+    Respect the following instructions:
+    - DO NOT create new facts.
+    - If the input is not relevant do not extract any fact
+
+    Format of the output:
+    - INCLUDE THE LIST OF PROLOG FACTS EXTRACTED inside a single markdown block.
+    - DO NOT create more than one block. Keep all facts in a single one.
+    - DO NOT put comments inside the markdown block.
+    - All variables must be lower letter for a fact to be valid.
+
+    {"PersonId is " + context["person_id"] + "." if context["person_id"] else ""}
+
+    Here is the user input:
+
+    {user_text}
+  """, temperature=0.5)
+
+  print(user_text)
+  print()
+
+  return [x for x in [y.strip().split("%")[0] for y in _extract_code(res).replace(".", "").split("\n")] if x]
 
 
-def run_dir_prolog(output, context):
+def add_facts(messages, context):
+  extr = extract_facts(messages[-1]["content"], context)
+  context["facts"] = list(set(context["facts"] + extr))
+  context["person_id"] = re.search(r"person_status\((.+),", "\n".join(context["facts"])).group(1).strip()
+  print(context["person_id"])
+  print(context["facts"])
+  print()
+  return len(extr) > 0
+
+
+def prettify_prolog(input):
+  def _prettify(elem):
+    return prompt_model(f"""
+      Prolog Tree:
+      {elem}
+
+      You have been provided a Prolog inference tree using a legal norm in a specific case (Prolog Tree).
+      Provide the following info according to the given structure:
+
+      Summary: simplified text of the legal norm. Use everyday langaguage with a serious register. Add any information you have on the source of law;
+      What Rights do You Have: what rights do you have according to the Prolog explanation;
+      Why do You Have Them: inference steps and reasoning that led to the the rights. Use all the Prolog terms in the explanation explicitly referencing the original Prolog when needed.
+
+      Use enumerations in the 'What Rights do You Have' and 'Why do You Have Them' sections if needed.
+    """, temperature=0.01)
+
+  for _, v in input.items():
+    for _, r in v.items():
+       for x in r:
+          x["pretty_explanation"] = _prettify(x["explanation"])
+
+def run_dir_prolog(context):
   try:
-    user_facts = parse_output(output)
-    if user_facts:
-      context["person_id"] = re.search(r"person_status\((.+),", "\n".join(user_facts)).group(1).strip()
-      response = query(context["person_id"], user_facts, ["dir"], [context["directive_target"]])
-      context["facts"] = user_facts
-      context["rights"] = response
-      print("Dir rights:")
-      print(context["person_id"])
-      print(context["facts"])
-      print(context["rights"])
-      print()
+    context["rights"] = query(context["person_id"], context["facts"], ["dir"], [context["directive_target"]])
+    prettify_prolog(context["rights"])
+    print("Dir rights:")
+    print(context["rights"])
+    print()
   except Exception as e:
     print(e)
 
 
 def run_national_prolog(context):
   try:
-    response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"]) # opt=context["opt_target"]
-    context["target"] = response
+    context["target"] = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"])
+    prettify_prolog(context["target"])
     print("National result:")
     print(context["target"])
     print()
   except Exception as e:
     print(e)
 
-
 def suggest_facts(context):
   if not context["country_target"] or not context["right_target"] or not context["person_id"]:
      return
   try:
-      response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True) # opt=context["opt_target"]
-      abduced = set([y for _, v in response[context["right_target"]].items() for x in v for y in x["abduced"]])
-      context["suggestions"] = abduced
+      response = query(context["person_id"], context["facts"], [context["country_target"]], [context["directive_target"]], right=context["right_target"], abduce=True)
+      context["suggestions"] = set([y for _, v in response[context["right_target"]].items() for x in v for y in x["abduced"]])
       print("Abduction result:")
       print(context["suggestions"])
       print()
@@ -291,42 +334,6 @@ def llm_response(input_text, context, memory):
 
 
 def main():
-
-    #st.title("Chat with CrossJustice!")
-
-    dirs = ["directive_2010_64", "directive_2012_13", "directive_2016_343", "directive_2013_48"]
-    selected_dir = st.sidebar.selectbox('Choose from the list the relevant directives: Directive 2010/64 on right to interpretation and translation; 2012/13 on the right to information, 2016/343 on the presumption of innocence; 2013/48 on the right of access to a lawyer', dirs)
-
-    laws = ["it", "nl", "bg", "pl"]
-    selected_law = st.sidebar.selectbox('Choose the country where the proceedings are taking place, therefore the applicable national law:', laws)
-
-    st.sidebar.markdown("""
-      ## Welcome to the Tutorial
-
-      This is a simple tutorial on how to use the bot.
-
-      ## How to use me:
-      1. Describe the scenario;
-      2. when you are satisfied of the scenario, ask me to provide the rights that apply to your scenario;
-      3. ask me an explanation of the right you are interested in;
-      4. Describe the conformity of the national implementation to the EU legislation on the specific right.
-
-      ### Talk with me:
-      To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
-
-      1. Their **name**.
-      2. The **proceeding language**.
-      3. The **location** of the proceedings.
-      4. Their **nationality**.
-      5. Their **spoken language(s)**.
-      6. Their **status** (e.g., suspect or accused).
-      7. Whether they were **arrested/detained** by authorities.
-      8. The **stage** of the proceedings (e.g., investigation, trial).
-      9. Details of any **investigative events** (e.g., searches, interrogations).
-      10. Any other **relevant information** about the case.
-
-      Providing clear, complete information ensures tailored and effective legal guidance.
-    """)
 
     if "chat_message" not in st.session_state:
       st.session_state.context = {
@@ -351,6 +358,43 @@ def main():
           temperature=0.5
       ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
 
+    dirs = ["directive_2010_64", "directive_2012_13", "directive_2016_343", "directive_2013_48"]
+    selected_dir = st.sidebar.selectbox('Choose from the list the relevant directives: Directive 2010/64 on right to interpretation and translation; 2012/13 on the right to information, 2016/343 on the presumption of innocence; 2013/48 on the right of access to a lawyer', dirs)
+
+    laws = ["it", "nl", "bg", "pl"]
+    selected_law = st.sidebar.selectbox('Choose the country where the proceedings are taking place, therefore the applicable national law:', laws)
+
+    st.sidebar.markdown(f"""
+      ## Welcome to the Tutorial
+
+      This is a simple tutorial on how to use the bot.
+
+      ## How to use me:
+      1. Describe the scenario;
+      2. when you are satisfied of the scenario, ask me to provide the rights that apply to your scenario;
+      3. ask me an explanation of the right you are interested in;
+      4. Describe the conformity of the national implementation to the EU legislation on the specific right.
+
+      ## Extracted Facts:
+      {"\n".join(["**" + x + "**" for x in st.session_state.context["facts"]])}
+
+      ### Talk with me:
+      To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
+
+      1. Their **name**.
+      2. The **proceeding language**.
+      3. The **location** of the proceedings.
+      4. Their **nationality**.
+      5. Their **spoken language(s)**.
+      6. Their **status** (e.g., suspect or accused).
+      7. Whether they were **arrested/detained** by authorities.
+      8. The **stage** of the proceedings (e.g., investigation, trial).
+      9. Details of any **investigative events** (e.g., searches, interrogations).
+      10. Any other **relevant information** about the case.
+
+      Providing clear, complete information ensures tailored and effective legal guidance.
+    """)
+
     for message in st.session_state.chat_message:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -367,14 +411,16 @@ def main():
 
         select_state(st.session_state.chat_message, st.session_state.context)
 
+        if True or st.session_state.context["state"] == "1":
+          if add_facts(st.session_state.chat_message, st.session_state.context):
+            run_dir_prolog(st.session_state.context)
+
         if st.session_state.context["state"] == "3":
           run_national_prolog(st.session_state.context)
           run_argumentation(st.session_state.context)
           suggest_facts(st.session_state.context)
 
         response = llm_response(user_question, st.session_state.context, st.session_state.memory)
-
-        run_dir_prolog(response, st.session_state.context)
 
         with st.chat_message("ai"):
           st.markdown(response)
