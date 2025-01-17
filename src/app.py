@@ -74,7 +74,7 @@ def filter_target_inverse(rights, context):
    return [x for _, v in rights[context["right_target"]].items() for x in v if x["option"] != context["opt_target"]]
 
 def natural_language(rights):
-   return [x["pretty_explanation"] for x in rights]
+   return "\n\nHere is the next right:\n\n".join([x["pretty_explanation"] for x in rights])
 
 def select_prompt(context):
 
