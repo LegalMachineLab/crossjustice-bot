@@ -88,7 +88,7 @@ def parse_file(file_path, file_name):
     test_match = re.search(r"TEST\n(.*?)\nTEST_END", text, re.DOTALL)
     tests = [re.sub(r"^\d+\.\s*", "", line.strip()) for line in test_match.group(1).split("\n") if line.strip()] if test_match else []
 
-    return file_name_splits[0], file_name_splits[1], facts, tests
+    return file_name_splits[0], file_name_splits[1], file_name_splits[2], facts, tests
 
 def compute_metrics(extracted, reference):
     extracted_set = set(extracted)
@@ -115,9 +115,9 @@ if __name__ == "__main__":
     false_negatives = 0
 
     for file in files:
-        directive, law, facts, tests = parse_file(path, file)
+        directive, law, person_id, facts, tests = parse_file(path, file)
         for test in tests[:10]:
-           m = compute_metrics(extract_facts(test, directive, law, "mario"), facts)
+           m = compute_metrics(extract_facts(test, directive, law, person_id), facts)
            true_positives += m[0]
            false_positives += m[1]
            false_negatives += m[2]
