@@ -9,7 +9,7 @@ import input_facts
 
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
   client = Groq(
-      api_key='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',
+      api_key='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',
   )
 
   while True:
@@ -119,6 +119,9 @@ def compute_metrics(true_positives, false_positives, false_negatives):
   }
   return res
 
+def get_samples(tests, facts):
+  n = 2 if len(facts) == 1 else 5
+  return tests[:(n if len(tests) > n else len(tests))]
 
 if __name__ == "__main__":
     path = os.path.join(Path(__file__).parent.absolute(), "..", "res", "extraction")
@@ -140,7 +143,7 @@ if __name__ == "__main__":
       temp_false_positives = 0
       temp_false_negatives = 0
 
-      for i, test in enumerate(tests[:(10 if len(tests) > 10 else len(tests))]):
+      for i, test in enumerate(get_samples(tests, facts)):
         print(f"Computing scenario {i + 1} in {file}")
         extracted = extract_facts(test, directive, law, person_id)
         m = compute_raw_metrics(extracted, facts)
