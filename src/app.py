@@ -109,11 +109,11 @@ def select_prompt(context):
       Format of the answer:
       Tell the user the list of computed rights in natural language.
       Each right has a label, a corresponding legal source (law) and article, and a specific application (option).
-
       Format the output in the same concise manner, ensuring that each right is matched to its corresponding options and article.
 
-      Respect this instruction:
+      Respect these instructions:
       DO NOT invent any rights, only present what has been computed.
+      Present all rights.
 
       If no rights apply, ask the user if more details should be provided to the scenario.
       If rights are granted, ask if the user wants to know more details any of these rights.
@@ -191,16 +191,15 @@ def run_argumentation(context):
          - If OUT they are rejected according to Dung's grounded semantics;
 
         To extract the conformity analyze the IN arguments provided, ignore the OUT arguments.
-        Read the IN arguments to define the level of conformity.
+        Read the IN arguments to define the level of conformity. For each right there is a list of conditions needed to grant that right.
         There are three levels of conformity:
-          - if you read in the IN arguments ((conformity(COUNTRY, ART)) it means there is Full Conformity: All rights and conditions are identical between EU and national implementation.
+          - if you read in the IN arguments ((conformity(COUNTRY, ART)) it means there is Full Conformity: The right and its conditions are identical between EU and national implementation.
           - if you read in the IN arguments ('-'(conformity(COUNTRY, ART)) it means there is No Conformity: That specific right is not granted under the national implementation.
-          - if you read in the IN arguments (partial_conformity(COUNTRY, ART)) it means there is Partial Conformity: Rights are granted, but under different conditions than the european source.
+          - if you read in the IN arguments (partial_conformity(COUNTRY, ART)) it means there is Partial Conformity: The right is granted under national law, but under different conditions than the european source.
 
         If there's full conformity, tell the user the right is granted and perfectly recognised under the national law.
-        If there's no conformity, tell the user the right is not granted under national law. There may be similar ones.
-        If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights.
-        Analyze the key differences between the two. Focus on the meaning of the relevant facts.
+        If there's no conformity, tell the user the right is not granted under national law. Similar rights may apply, but its not relevant to the conformity.
+        If there's partial conformity, evaluate the conditions required by the national implementation of the EU and National rights, and analyze the key differences between the two, and the option of the right.
 
         Details on national implementation:
 
@@ -282,9 +281,8 @@ def prettify_prolog(input):
       {elem}
 
       You have been provided a Prolog inference tree using a legal norm in a specific case (Prolog Tree).
-      For the right there is a label, a corresponding article, and an option (specific application).
-      The option helps identifying the characteristics of the main right.
-      Focus on the main right, and specify it according to the option.
+      Each right has a label, a corresponding legal source (law) and article, and a specific application (option).
+      Ensure that each right is matched to its corresponding option and article.
 
       Provide the following info according to the given structure:
 
