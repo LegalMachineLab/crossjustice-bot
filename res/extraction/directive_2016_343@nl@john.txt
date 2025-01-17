@@ -1,6 +1,7 @@
 FACTS
 
 person_status(john, suspect).
+proceeding_type(john, criminal).
 person_event(john, cannot_be_located).
 
 FACTS_END

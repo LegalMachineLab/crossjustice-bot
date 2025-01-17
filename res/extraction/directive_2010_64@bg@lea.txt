@@ -7,7 +7,6 @@ proceeding_language(lea, bulgarian).
 person_document(lea, charge).
 person_status(lea, deprived_of_liberty).
 person_document(lea, remand_measure).
-proceeding_matter(lea, investigation).
 proceeding_matter(lea, interrogation).
 
 FACTS_END

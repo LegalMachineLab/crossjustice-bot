@@ -2,7 +2,7 @@ FACTS
 
 proceeding_type(luke, europeanArrestWarrant).
 person_status(luke, accused).
-proceeding_type(luke, criminal).
+proceeding_matter(luke, arrest).
 person_speaks(luke, italian).
 lawyer_language(luke, polish).
 proceeding_language(luke, polish).

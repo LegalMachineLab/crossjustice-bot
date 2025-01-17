@@ -9,6 +9,6 @@ proceeding_language(josephine, italy).
 FACTS_END
 TEST
 
-1. Josephine, a French citizen, who only speaks french, was formally charged by the Italian authorities for having committed a serious crime. The pre trial proceeding has just started. The proceeding is in French.
+1. Josephine, a French citizen, who only speaks french, was formally charged by the Italian authorities for having committed a serious crime. The proceeding is in French.
 
 TEST_END

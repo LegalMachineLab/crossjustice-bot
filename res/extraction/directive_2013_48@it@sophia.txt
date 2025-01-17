@@ -1,10 +1,13 @@
 FACTS
 
 proceeding_type(sophia, criminal).
+proceeding_matter(sophia, questioning).
+proceeding_country(sophia, italy).
+person_nationality(sophia, greece).
+person_status(sophia, requested).
 person_status(sophia, suspect).
 proceeding_matter(sophia, summoned_court).
-proceeding_country(anna, italy).
-person_nationality(anna, greece).
+proceeding_language(sophia, italian).
 
 FACTS_END
 TEST
