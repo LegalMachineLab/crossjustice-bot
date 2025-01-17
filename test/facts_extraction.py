@@ -109,6 +109,9 @@ def compute_metrics(true_positives, false_positives, false_negatives):
   precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
   recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
   res = {
+    "true_positives" : true_positives,
+    "false_positives" : false_positives,
+    "false_negatives" : false_negatives,
     "precision" : precision,
     "recall": recall,
     "f1": _f_beta(1, precision, recall),
@@ -137,7 +140,7 @@ if __name__ == "__main__":
       temp_false_positives = 0
       temp_false_negatives = 0
 
-      for i, test in enumerate(tests[:(100 if len(tests) > 100 else len(tests))]):
+      for i, test in enumerate(tests[:(10 if len(tests) > 10 else len(tests))]):
         print(f"Computing scenario {i + 1} in {file}")
         extracted = extract_facts(test, directive, law, person_id)
         m = compute_raw_metrics(extracted, facts)
