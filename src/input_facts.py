@@ -198,7 +198,7 @@ person_nominate(PersonId, PersonId2).
 
 %% person_danger(PersonId, _life)
 %
-% There is need to avoid damage to a person's life
+% There is need to avoid damage to any person's life
 %
 
 person_danger(PersonId, life).
