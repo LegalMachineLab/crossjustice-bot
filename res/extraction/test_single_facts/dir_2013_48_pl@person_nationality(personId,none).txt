@@ -1,0 +1,30 @@
+FACTS
+
+person_nationality(personId, none)
+
+FACTS_END
+
+TEST
+
+1. The individual lacks citizenship.
+2. Citizenship has not been granted to this person.
+3. This person is without a citizenship status.
+4. The individual is not a citizen.
+5. The person has no citizenship.
+6. This individual is not in possession of citizenship.
+7. Citizenship is absent for this person.
+8. The person is not recognized as a citizen.
+9. The individual does not hold citizenship.
+10. This person has not acquired a citizenship.
+11. The person is devoid of citizenship.
+12. Citizenship is not held by this individual.
+13. The individual is without a nationality.
+14. This person does not possess citizenship.
+15. The person is not assigned any citizenship.
+16. The individual is not affiliated with any citizenship.
+17. This individual has no citizenship status.
+18. The person remains uncitizenized.
+19. The individual is not a legal citizen.
+20. Citizenship is not attributed to this person.
+
+TEST_END

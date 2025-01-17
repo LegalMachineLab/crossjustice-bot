@@ -1,0 +1,30 @@
+FACTS
+
+proceeding_language(personId, Language)
+
+FACTS_END
+
+TEST
+
+1. The proceedings will be conducted in X.
+2. X is the language used for the proceedings.
+3. The proceedings are carried out in X.
+4. X serves as the language for the proceedings.
+5. Proceedings will occur in the language of X.
+6. The language employed for the proceedings is X.
+7. X is the designated language for the proceedings.
+8. The proceedings utilize X as the language.
+9. The official language of the proceedings is X.
+10. X is the medium of language for the proceedings.
+11. The proceedings take place in X.
+12. X is the language in which the proceedings are held.
+13. The language chosen for the proceedings is X.
+14. The proceedings are in the language of X.
+15. X will be the language of the proceedings.
+16. The proceedings are expressed in X.
+17. X is the language adopted for the proceedings.
+18. The proceedings will utilize X as the language.
+19. X is the language for the proceedings.
+20. The proceedings will be in the language of X.
+
+TEST_END

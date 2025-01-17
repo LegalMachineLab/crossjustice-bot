@@ -1,0 +1,30 @@
+FACTS
+
+person_status(personId, vulnerable)
+
+FACTS_END
+
+TEST
+
+1. personId is currently vulnerable and needs special care or intervention.
+2. personId is in a sensitive condition, necessitating extra attention or precautions.
+3. personId requires special handling due to their vulnerable state.
+4. personId is experiencing vulnerability and requires specific measures for support.
+5. personId is in a delicate situation, needing particular attention and care.
+6. personId is in a state that calls for special protective measures.
+7. personId is vulnerable and demands careful attention and tailored measures.
+8. personId requires special consideration due to their current vulnerable state.
+9. personId is in a fragile condition, warranting special attention or actions.
+10. personId needs special measures due to their vulnerable situation.
+11. personId is in a precarious state, requiring focused care or intervention.
+12. personId is vulnerable, necessitating specific attention and protective actions.
+13. personId is in need of special care due to their current state of vulnerability.
+14. personId is in a susceptible condition, calling for special attention and actions.
+15. personId requires additional attention due to their vulnerable status.
+16. personId is experiencing a vulnerable phase, needing special measures or care.
+17. personId is in a fragile state, requiring dedicated attention or protection.
+18. personId is in a vulnerable position, necessitating special care or intervention.
+19. personId requires particular focus and measures due to their vulnerable condition.
+20. personId is in a state that
+
+TEST_END

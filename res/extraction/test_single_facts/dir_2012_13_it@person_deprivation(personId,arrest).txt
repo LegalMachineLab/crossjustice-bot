@@ -1,0 +1,30 @@
+FACTS
+
+person_deprivation(personId, arrest)
+
+FACTS_END
+
+TEST
+
+1. The defendant has lost their freedom due to being arrested.
+2. Arrest has resulted in the defendant being deprived of their liberty.
+3. Being arrested has led to the defendant's loss of liberty.
+4. The defendant's liberty has been taken away through arrest.
+5. The arrest has caused the defendant to be stripped of their liberty.
+6. By being arrested, the defendant has been denied their freedom.
+7. The defendant's freedom has been curtailed by the act of arrest.
+8. Arresting the defendant has resulted in their deprivation of liberty.
+9. The defendant is without liberty as a consequence of arrest.
+10. As a result of being arrested, the defendant has been deprived of freedom.
+11. The defendant has been arrested, leading to a loss of liberty.
+12. The arrest has revoked the defendant's liberty.
+13. By arresting the defendant, their liberty has been removed.
+14. The defendant's freedom has been restricted due to the arrest.
+15. Being apprehended has deprived the defendant of their liberty.
+16. The arrest imposed on the defendant has led to a deprivation of liberty.
+17. The act of arrest has stripped the defendant of their freedom.
+18. The defendant is currently deprived of liberty following their arrest.
+19. Due to an arrest, the defendant has been denied their liberty.
+20. The defendant's liberty has been revoked as a result of arrest.
+
+TEST_END
