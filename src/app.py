@@ -106,16 +106,16 @@ def select_prompt(context):
 
       {"\n".join(pretty_rights(context))}
 
+      Format of the answer:
+      Tell the user the list of computed rights in natural language.
+      Each right has a label, a corresponding legal source (law) and article, and a specific application (option).
+
+      Format the output in the same concise manner, ensuring that each right is matched to its corresponding options and article.
+
       Respect this instruction:
       DO NOT invent any rights, only present what has been computed.
 
-      The right has a label, a corresponding article, and an option (specific application).
-      One right can have multiple options. Show that all the options refer to the same right.
-
-      Format of the answer:
-      Tell the user the list of computed rights in natural language.
       If no rights apply, ask the user if more details should be provided to the scenario.
-
       If rights are granted, ask if the user wants to know more details any of these rights.
 
     """ if context["state"] == "2" else "") + (f"""
@@ -228,10 +228,11 @@ def extract_facts(user_text, context):
 
   res = prompt_model(f"""
     Assist the user in building a comprehensive case description by extracting relevant Prolog facts.
-    The list of prolog facts follows:
+    There are certain facts which are essential and must always apply, unless explicitly stated otherwise:
+    '''{input_facts.facts}'''.
 
+    Consider also if any of the following conditions may be relevant:
     '''
-    {input_facts.facts}
     {input_facts.dir_facts[context["directive_target"]]}
     {input_facts.national_facts[context["directive_target"]][context["country_target"]]}
     '''
@@ -281,6 +282,10 @@ def prettify_prolog(input):
       {elem}
 
       You have been provided a Prolog inference tree using a legal norm in a specific case (Prolog Tree).
+      For the right there is a label, a corresponding article, and an option (specific application).
+      The option helps identifying the characteristics of the main right.
+      Focus on the main right, and specify it according to the option.
+
       Provide the following info according to the given structure:
 
       Summary: simplified text of the legal norm. Use everyday langaguage with a serious register. Add any information you have on the source of law;
