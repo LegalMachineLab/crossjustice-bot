@@ -77,33 +77,43 @@ def extract_facts(user_text, directive, law, person_id=""):
   return [x for x in [y.strip().split("%")[0] for y in _extract_code(res).replace(".", "").replace(" ", "").split("\n")] if x]
 
 def parse_file(file_path, file_name):
-    file_name_splits = file_name.replace(".txt", "").split("@")
+  file_name_splits = file_name.replace(".txt", "").split("@")
 
-    with open(os.path.join(file_path, file_name), "r") as f:
-        text = f.read()
+  with open(os.path.join(file_path, file_name), "r") as f:
+      text = f.read()
 
-    facts_match = re.search(r"FACTS\n(.*?)\nFACTS_END", text, re.DOTALL)
-    facts = [line.strip().replace(".", "").replace(" ", "") for line in facts_match.group(1).split("\n") if line.strip()] if facts_match else []
+  facts_match = re.search(r"FACTS\n(.*?)\nFACTS_END", text, re.DOTALL)
+  facts = [line.strip().replace(".", "").replace(" ", "") for line in facts_match.group(1).split("\n") if line.strip()] if facts_match else []
 
-    test_match = re.search(r"TEST\n(.*?)\nTEST_END", text, re.DOTALL)
-    tests = [re.sub(r"^\d+\.\s*", "", line.strip()) for line in test_match.group(1).split("\n") if line.strip()] if test_match else []
+  test_match = re.search(r"TEST\n(.*?)\nTEST_END", text, re.DOTALL)
+  tests = [re.sub(r"^\d+\.\s*", "", line.strip()) for line in test_match.group(1).split("\n") if line.strip()] if test_match else []
 
-    return file_name_splits[0], file_name_splits[1], file_name_splits[2], facts, tests
+  return file_name_splits[0], file_name_splits[1], file_name_splits[2], facts, tests
 
-def compute_metrics(extracted, reference):
-    extracted_set = set(extracted)
-    reference_set = set(reference)
+def compute_raw_metrics(extracted, reference):
+  extracted_set = set(extracted)
+  reference_set = set(reference)
 
-    true_positives = extracted_set.intersection(reference_set)
-    false_positives = extracted_set.difference(reference_set)
-    false_negatives = reference_set.difference(extracted_set)
+  true_positives = extracted_set.intersection(reference_set)
+  false_positives = extracted_set.difference(reference_set)
+  false_negatives = reference_set.difference(extracted_set)
 
-    return len(true_positives), len(false_positives), len(false_negatives)
+  return len(true_positives), len(false_positives), len(false_negatives)
 
-def compute_precision_and_recall(true_positives, false_positives, false_negatives):
-    precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
-    recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
-    return precision, recall
+def compute_metrics(true_positives, false_positives, false_negatives):
+
+  def _f_beta(beta, p, r):
+    return (1 + beta**2) * (p * r) / ((beta**2 * p) + r) if p + r > 0 else 0
+
+  precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
+  recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
+  res = {
+    "precision" : precision,
+    "recall": recall,
+    "f1": _f_beta(1, precision, recall),
+    "f2": _f_beta(2, precision, recall),
+  }
+  return res
 
 
 if __name__ == "__main__":
@@ -115,13 +125,11 @@ if __name__ == "__main__":
     false_negatives = 0
 
     for file in files:
-        directive, law, person_id, facts, tests = parse_file(path, file)
-        for test in tests[:10]:
-           m = compute_metrics(extract_facts(test, directive, law, person_id), facts)
-           true_positives += m[0]
-           false_positives += m[1]
-           false_negatives += m[2]
+      directive, law, person_id, facts, tests = parse_file(path, file)
+      for test in tests[:10]:
+        m = compute_raw_metrics(extract_facts(test, directive, law, person_id), facts)
+        true_positives += m[0]
+        false_positives += m[1]
+        false_negatives += m[2]
 
-    precision, recall = compute_precision_and_recall(true_positives, false_positives, false_negatives)
-    print(f"Precision: {precision}")
-    print(f"Recall: {recall}")
+    print(compute_metrics(true_positives, false_positives, false_negatives))
