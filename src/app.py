@@ -107,9 +107,9 @@ def select_prompt(context):
       {"\n".join(pretty_rights(context))}
 
       Format of the answer:
-      Tell the user the list of computed rights in natural language.
-      Each right has a label, a corresponding legal source (law) and article, and a specific application (option).
-      Format the output in the same concise manner, ensuring that each right is matched to its corresponding options and article.
+      - Tell the user the list of computed rights in natural language.
+      - Ensure that each main right is matched to its corresponding options and article. The same right can have more than one option and article.
+      - The answer should have each main right, followed by a brief reference to the article. Finally, add the option.
 
       Respect these instructions:
       DO NOT invent any rights, only present what has been computed.
@@ -281,12 +281,12 @@ def prettify_prolog(input):
       {elem}
 
       You have been provided a Prolog inference tree using a legal norm in a specific case (Prolog Tree).
-      Each right has a label, a corresponding legal source (law) and article, and a specific application (option).
-      Ensure that each right is matched to its corresponding option and article.
+      Each main right (right:) has a corresponding legal source (law) and article, and additional information (option).
+      Ensure that each right is matched to its corresponding option and article. The same right can have more than one option and article.
 
       Provide the following info according to the given structure:
 
-      Summary: simplified text of the legal norm. Use everyday langaguage with a serious register. Add any information you have on the source of law;
+      Summary: simplified text of the legal norm. Use everyday langaguage with a serious register. Present the main right. Then explain in a concise manner the legal source and article. Finally, refer to the option.
       What Rights do You Have: what rights do you have according to the Prolog explanation;
       Why do You Have Them: inference steps and reasoning that led to the the rights. Use all the Prolog terms in the explanation explicitly referencing the original Prolog when needed.
 
