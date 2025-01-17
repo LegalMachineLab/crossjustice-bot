@@ -1,0 +1,12 @@
+FACTS
+
+person_status(maria, requested).
+person_status(maria, arrested).
+proceeding_type(maria, europeanArrestWarrant).
+
+FACTS_END
+TEST
+
+1. Maria has been arrested for theft in Poland. She was already subject to a previous european Arrest Warrant, and is arguing against extradiction.
+
+TEST_END

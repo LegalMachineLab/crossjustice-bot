@@ -1,0 +1,12 @@
+FACTS
+
+person_status(john, suspect).
+person_document(john, new_evidence).
+person_request_submitted(john, access_materials).
+
+FACTS_END
+TEST
+
+1. John is a suspect in a burglary case. After the investigation, he gains access to newly discovered evidence before trial. He submits a reasoned requested to access the documents.
+
+TEST_END

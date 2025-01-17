@@ -1,0 +1,14 @@
+FACTS
+
+proceeding_type(mario, criminal).
+person_status(mario, suspect).
+proceeding_language(mario, dutch).
+proceeding_matter(mario, questioning).
+person_speaks(mario, italian).
+
+FACTS_END
+TEST
+
+1. Mario, an Italian Citizen, who only speaks italian, while on holiday in the Netherlands, has been stopped by the police for questioning. He is the main suspect of a car theft. The proceeding is in Dutch.
+
+TEST_END

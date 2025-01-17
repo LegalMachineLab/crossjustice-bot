@@ -1,0 +1,16 @@
+FACTS
+
+proceeding_type(nino, europeanArrestWarrant).
+person_status(nino, accused).
+person_document(nino, europeanArrestWarrant).
+person_status(nino, deprived_of_liberty).
+person_speaks(nino, italian).
+lawyer_language(nino, polish).
+proceeding_language(nino, polish).
+
+FACTS_END
+TEST
+
+1. Nino, an Italian citizen, who only speaks italian, was arrested in Warsaw, Poland, under a European Arrest Warrant issued by Italy. Nino is trying to argue against the execution of the European Arrest Warrant. He has been assigned a polish lawyer by the polish Government. The proceeding is in Polish.
+
+TEST_END

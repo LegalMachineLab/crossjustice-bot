@@ -1,0 +1,15 @@
+FACTS
+
+proceeding_type(anna, europeanArrestWarrant).
+person_status(anna, suspect).
+person_nationality(anna, poland).
+proceeding_country(anna, netherlands).
+person_status(anna, requested).
+proceeding_matter(anna, hearing).
+
+FACTS_END
+TEST
+
+1. Anna is a Polish citizen. She was detained in Netherlands after being named a suspect in a human trafficking investigation. The Netherlands police received an European Warrant for her arrest. There's an ongoing trial to that effect. She is currently out on bail but must report to the dutch authorities, who are carrying out the proceeding, for a formal hearing.
+
+TEST_END

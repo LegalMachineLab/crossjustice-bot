@@ -1,0 +1,18 @@
+FACTS
+
+person_speaks(lea, french).
+proceeding_type(lea, criminal).
+person_status(lea, accused).
+proceeding_language(lea, bulgarian).
+person_document(lea, charge).
+person_status(lea, deprived_of_liberty).
+person_document(lea, remand_measure).
+proceeding_matter(lea, investigation).
+proceeding_matter(lea, interrogation).
+
+FACTS_END
+TEST
+
+1. Lea, a French tourist in Bulgaria, who only speaks french, is accused of stealing. The Bulgarian court has formally charged her and imposed a remand measure (house arrest) while the investigation continues. She has also been interrogated.
+
+TEST_END

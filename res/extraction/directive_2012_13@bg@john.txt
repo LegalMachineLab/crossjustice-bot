@@ -1,0 +1,10 @@
+FACTS
+
+person_status(john, suspect).
+
+FACTS_END
+TEST
+
+1. John is a suspect in a burglary investigation.
+
+TEST_END

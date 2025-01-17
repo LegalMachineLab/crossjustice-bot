@@ -1,0 +1,11 @@
+FACTS
+
+person_status(john, suspect).
+person_event(john, cannot_be_located).
+
+FACTS_END
+TEST
+
+1. John is a suspect in a burglary investigation. He cannot be located by the Dutch Police.
+
+TEST_END
