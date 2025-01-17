@@ -5,6 +5,7 @@ person_status(maria, arrested).
 proceeding_type(maria, europeanArrestWarrant).
 proceeding_type(maria, criminal).
 proceeding_language(maria, polish).
+person_status(maria, deprived_of_liberty).
 
 FACTS_END
 TEST
