@@ -134,9 +134,8 @@ facts_dir_2013_48 = """
 
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested and subject to an european arrest warrant
 %
-
 person_status(PersonId, requested).
 
 
@@ -144,7 +143,6 @@ person_status(PersonId, requested).
 %
 % The person has been deprived of liberty
 %
-
 person_status(PersonId, deprived_of_liberty).
 
 
@@ -1515,6 +1513,25 @@ person_event(PersonId, cannot_be_located).
 % The person poses a danger to the proper conduct of proceedings
 %
 person_danger(PersonId, proper_conduct_proceedings).
+
+%% proceeding_danger(PersonId, investigation)
+%
+% The dissemination of information is necessary for the investigation
+%
+proceeding_danger(PersonId, investigation).
+
+%% proceeding_danger(PersonId, public_interest)
+%
+% The dissemination of information is necessary for the public interest
+%
+proceeding_danger(PersonId, public_interest).
+
+%% proceeding_matter(PersonId, evidence_gathering_act)
+%
+% The proceeding matter involves an evidence gathering act
+%
+proceeding_matter(PersonId, evidence_gathering_act).
+
 """
 
 facts_dir_2016_343_bg = """
