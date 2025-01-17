@@ -1,6 +1,7 @@
 import re
 import os
 import time
+import json
 from pathlib import Path
 from groq import Groq
 
@@ -124,12 +125,42 @@ if __name__ == "__main__":
     false_positives = 0
     false_negatives = 0
 
+    res = {
+      "partial" : {}
+    }
+
     for file in files:
       directive, law, person_id, facts, tests = parse_file(path, file)
-      for test in tests[:(2 if len(tests) > 2 else len(tests))]:
-        m = compute_raw_metrics(extract_facts(test, directive, law, person_id), facts)
-        true_positives += m[0]
-        false_positives += m[1]
-        false_negatives += m[2]
 
-    print(compute_metrics(true_positives, false_positives, false_negatives))
+      t_r = {}
+      temp_true_positives = 0
+      temp_false_positives = 0
+      temp_false_negatives = 0
+
+      for i, test in enumerate(tests[:(100 if len(tests) > 100 else len(tests))]):
+        print(f"Computing scenario {i + 1} in {file}")
+        extracted = extract_facts(test, directive, law, person_id)
+        m = compute_raw_metrics(extracted, facts)
+        temp_true_positives += m[0]
+        temp_false_positives += m[1]
+        temp_false_negatives += m[2]
+        t_r[i] = {
+          "input" : test,
+          "extracted" : extracted
+        }
+
+      res["partial"][file] = {
+        "facts" : facts,
+        "metrics" : compute_metrics(temp_true_positives, temp_false_positives, temp_false_negatives),
+        "test" : t_r
+      }
+
+      true_positives += temp_true_positives
+      false_positives += temp_false_positives
+      false_negatives += temp_false_negatives
+
+    m = compute_metrics(true_positives, false_positives, false_negatives)
+    print(f"Results: {m}")
+    res["metrics"] = m
+    with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", f"results_{int(time.time())}.json"), "x") as f:
+      json.dump(res, f, indent=4)
