@@ -4,6 +4,8 @@ import time
 import json
 from pathlib import Path
 from groq import Groq
+from functools import reduce
+
 
 import input_facts
 
@@ -123,7 +125,7 @@ def get_samples(tests, facts):
   n = 2 if len(facts) == 1 else 5
   return tests[:(n if len(tests) > n else len(tests))]
 
-if __name__ == "__main__":
+def extract_facts():
     path = os.path.join(Path(__file__).parent.absolute(), "..", "res", "extraction")
     files = [f for f in os.listdir(path)]
 
@@ -168,5 +170,37 @@ if __name__ == "__main__":
     m = compute_metrics(true_positives, false_positives, false_negatives)
     print(f"Results: {m}")
     res["metrics"] = m
-    with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", f"results_{int(time.time())}.json"), "x") as f:
+
+    file_out = f"results_{int(time.time())}.json"
+    with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", file_out), "x") as f:
       json.dump(res, f, indent=4)
+
+    return file_out
+
+
+def more_data(file):
+
+  def _sum(target, values):
+    return reduce(lambda x, y: x + y, [x["metrics"][target] for x in values])
+
+  def _compute(data):
+    true_positives = _sum("true_positives", data.values())
+    false_positives = _sum("false_positives", data.values())
+    false_negatives = _sum("false_negatives", data.values())
+    return compute_metrics(true_positives, false_positives, false_negatives)
+
+  with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", file), "r") as f:
+    data = json.load(f)
+
+  res = {
+    "single_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) == 1}),
+    "complex_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) != 1})
+  }
+
+  with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", f"{file.replace(".json", "")}_more.json"), "x") as f:
+    json.dump(res, f, indent=4)
+
+
+if __name__ == "__main__":
+  n = extract_facts()
+  more_data(n)
