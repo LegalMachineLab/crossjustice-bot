@@ -16,7 +16,13 @@ def new_name(f, i):
     return f"{comb[splits[0]]}@personId@{i}.txt"
 
 if __name__ == "__main__":
-    files = [f for f in os.listdir(Path(__file__).parent.absolute()) if f.endswith("txt")]
-    path = Path(__file__).parent.absolute()
+    path = os.path.join(Path(__file__).parent.absolute(), "..", "res", "extraction")
+    files = [f for f in os.listdir(path) if f.endswith("txt")]
     for i, file in enumerate(files):
-        os.rename(os.path.join(path, file), os.path.join(path, new_name(file, i)))
+        if "personId" in file:
+            os.rename(os.path.join(path, file), os.path.join(path, file.replace("personId", "bruno")))
+            with open(os.path.join(path, file.replace("personId", "bruno")), "r+") as f:
+                c = f.read().replace("personId", "bruno")
+                f.seek(0)
+                f.write(c)
+                f.truncate()

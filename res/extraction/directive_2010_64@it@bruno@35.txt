@@ -1,0 +1,30 @@
+FACTS
+
+person_understands(bruno, Language)
+
+FACTS_END
+
+TEST
+
+1. The individual can read and comprehend language X.
+2. The individual is capable of reading and understanding language X.
+3. The person is able to read and grasp language X.
+4. The person possesses the ability to read and understand language X.
+5. The individual reads and interprets language X.
+6. The person has the skill to read and comprehend language X.
+7. The individual can interpret and read language X.
+8. The person is proficient in reading and understanding language X.
+9. The person has an understanding and reading ability in language X.
+10. The individual comprehends and reads language X.
+11. The person is adept at reading and comprehending language X.
+12. The individual possesses reading and comprehension skills in language X.
+13. The person is skilled in understanding and reading language X.
+14. The person has the capability to comprehend and read language X.
+15. The individual has the proficiency to read and understand language X.
+16. The person reads language X with understanding.
+17. The individual is able to comprehend and read language X.
+18. The person has the ability to understand and read language X.
+19. The person comprehends language X through reading.
+20. The individual understands language X by reading it.
+
+TEST_END
