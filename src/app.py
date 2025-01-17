@@ -365,7 +365,7 @@ def main():
       st.session_state.chat_message = []
       # st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
       st.session_state.memory = ConversationSummaryBufferMemory(llm=ChatGroq(
-          groq_api_key='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',
+          groq_api_key='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',
           model_name="llama3-70b-8192",
           temperature=0.5
       ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
