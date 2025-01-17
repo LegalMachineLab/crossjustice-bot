@@ -1,0 +1,14 @@
+FACTS
+
+person_status(carlos, accused)
+person_status(carlos, deprived_of_liberty)
+person_nationality(anna, spanish).
+proceeding_type(carlos, criminal)
+proceeding_country(anna, poland).
+
+FACTS_END
+TEST
+
+1. Carlos is a Spanish citizen. He was arrested in Poland by the police. He is accused of being part of a smuggling ring. The proceedings are taking place in Poland. Carlos is currently in custody and has been assigned a public defender since he cannot afford a private lawyer.
+
+TEST_END

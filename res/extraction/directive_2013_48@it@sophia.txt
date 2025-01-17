@@ -1,0 +1,14 @@
+FACTS
+
+proceeding_type(sophia, criminal).
+person_status(sophia, suspect).
+proceeding_matter(sophia, summoned_court).
+proceeding_country(anna, italy).
+person_nationality(anna, greece).
+
+FACTS_END
+TEST
+
+1. Sophia is a Greek citizen. While traveling through Italy she is informed by the police that she is under investigation for a crime. The proceedings are being conducted in italy, and all official communications are in italian. Sophia speaks only Greek and some basic English. She is not in custody but has been ordered to remain in Italy for questioning. She has been summoned to speak with the Italian courts.
+
+TEST_END

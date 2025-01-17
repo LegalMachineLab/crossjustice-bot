@@ -1,0 +1,12 @@
+FACTS
+
+person_status(maria, accused).
+proceeding_danger(maria, public_interest).
+proceeding_matter(maria, evidence_gathering_act).
+
+FACTS_END
+TEST
+
+1. Maria has been arrested for theft in Poland. The authority decided to detain her due to the risks of safety of the public, and to push for a more active investigative measure to get the evidence needed.
+
+TEST_END

@@ -1,0 +1,15 @@
+FACTS
+
+proceeding_type(luke, europeanArrestWarrant).
+person_status(luke, accused).
+proceeding_type(luke, criminal).
+person_speaks(luke, italian).
+lawyer_language(luke, polish).
+proceeding_language(luke, polish).
+
+FACTS_END
+TEST
+
+1. Luke, an Italian citizen, who only speaks italian, was arrested in Warsaw, Poland. Luke is trying to argue against the execution of the European Arrest Warrant. He has been assigned a polish lawyer by the polish Government. The proceeding is in Polish.
+
+TEST_END

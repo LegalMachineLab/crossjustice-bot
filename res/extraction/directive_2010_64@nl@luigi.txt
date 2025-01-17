@@ -1,0 +1,18 @@
+FACTS
+
+proceeding_type(luigi, europeanArrestWarrant).
+person_status(luigi, accused).
+person_status(luigi, requested).
+person_status(luigi, deprived_of_liberty).
+person_document(luigi, europeanArrestWarrant).
+person_document(luigi, charge).
+proceeding_language(luigi, dutch).
+person_speaks(luigi, italian).
+person_request_submitted(luigi, essential_document).
+
+FACTS_END
+TEST
+
+1. Luigi is an Italian Citizen, who only speaks italian. The Italian Government issued an European Arrest Warrant for his capture. He was arrested in Amsterdam, Netherlands. He was put in jail. He has been formally charged and presented with the documents in Dutch by the police. He has asked for the documents to be put in italian.
+
+TEST_END
