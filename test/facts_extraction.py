@@ -6,14 +6,13 @@ from pathlib import Path
 from groq import Groq
 from functools import reduce
 
-
 import input_facts
 
-def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
+def prompt_model(prompt, system="", model="llama-3.1-8b-instant", temperature=0.3):
   client = Groq(
-      api_key='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',
+      api_key='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',
   )
-
+  time.sleep(1)
   while True:
     try:
       completion = client.chat.completions.create(
@@ -122,10 +121,10 @@ def compute_metrics(true_positives, false_positives, false_negatives):
   return res
 
 def get_samples(tests, facts):
-  n = 2 if len(facts) == 1 else 5
+  n = 2 if len(facts) == 1 else 10
   return tests[:(n if len(tests) > n else len(tests))]
 
-def extract_facts():
+def compute_data():
     path = os.path.join(Path(__file__).parent.absolute(), "..", "res", "extraction")
     files = [f for f in os.listdir(path)]
 
@@ -189,12 +188,21 @@ def more_data(file):
     false_negatives = _sum("false_negatives", data.values())
     return compute_metrics(true_positives, false_positives, false_negatives)
 
+  def _replace_id(l):
+    return [x.replace(re.search(r"\((.+),", x).group(1), "pid") for x in l]
+
+  def _false_positives(data):
+    from collections import Counter
+    e = [z for x in data.values() for y in x["test"].values() for z in list(set(_replace_id(y["extracted"])).difference(set(_replace_id(x["facts"]))))]
+    return dict(sorted(Counter(e).items(), key=lambda item: item[1], reverse=True))
+
   with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", file), "r") as f:
     data = json.load(f)
 
   res = {
     "single_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) == 1}),
-    "complex_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) != 1})
+    "complex_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) != 1}),
+    "false_positives" : _false_positives({k : v for k, v in data["partial"].items()})
   }
 
   with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", f"{file.replace(".json", "")}_more.json"), "x") as f:
@@ -202,5 +210,5 @@ def more_data(file):
 
 
 if __name__ == "__main__":
-  n = extract_facts()
+  n = compute_data()
   more_data(n)
