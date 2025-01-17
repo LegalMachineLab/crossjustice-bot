@@ -196,7 +196,7 @@ person_nominate(PersonId, PersonId2).
 
 %% person_danger(PersonId, _life)
 %
-% There is need to avoid damage to a person's life
+% A serious concern or threat has risen, that concerns the life of a person
 %
 
 person_danger(PersonId, life).
@@ -204,7 +204,7 @@ person_danger(PersonId, life).
 
 %% person_danger(PersonId, _liberty)
 %
-% There is need to avoid damage to a person's liberty
+%  A serious concern or threat has risen, that concerns the liberty of a person
 %
 
 person_danger(PersonId, liberty).
@@ -212,7 +212,7 @@ person_danger(PersonId, liberty).
 
 %% person_danger(PersonId, _physical_integrity)
 %
-% There is need to avoid damage to a person's physical integrity
+% A serious concern or threat has risen, that concerns the physical integrity of a person
 %
 
 person_danger(PersonId, physical_integrity).
