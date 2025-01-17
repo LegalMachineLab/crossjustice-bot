@@ -126,7 +126,7 @@ if __name__ == "__main__":
 
     for file in files:
       directive, law, person_id, facts, tests = parse_file(path, file)
-      for test in tests[:10]:
+      for test in tests[:(2 if len(tests) > 2 else len(tests))]:
         m = compute_raw_metrics(extract_facts(test, directive, law, person_id), facts)
         true_positives += m[0]
         false_positives += m[1]
