@@ -100,7 +100,7 @@ def extract_facts(user_text, directive, law, person_id=""):
     Here is the user input:
 
     {user_text}
-  """, temperature=0.3)
+  """, temperature=0.6)
 
 #   print(res)
 #   print()
