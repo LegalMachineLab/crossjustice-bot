@@ -234,7 +234,8 @@ def more_data(file):
   res = {
     "single_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) == 1}),
     "complex_metrics" : _compute({k : v for k, v in data["partial"].items() if len(v["facts"]) != 1}),
-    "false_positives" : _false_positives({k : v for k, v in data["partial"].items()})
+    "single_false_positives" : _false_positives({k : v for k, v in data["partial"].items() if len(v["facts"]) == 1}),
+    "complex_false_positives" : _false_positives({k : v for k, v in data["partial"].items() if len(v["facts"]) != 1}),
   }
 
   with open(os.path.join(Path(__file__).parent.absolute(), "..", "res", f"{file.replace(".json", "")}_more.json"), "x") as f:
