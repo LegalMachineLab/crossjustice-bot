@@ -3,7 +3,7 @@ facts = """
 
 %% proceeding_type(PersonId, _europeanArrestWarrant)
 %
-% The proceedings concern the execution of a european arrest warrant
+% The proceedings concern the execution of a European Arrest Warrant issued by another country.
 %
 
 proceeding_type(PersonId, europeanArrestWarrant).
