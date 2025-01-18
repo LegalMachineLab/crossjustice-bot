@@ -5,8 +5,38 @@ import json
 from pathlib import Path
 from groq import Groq
 from functools import reduce
+from together import Together
 
 import input_facts
+
+
+def prompt_model_together(prompt, system="", model="meta-llama/Llama-3-70b-chat-hf", temperature=0.3):
+  client = Together(api_key="ae803a3783ad3d5d1c8c43fd1ca5d75ac6879a6bf29ce655b763da797528fe5a")
+  time.sleep(1)
+  while True:
+    try:
+      response = client.chat.completions.create(
+          model=model,
+          messages=[
+            {
+                "role": "system",
+                "content": system
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+          ],
+          max_tokens=None,
+          temperature=temperature,
+          top_p=1,
+          stop=None,
+          stream=True
+      )
+      return "".join([chunk.choices[0].delta.content or "" for chunk in response])
+    except:
+      time.sleep(3)
+
 
 def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
   client = Groq(
@@ -43,13 +73,12 @@ def extract_facts(user_text, directive, law, person_id=""):
     blocks = extract_md_blocks(completion)
     return blocks[0] if blocks else ""
 
-  res = prompt_model(f"""
+  res = prompt_model_together(f"""
     Assist the user in building a comprehensive case description by extracting relevant Prolog facts.
-    There are certain facts which are essential and must always apply, unless explicitly stated otherwise:
-    '''{input_facts.facts}'''.
 
-    Consider also if any of the following conditions may be relevant:
+    Consider if any of the following conditions may be relevant:
     '''
+    {input_facts.facts}
     {input_facts.dir_facts[directive]}
     {input_facts.national_facts[directive][law]}
     '''
@@ -58,7 +87,7 @@ def extract_facts(user_text, directive, law, person_id=""):
 
     Respect the following instructions:
     - DO NOT create new facts.
-    - If the input is not relevant do not extract any fact
+    - If the input is not relevant do not extract any fact.
 
     Format of the output:
     - INCLUDE THE EXTRACTED PROLOG FACTS inside a single markdown block.
@@ -121,12 +150,15 @@ def compute_metrics(true_positives, false_positives, false_negatives):
   return res
 
 def get_samples(tests, facts):
-  n = 2 if len(facts) == 1 else 2
+  n = 2 if len(facts) == 1 else 10
   return tests[:(n if len(tests) > n else len(tests))]
+
+def filter_files(files):
+  return files
 
 def compute_data():
     path = os.path.join(Path(__file__).parent.absolute(), "..", "res", "extraction")
-    files = [f for f in os.listdir(path)]
+    files = filter_files([f for f in os.listdir(path)])
 
     true_positives = 0
     false_positives = 0
@@ -189,7 +221,7 @@ def more_data(file):
     return compute_metrics(true_positives, false_positives, false_negatives)
 
   def _replace_id(l):
-    return [x.replace(re.search(r"\((.+),", x).group(1), "pid") for x in l]
+    return [x.replace(re.search(r"\((.+),", x).group(1) if re.search(r"\((.+),", x) is not None else x, "pid") for x in l]
 
   def _false_positives(data):
     from collections import Counter
