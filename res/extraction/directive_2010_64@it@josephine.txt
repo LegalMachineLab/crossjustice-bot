@@ -1,7 +1,6 @@
 FACTS
 
 person_status(josephine, accused).
-person_status(josephine, suspect).
 person_document(josephine, charge).
 person_speaks(josephine, french).
 proceeding_language(josephine, italy).

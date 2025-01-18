@@ -1140,7 +1140,7 @@ person_document(PersonId, decision_changing_charge).
 facts_dir_2012_13 = """
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested, and subject to an european arrest warrant
 %
 
 person_status(PersonId, requested).
@@ -1506,13 +1506,13 @@ person_danger(PersonId, proper_conduct_proceedings).
 
 %% proceeding_danger(PersonId, investigation)
 %
-% The dissemination of information is necessary for the investigation
+% The authority has disseminated the defendant's information due to the necessary of the investigation
 %
 proceeding_danger(PersonId, investigation).
 
 %% proceeding_danger(PersonId, public_interest)
 %
-% The dissemination of information is necessary for the public interest
+% The authority has disseminated the defendant's information due to the necessary of the public interest
 %
 proceeding_danger(PersonId, public_interest).
 
