@@ -1,7 +1,6 @@
 FACTS
 
 person_status(john, suspect).
-proceeding_type(john, criminal).
 
 FACTS_END
 TEST

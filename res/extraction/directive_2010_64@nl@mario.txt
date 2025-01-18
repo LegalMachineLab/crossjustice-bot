@@ -1,6 +1,5 @@
 FACTS
 
-proceeding_type(mario, criminal).
 person_status(mario, suspect).
 proceeding_language(mario, dutch).
 proceeding_matter(mario, questioning).

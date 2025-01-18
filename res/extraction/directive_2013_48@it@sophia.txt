@@ -1,6 +1,5 @@
 FACTS
 
-proceeding_type(sophia, criminal).
 proceeding_matter(sophia, questioning).
 proceeding_country(sophia, italy).
 person_nationality(sophia, greece).

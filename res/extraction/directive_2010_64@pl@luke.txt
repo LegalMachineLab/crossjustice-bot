@@ -1,6 +1,7 @@
 FACTS
 
 proceeding_type(luke, europeanArrestWarrant).
+person_document(luke, europeanArrestWarrant).
 person_status(luke, accused).
 proceeding_matter(luke, arrest).
 person_speaks(luke, italian).

@@ -3,7 +3,6 @@ FACTS
 person_status(john, suspect).
 person_document(john, new_evidence).
 person_request_submitted(john, access_materials).
-proceeding_type(john, criminal).
 
 FACTS_END
 TEST

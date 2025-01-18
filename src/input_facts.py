@@ -1,16 +1,6 @@
 facts = """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% GENERAL FACTS
-
-%% proceeding_type(PersonId, _criminal)
-%
-% The proceedings are of criminal nature
-%
-
-proceeding_type(PersonId, criminal).
-
-
 %% proceeding_type(PersonId, _europeanArrestWarrant)
 %
 % The proceedings concern the execution of a european arrest warrant
@@ -21,7 +11,7 @@ proceeding_type(PersonId, europeanArrestWarrant).
 
 %% person_status(PersonId, _suspect)
 %
-% The person is a suspect
+% The person is a suspect.
 %
 
 person_status(PersonId, suspect).
@@ -29,7 +19,7 @@ person_status(PersonId, suspect).
 
 %% person_status(PersonId, _accused)
 %
-% The person is an accused
+% The person is an accused.
 %
 
 person_status(PersonId, accused).
@@ -994,7 +984,7 @@ person_document(PersonId, penal_order).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 proceeding_matter(PersonId, minor_offence).
 
@@ -1158,7 +1148,7 @@ person_status(PersonId, requested).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 
 proceeding_matter(PersonId, minor_offence).

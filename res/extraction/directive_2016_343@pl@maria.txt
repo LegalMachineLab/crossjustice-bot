@@ -2,7 +2,6 @@ FACTS
 
 proceeding_language(maria, polish).
 proceeding_matter(maria, evidence_gathering_act).
-proceeding_type(maria, criminal).
 person_status(maria, suspect).
 proceeding_danger(maria, public_interest).
 person_status(maria, deprived_of_liberty).
