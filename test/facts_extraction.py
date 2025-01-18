@@ -8,7 +8,7 @@ from functools import reduce
 
 import input_facts
 
-def prompt_model(prompt, system="", model="llama-3.1-8b-instant", temperature=0.3):
+def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
   client = Groq(
       api_key='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',
   )
@@ -121,7 +121,7 @@ def compute_metrics(true_positives, false_positives, false_negatives):
   return res
 
 def get_samples(tests, facts):
-  n = 2 if len(facts) == 1 else 10
+  n = 2 if len(facts) == 1 else 2
   return tests[:(n if len(tests) > n else len(tests))]
 
 def compute_data():
