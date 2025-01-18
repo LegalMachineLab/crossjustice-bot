@@ -308,7 +308,7 @@ def prettify_response(response, facts):
     return group
 
 def query(personId, facts, laws, modules, right="Right", opt="Opt", abduce=False):
-    f = facts + [f"person_made_aware({personId}, personStatus)", f"proceeding_status({personId}, started)"]
+    f = facts + [f"person_made_aware({personId}, personStatus)", f"proceeding_status({personId}, started)", f"proceeding_type({personId}, criminal)"]
     f = list(set([x.replace(".", "").strip() for x in f]))
     response = generate_response(personId, f, laws, modules, right=right, opt=opt, abduce=abduce)
     return prettify_response(response, f)

@@ -1,16 +1,6 @@
 facts = """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% GENERAL FACTS
-
-%% proceeding_type(PersonId, _criminal)
-%
-% The proceedings are of criminal nature
-%
-
-proceeding_type(PersonId, criminal).
-
-
 %% proceeding_type(PersonId, _europeanArrestWarrant)
 %
 % The proceedings concern the execution of a european arrest warrant
@@ -21,7 +11,7 @@ proceeding_type(PersonId, europeanArrestWarrant).
 
 %% person_status(PersonId, _suspect)
 %
-% The person is a suspect
+% The person is a suspect.
 %
 
 person_status(PersonId, suspect).
@@ -29,7 +19,7 @@ person_status(PersonId, suspect).
 
 %% person_status(PersonId, _accused)
 %
-% The person is an accused
+% The person is an accused.
 %
 
 person_status(PersonId, accused).
@@ -196,7 +186,7 @@ person_nominate(PersonId, PersonId2).
 
 %% person_danger(PersonId, _life)
 %
-% There is need to avoid damage to a person's life
+% A serious concern or threat has risen, that concerns the life of a person
 %
 
 person_danger(PersonId, life).
@@ -204,7 +194,7 @@ person_danger(PersonId, life).
 
 %% person_danger(PersonId, _liberty)
 %
-% There is need to avoid damage to a person's liberty
+%  A serious concern or threat has risen, that concerns the liberty of a person
 %
 
 person_danger(PersonId, liberty).
@@ -212,7 +202,7 @@ person_danger(PersonId, liberty).
 
 %% person_danger(PersonId, _physical_integrity)
 %
-% There is need to avoid damage to a person's physical integrity
+% A serious concern or threat has risen, that concerns the physical integrity of a person
 %
 
 person_danger(PersonId, physical_integrity).
@@ -994,7 +984,7 @@ person_document(PersonId, penal_order).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 proceeding_matter(PersonId, minor_offence).
 
@@ -1158,7 +1148,7 @@ person_status(PersonId, requested).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 
 proceeding_matter(PersonId, minor_offence).
