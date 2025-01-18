@@ -1,6 +1,6 @@
 FACTS
 
-proceeding_matter(bruno, _precautionary_measure)
+proceeding_matter(bruno, precautionary_measure)
 
 FACTS_END
 

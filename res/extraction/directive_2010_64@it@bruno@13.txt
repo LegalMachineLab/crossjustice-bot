@@ -6,9 +6,8 @@ FACTS_END
 
 TEST
 
-1. The individual is a suspect.
-2. The person is alleged to be involved.
-3. The individual faces accusations.
+1. The individual has been formally accused.
+2. The individual faces accusations.
 4. The person stands accused.
 5. The individual is under suspicion.
 6. The person is charged with an offense.
