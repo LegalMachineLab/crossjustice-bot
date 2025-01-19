@@ -6,10 +6,10 @@ FACTS_END
 
 TEST
 
-1. The individual has been taken into custody.
-2. The person is under arrest.
-3. The individual has been held.
-4. The person has been apprehended.
+1. The individual has been detained.
+2. The person is under detention.
+3. The individual has been held in custody.
+4. The person has been apprehended and put in detention.
 5. The individual is being detained.
 6. The person is in detention.
 7. The individual has been taken in.
