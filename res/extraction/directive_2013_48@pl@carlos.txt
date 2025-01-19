@@ -4,7 +4,6 @@ person_status(carlos, accused)
 person_status(carlos, deprived_of_liberty)
 person_nationality(carlos, spain).
 proceeding_country(carlos, poland).
-proceeding_language(carlos, polish).
 
 FACTS_END
 TEST

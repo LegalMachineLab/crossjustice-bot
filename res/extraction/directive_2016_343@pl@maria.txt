@@ -1,11 +1,11 @@
 FACTS
 
-proceeding_language(maria, polish).
 proceeding_matter(maria, evidence_gathering_act).
 person_status(maria, suspect).
 proceeding_danger(maria, public_interest).
 person_status(maria, deprived_of_liberty).
 person_danger(maria, proper_conduct_proceedings).
+proceeding_danger(maria,investigation).
 
 FACTS_END
 TEST

@@ -3,7 +3,8 @@ facts = """
 
 %% proceeding_type(PersonId, _europeanArrestWarrant)
 %
-% The proceedings concern the execution of a European Arrest Warrant issued by another country.
+% The proceedings concern the execution of a European Arrest Warrant.
+% The European Arrest Warrant ("EAW") is a simplified cross-border judicial surrender procedure for the purpose of prosecution.
 %
 
 proceeding_type(PersonId, europeanArrestWarrant).
@@ -124,7 +125,7 @@ facts_dir_2013_48 = """
 
 %% person_status(PersonId, _requested)
 %
-% The person is requested and subject to an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
 person_status(PersonId, requested).
 
@@ -663,11 +664,6 @@ person_status(PersonId, temporary_custody).
 
 
 facts_dir_2013_48_nl = """
-Dutch Code of Criminal Procedure
-
-Here is the explanation following the requested format, with uncommented Prolog facts included at the end of each block:
-
-```prolog
 %% person_status(PersonId, arrested)
 %
 % PersonId has been arrested and is in custody.
@@ -953,7 +949,7 @@ facts_dir_2010_64_nl = """
 
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
 person_status(PersonId, requested).
 
@@ -1140,7 +1136,7 @@ person_document(PersonId, decision_changing_charge).
 facts_dir_2012_13 = """
 %% person_status(PersonId, _requested)
 %
-% The person is requested, and subject to an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
 
 person_status(PersonId, requested).
@@ -1418,13 +1414,13 @@ proceeding_matter(PersonId, summoned_court).
 
 %% authority_decision(PersonId, access_materials)
 %
-% An authority has decided to allow the defendant access to the materials of the case
+% An authority has decided to allow the defendant access to the documents of the case. This includes evidence and related documents.
 %
 authority_decision(PersonId, access_materials).
 
 %% person_request_submitted(PersonId, access_materials)
 %
-% The person, or his lawyer, have submitted a request for access to the investigative materials of the case
+% The person, or his lawyer, have submitted a request for access to the documents of the case. This includes evidence and related documents.
 %
 person_request_submitted(PersonId, access_materials).
 """

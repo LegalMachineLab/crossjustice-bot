@@ -6,9 +6,7 @@ person_nationality(anna, poland).
 proceeding_country(anna, netherlands).
 person_status(anna, requested).
 proceeding_matter(anna, hearing).
-person_status(anna, deprived_of_liberty).
 person_status(anna, detained).
-proceeding_language(anna, dutch).
 
 FACTS_END
 TEST

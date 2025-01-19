@@ -3,7 +3,7 @@ FACTS
 person_status(josephine, accused).
 person_document(josephine, charge).
 person_speaks(josephine, french).
-proceeding_language(josephine, italy).
+proceeding_language(josephine, italian).
 
 FACTS_END
 TEST
