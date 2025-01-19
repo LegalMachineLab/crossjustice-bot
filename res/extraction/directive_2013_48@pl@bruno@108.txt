@@ -6,8 +6,9 @@ FACTS_END
 
 TEST
 
-1. The process is moving faster.
-2. The pace of the proceedings is quickened.
+1. The proceedings are in the form of abbreviated trial procedure
+2. The proceedings are in the form of summary proceedings.
+3. The pace of the proceedings is quickened.
 3. The proceedings are being expedited.
 4. The developments are hastened.
 5. The proceedings are happening at an increased speed.

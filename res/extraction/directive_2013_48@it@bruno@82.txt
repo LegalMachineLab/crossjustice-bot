@@ -1,6 +1,6 @@
 FACTS
 
-person_nominate(bruno, bruno2)
+person_nominate(bruno, x)
 
 FACTS_END
 

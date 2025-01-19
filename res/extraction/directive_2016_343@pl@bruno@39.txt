@@ -6,11 +6,11 @@ FACTS_END
 
 TEST
 
-1. The accused is participating in evidentiary proceedings.
-2. The defendant is present for the evidentiary process.
-3. The accused is involved in the procedures to present evidence.
-4. The defendant is attending the evidence-related proceedings.
-5. The accused is taking part in the evidentiary hearings.
+1. The case in question entails an evidentiary process.
+2. The current matter includes a procedure for collecting evidence.
+3. The issue at hand involves a procedure related to evidence.
+4. The case in question entails an evidentiary process.
+5. The current matter includes a procedure for collecting evidence.
 6. The matter under discussion involves a process for handling evidence.
 7. The topic under consideration involves a procedure for evidence assessment.
 8. The subject matter involves a protocol for managing evidence.

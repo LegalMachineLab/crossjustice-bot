@@ -6,7 +6,7 @@ FACTS_END
 
 TEST
 
-1. The case involves an arrest.
+1. The individual was arrested.
 2. These proceedings are related to an arrest.
 3. The matter pertains to an arrest.
 4. An arrest is at the center of these proceedings.
