@@ -6,25 +6,25 @@ FACTS_END
 
 TEST
 
-1. The proceedings are intended for preparation.
-2. These proceedings serve a preparatory purpose.
-3. The purpose of these proceedings is to prepare.
-4. These activities are focused on preparation.
-5. The nature of these proceedings is preparatory.
-6. These proceedings are designed to prepare.
-7. The intent behind these proceedings is preparatory.
-8. The proceedings are meant for groundwork.
-9. These actions are of a preparatory kind.
-10. The purpose of these activities is preparatory.
-11. These are preparatory proceedings.
-12. The proceedings have a preparatory aim.
-13. These proceedings are for foundational purposes.
-14. The proceedings are focused on preparation.
-15. These activities are intended to prepare.
-16. These proceedings are preparatory in nature.
-17. The proceedings are aimed at preparation.
-18. These are groundwork proceedings.
-19. These proceedings are to lay the groundwork.
-20. The proceedings are centered around preparation.
+1. Preparatory proceedings streamline case management for efficient resolution.
+2. Clarification of legal issues occurs during preparatory proceedings.
+3. Parties exchange evidence during the preparatory stage.
+4. Key disputes are identified and narrowed in preparatory proceedings.
+5. Witness lists are submitted and reviewed in preparatory proceedings.
+6. Deadlines are set during the preparatory phase of litigation.
+7. Procedural rules are clarified in preparatory proceedings.
+8. Court schedules hearings after preparatory proceedings are complete.
+9. Settlement possibilities are explored during preparatory case management.
+10. Legal arguments are refined in the preparatory stage.
+11. Preliminary motions are resolved in preparatory proceedings.
+12. Evidence admissibility is reviewed during preparatory case discussions.
+13. Parties agree on timelines during the preparatory phase.
+14. Pretrial orders are issued after the preparatory proceedings.
+15. Disclosures are made during preparatory meetings with opposing counsel.
+16. Discovery disputes are addressed during preparatory proceedings.
+17. Court resources are allocated based on preparatory case assessments.
+18. Preparatory proceedings help streamline complex cases for trial readiness.
+19. Legal representatives discuss procedural matters in preparatory meetings.
+20. Settlement conferences often arise from preparatory discussions.
 
 TEST_END

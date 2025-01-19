@@ -25,6 +25,6 @@ TEST
 17. The individual has moved to engage in communication with his attorney.
 18. The person has officially asked to discuss matters with his defense lawyer.
 19. A formal application has been submitted by the individual to reach out to his defense counsel.
-20. The person
+
 
 TEST_END

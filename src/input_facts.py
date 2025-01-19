@@ -1502,13 +1502,13 @@ person_danger(PersonId, proper_conduct_proceedings).
 
 %% proceeding_danger(PersonId, investigation)
 %
-% The authority has disseminated the defendant's information due to the necessary of the investigation
+% The authority has disseminated the defendant's information due to the necessity of the investigation
 %
 proceeding_danger(PersonId, investigation).
 
 %% proceeding_danger(PersonId, public_interest)
 %
-% The authority has disseminated the defendant's information due to the necessary of the public interest
+% The authority has disseminated the defendant's information due to the necessity of the public interest
 %
 proceeding_danger(PersonId, public_interest).
 
