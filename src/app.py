@@ -227,11 +227,10 @@ def extract_facts(user_text, context):
 
   res = prompt_model(f"""
     Assist the user in building a comprehensive case description by extracting relevant Prolog facts.
-    There are certain facts which are essential and must always apply, unless explicitly stated otherwise:
-    '''{input_facts.facts}'''.
 
-    Consider also if any of the following conditions may be relevant:
+    Consider if any of the following conditions may be relevant:
     '''
+    {input_facts.facts}
     {input_facts.dir_facts[context["directive_target"]]}
     {input_facts.national_facts[context["directive_target"]][context["country_target"]]}
     '''
@@ -240,7 +239,7 @@ def extract_facts(user_text, context):
 
     Respect the following instructions:
     - DO NOT create new facts.
-    - If the input is not relevant do not extract any fact
+    - If the input is not relevant do not extract any fact.
 
     Format of the output:
     - INCLUDE THE EXTRACTED PROLOG FACTS inside a single markdown block.
@@ -253,7 +252,7 @@ def extract_facts(user_text, context):
     Here is the user input:
 
     {user_text}
-  """, temperature=0.01)
+  """, temperature=0.3)
 
   print(user_text)
   print()
