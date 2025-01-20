@@ -11,7 +11,7 @@ import input_facts
 
 # "meta-llama/Llama-3-70b-chat-hf"
 # "meta-llama/Llama-3.3-70B-Instruct-Turbo"
-def prompt_model_together(prompt, system="", model="meta-llama/Llama-3.3-70B-Instruct-Turbo", temperature=0.3):
+def prompt_model_together(prompt, system="", model="meta-llama/Llama-3-70b-chat-hf", temperature=0.3):
   client = Together(api_key="ae803a3783ad3d5d1c8c43fd1ca5d75ac6879a6bf29ce655b763da797528fe5a")
   time.sleep(0.1)
   while True:
