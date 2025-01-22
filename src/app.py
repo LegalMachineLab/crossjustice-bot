@@ -385,9 +385,10 @@ def main():
 
       ## How to use me:
       1. Describe the scenario;
-      2. when you are satisfied of the scenario, ask me to provide the rights that apply to your scenario;
-      3. ask me an explanation of the right you are interested in;
-      4. Describe the conformity of the national implementation to the EU legislation on the specific right.
+      2. When you are satisfied of the scenario, ask me to provide the rights that apply to your scenario;
+      3. To understand why a specific right apply, choose it from the list obtained from the previous step and ask me further details about it;
+      4. To know whether the right recognised at the European level is also recogniesd an the national level, ask me furhter about the conformity of the national legislation.
+      5. Ask me suggestions of potential facts or conditions that may be relevant in your case to have rights recognised
 
       ### Talk with me:
       To provide accurate advice, please provide the following details about the person involved in the criminal proceedings:
