@@ -551,7 +551,6 @@ proceeding_matter(PersonId, trial_in_absentia).
 """
 
 facts_dir_2013_48_it = """
-Italian Code of Criminal Procedure
 
 %% proceeding_matter(PersonId, _precautionary_detention)
 %
