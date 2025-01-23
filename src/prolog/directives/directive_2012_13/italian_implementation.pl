@@ -434,9 +434,9 @@ has_right(art360, PersonId, right_to_access_lawyer, investigation) :-
 % In carrying out the acts indicated in article 356 of the criminal procedure code, the police warns the person
 % under investigation, if present, that he/she has the right to be assisted by the retained lawyer.
 
-has_right(art114, PersonId, right_to_access_lawyer, investigation) :-
-    person_status(PersonId, suspect),
-    proceeding_matter(PersonId, urgent_check_scene).
+%has_right(art114, PersonId, right_to_access_lawyer, investigation) :-
+%    person_status(PersonId, suspect),
+%    proceeding_matter(PersonId, urgent_check_scene).
 
 %% has_right(_art64_3_b, PersonId, _right_to_remain_silent, _trial)
 %
@@ -445,9 +445,9 @@ has_right(art114, PersonId, right_to_access_lawyer, investigation) :-
 % Prior to the questioning, the person must be warned that:
 % b) without prejudice to the provisions of Article 66, paragraph 1, he has the right to silence, but the
 % proceedings will in any case continue their course;
-has_right(art64_3_b, PersonId, right_to_remain_silent, trial) :-
-    person_status(PersonId, suspect);
-    person_status(PersonId, accused).
+%has_right(art64_3_b, PersonId, right_to_remain_silent, trial) :-
+%    person_status(PersonId, suspect);
+%    person_status(PersonId, accused).
 
 %% person_status(PersonId, _suspect)
 %
@@ -595,8 +595,8 @@ has_right(art12_2, PersonId, right_to_information, lawyer):-
 % person of the faculty to appoint a lawyer in the issuing State. The President of the Court of Appeal gives
 % immediate notice to the competent authority of the issuing State of such appointment or of the will of the
 % interested person to make use of a lawyer in the issuing State.
-has_right(art9_5bis, PersonId, right_to_access_lawyer, trial):-
-    person_status(PersonId, arrested).
+%has_right(art9_5bis, PersonId, right_to_access_lawyer, trial):-
+%    person_status(PersonId, arrested).
 
 %% has_right(_art335_3, PersonId, _right_to_information, _accusation)
 %

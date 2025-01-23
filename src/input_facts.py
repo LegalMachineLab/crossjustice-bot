@@ -1,19 +1,10 @@
 facts = """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% GENERAL FACTS
-
-%% proceeding_type(PersonId, _criminal)
-%
-% The proceedings are of criminal nature
-%
-
-proceeding_type(PersonId, criminal).
-
-
 %% proceeding_type(PersonId, _europeanArrestWarrant)
 %
-% The proceedings concern the execution of a european arrest warrant
+% The proceedings concern the execution of a European Arrest Warrant.
+% The European Arrest Warrant ("EAW") is a simplified cross-border judicial surrender procedure for the purpose of prosecution.
 %
 
 proceeding_type(PersonId, europeanArrestWarrant).
@@ -21,7 +12,7 @@ proceeding_type(PersonId, europeanArrestWarrant).
 
 %% person_status(PersonId, _suspect)
 %
-% The person is a suspect
+% The person is a suspect.
 %
 
 person_status(PersonId, suspect).
@@ -29,7 +20,7 @@ person_status(PersonId, suspect).
 
 %% person_status(PersonId, _accused)
 %
-% The person is an accused
+% The person is an accused.
 %
 
 person_status(PersonId, accused).
@@ -134,9 +125,8 @@ facts_dir_2013_48 = """
 
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
-
 person_status(PersonId, requested).
 
 
@@ -144,7 +134,6 @@ person_status(PersonId, requested).
 %
 % The person has been deprived of liberty
 %
-
 person_status(PersonId, deprived_of_liberty).
 
 
@@ -198,7 +187,7 @@ person_nominate(PersonId, PersonId2).
 
 %% person_danger(PersonId, _life)
 %
-% There is need to avoid damage to any person's life
+% A serious concern or threat has risen, that concerns the life of a person
 %
 
 person_danger(PersonId, life).
@@ -206,7 +195,7 @@ person_danger(PersonId, life).
 
 %% person_danger(PersonId, _liberty)
 %
-% There is need to avoid damage to a person's liberty
+%  A serious concern or threat has risen, that concerns the liberty of a person
 %
 
 person_danger(PersonId, liberty).
@@ -214,7 +203,7 @@ person_danger(PersonId, liberty).
 
 %% person_danger(PersonId, _physical_integrity)
 %
-% There is need to avoid damage to a person's physical integrity
+% A serious concern or threat has risen, that concerns the physical integrity of a person
 %
 
 person_danger(PersonId, physical_integrity).
@@ -562,7 +551,6 @@ proceeding_matter(PersonId, trial_in_absentia).
 """
 
 facts_dir_2013_48_it = """
-Italian Code of Criminal Procedure
 
 %% proceeding_matter(PersonId, _precautionary_detention)
 %
@@ -675,11 +663,6 @@ person_status(PersonId, temporary_custody).
 
 
 facts_dir_2013_48_nl = """
-Dutch Code of Criminal Procedure
-
-Here is the explanation following the requested format, with uncommented Prolog facts included at the end of each block:
-
-```prolog
 %% person_status(PersonId, arrested)
 %
 % PersonId has been arrested and is in custody.
@@ -965,7 +948,7 @@ facts_dir_2010_64_nl = """
 
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
 person_status(PersonId, requested).
 
@@ -996,7 +979,7 @@ person_document(PersonId, penal_order).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 proceeding_matter(PersonId, minor_offence).
 
@@ -1152,7 +1135,7 @@ person_document(PersonId, decision_changing_charge).
 facts_dir_2012_13 = """
 %% person_status(PersonId, _requested)
 %
-% The person is requested under an european arrest warrant
+% The person is requested or subject to an european arrest warrant
 %
 
 person_status(PersonId, requested).
@@ -1160,7 +1143,7 @@ person_status(PersonId, requested).
 
 %% proceeding_matter(PersonId, _minor_offence)
 %
-% The proceedings concern a minor offence
+% The proceedings concern an offence declared to be of minor importance.
 %
 
 proceeding_matter(PersonId, minor_offence).
@@ -1430,13 +1413,13 @@ proceeding_matter(PersonId, summoned_court).
 
 %% authority_decision(PersonId, access_materials)
 %
-% An authority has decided to allow the defendant access to the materials of the case
+% An authority has decided to allow the defendant access to the documents of the case. This includes evidence and related documents.
 %
 authority_decision(PersonId, access_materials).
 
 %% person_request_submitted(PersonId, access_materials)
 %
-% The person, or his lawyer, have submitted a request for access to the investigative materials of the case
+% The person, or his lawyer, have submitted a request for access to the documents of the case. This includes evidence and related documents.
 %
 person_request_submitted(PersonId, access_materials).
 """
@@ -1515,6 +1498,25 @@ person_event(PersonId, cannot_be_located).
 % The person poses a danger to the proper conduct of proceedings
 %
 person_danger(PersonId, proper_conduct_proceedings).
+
+%% proceeding_danger(PersonId, investigation)
+%
+% The authority has disseminated the defendant's information due to the necessity of the investigation
+%
+proceeding_danger(PersonId, investigation).
+
+%% proceeding_danger(PersonId, public_interest)
+%
+% The authority has disseminated the defendant's information due to the necessity of the public interest
+%
+proceeding_danger(PersonId, public_interest).
+
+%% proceeding_matter(PersonId, evidence_gathering_act)
+%
+% The proceeding matter involves an evidence gathering act
+%
+proceeding_matter(PersonId, evidence_gathering_act).
+
 """
 
 facts_dir_2016_343_bg = """
