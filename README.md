@@ -4,7 +4,7 @@ This repository contains the support material for the paper *ALEXChat: a Generat
 
 A running instance of the application is available at:  **[ALEXChat](https://alexchat.streamlit.app/)**  
 
-⚠ **Note**: This instance runs on [Groq](https://groq.com/). If its shared key is rate-limited, enter your own Groq API key in the sidebar.
+⚠ **Note**: To use this instance, enter your own [Groq](https://groq.com/) API key in the sidebar.
 
 The deployed app is built from the `release` branch.
 
