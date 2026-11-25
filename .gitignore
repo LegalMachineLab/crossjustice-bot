@@ -156,3 +156,6 @@ cython_debug/
 .env
 
 flask_session
+
+# Streamlit secrets (API keys)
+.streamlit/secrets.toml

@@ -1,5 +1,7 @@
+import os
 import re
 import streamlit as st
+import groq
 from groq import Groq
 import time
 
@@ -17,15 +19,35 @@ import input_facts
 from swi_interface import query
 from argumentation.arg_interface import get_full_theory, run_reasoner
 
-GROQ_API_KEY = ""
-GROQ_API_MODEL = "llama-3.3-70b-versatile"
+# llama-3.3-70b-versatile was shut down by Groq for free/developer keys on 2026-08-16.
+DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b"
 
-def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.0):
+GROQ_API_KEY = ""
+GROQ_API_MODEL = DEFAULT_GROQ_MODEL
+
+# Transient errors are retried a few times; anything else (bad key, unknown or
+# decommissioned model, bad request) is raised at once so the UI can show it.
+RETRYABLE_ERRORS = (groq.RateLimitError, groq.APIConnectionError, groq.InternalServerError)
+MAX_ATTEMPTS = 5
+
+
+def secret_api_key():
+  """Shared key configured in the Streamlit Cloud secrets (or the environment), if any."""
+  try:
+    # Without this check st.secrets renders a "No secrets found" error when there is no secrets.toml.
+    if st.secrets.load_if_toml_exists():
+      return st.secrets.get("GROQ_API_KEY", "")
+  except Exception:
+    pass
+  return os.environ.get("GROQ_API_KEY", "")
+
+
+def prompt_model(prompt, system="", temperature=0.0):
   client = Groq(
       api_key=GROQ_API_KEY,
   )
 
-  while True:
+  for attempt in range(MAX_ATTEMPTS):
     try:
       completion = client.chat.completions.create(
         model=GROQ_API_MODEL,
@@ -46,8 +68,11 @@ def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.0):
       )
 
       return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
-    except Exception as e:
-      time.sleep(3)
+    except RETRYABLE_ERRORS as e:
+      if attempt == MAX_ATTEMPTS - 1:
+        raise
+      print(f"Groq call failed ({type(e).__name__}), retrying: {e}")
+      time.sleep(3 * (attempt + 1))
 
 def facts_hash(context):
   return hash(f"{context["facts"]}")
@@ -171,10 +196,16 @@ def select_state(messages, context):
     print(res)
     print()
 
-    context["right_target"] = [x.strip() for x in res.split("-")][2] if "3" in res else context["right_target"]
-    context["opt_target"] = [x.strip() for x in res.split("-")][3] if "3" in res else context["opt_target"]
-    raw_state = [x.strip() for x in res.split("-")][0]
+    parts = [x.strip() for x in res.strip().split("-")]
+    raw_state = parts[0]
     context["state"] = "0" if "0" in raw_state else "1" if "1" in raw_state else "2" if "2" in raw_state else "3"
+    if context["state"] == "3":
+      if len(parts) >= 4:
+        context["right_target"] = parts[2]
+        context["opt_target"] = parts[3]
+      if not context["right_target"] or facts_hash(context) not in context["rights"]:
+        # No right named, or rights not computed for the current facts: show the rights list instead.
+        context["state"] = "2"
 
 
 def run_argumentation(context):
@@ -359,17 +390,24 @@ def main():
     laws = ["it", "nl", "bg", "pl"]
     selected_law = st.sidebar.selectbox('Choose the country where the proceedings are taking place, therefore the applicable national law:', laws)
 
-    old_model = st.session_state.context["model"] if "context" in st.session_state else GROQ_API_MODEL
-    old_key = st.session_state.context["api_key"] if "context" in st.session_state else GROQ_API_KEY
-    
-    new_key = st.sidebar.text_input("Enter your Groq API Key:", old_key, type="password")
-    new_model = st.sidebar.text_input("Enter the Groq Model:", old_model)
-    
-    GROQ_API_KEY = new_key
+    shared_key = secret_api_key()
+    old_model = st.session_state.context["model"] if "context" in st.session_state else None
+    old_key = st.session_state.context["api_key"] if "context" in st.session_state else None
+
+    # The shared key is never put into the widget, so it is never sent to the browser.
+    user_key = st.sidebar.text_input(
+      "Enter your Groq API Key:" + (" (optional)" if shared_key else ""),
+      type="password",
+      key="groq_api_key",
+      help="Leave empty to use the app's shared key." if shared_key else None,
+    )
+    new_model = st.sidebar.text_input("Enter the Groq Model:", DEFAULT_GROQ_MODEL, key="groq_model").strip()
+
+    GROQ_API_KEY = user_key.strip() or shared_key
     GROQ_API_MODEL = new_model
 
-    reinit =  new_key != old_key or new_model != old_model
-    
+    reinit = "context" in st.session_state and (GROQ_API_KEY != old_key or new_model != old_model)
+
     st.sidebar.markdown(f"""
       ## Welcome to the Tutorial
 
@@ -400,8 +438,9 @@ def main():
     """)
 
     if not GROQ_API_KEY or not GROQ_API_MODEL:
+        st.info("Enter a Groq API key and model in the sidebar to start. You can create a free key at https://console.groq.com/keys.")
         return
-        
+
     if "chat_message" not in st.session_state or reinit:
       st.session_state.context = {
         "state" : "1",
@@ -441,6 +480,17 @@ def main():
 
         st.session_state.chat_message.append({"role": "user", "content": user_question})
 
+        try:
+          answer_turn(user_question)
+        except groq.APIError as e:
+          st.session_state.chat_message.pop()
+          print(f"Groq error: {e}")
+          st.error(f"The Groq API returned an error, so this message could not be answered. "
+                   f"Check the API key and that the model `{GROQ_API_MODEL}` is available "
+                   f"(https://console.groq.com/docs/models).\n\n{type(e).__name__}: {e}")
+
+
+def answer_turn(user_question):
         select_state(st.session_state.chat_message, st.session_state.context)
 
         if st.session_state.context["state"] == "1":

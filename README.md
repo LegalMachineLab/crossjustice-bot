@@ -31,7 +31,8 @@ Contains the main source code.
     ```bash
     streamlit run src/app.py
     ```  
-  - The script includes pre-configured [Groq](https://groq.com/) API keys. However, their usage is limited, so it is recommended to generate new keys and replace them in the code.  
+  - Enter a [Groq](https://groq.com/) API key and model in the sidebar. The default model is `openai/gpt-oss-120b`; see the [Groq models list](https://console.groq.com/docs/models) for the ones currently available.
+  - Alternatively, set a shared key as `GROQ_API_KEY` in `.streamlit/secrets.toml` (never commit it) or in the environment. On Streamlit Community Cloud, put it in the app's *Secrets* settings.
 
 ## Setup and Installation  
 
@@ -49,7 +50,7 @@ Contains the main source code.
    pip install -r requirements.txt
    ```  
 4. Set up API keys (**Optional**):
-   - Replace the Groq API key in `src/app.py`.
+   - Enter your Groq API key in the app sidebar, or set `GROQ_API_KEY` as described above.
    - Add a valid Together AI API key for evaluation (`test/facts_extraction.py`).
 
 5. Run the application:  
