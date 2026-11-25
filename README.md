@@ -4,7 +4,9 @@ This repository contains the support material for the paper *ALEXChat: a Generat
 
 A running instance of the application is available at:  **[ALEXChat](https://alexchat.streamlit.app/)**  
 
-⚠ **Note**: This instance uses limited [Groq](https://groq.com/) API keys, so it may experience crashes or timeouts under high load.
+⚠ **Note**: This instance runs on [Groq](https://groq.com/). If its shared key is rate-limited, enter your own Groq API key in the sidebar.
+
+The deployed app is built from the `release` branch.
 
 ## Repository Structure  
 
@@ -38,7 +40,7 @@ Contains the main source code.
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/ecai2025sub/crossjustice-bot.git
+   git clone https://github.com/LegalMachineLab/crossjustice-bot.git
    cd crossjustice-bot
    ```  
 2. Install system dependencies (tested with Debian Bullseye):  
