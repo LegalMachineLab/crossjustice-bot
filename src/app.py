@@ -17,16 +17,18 @@ import input_facts
 from swi_interface import query
 from argumentation.arg_interface import get_full_theory, run_reasoner
 
+GROQ_API_KEY = ""
+GROQ_API_MODEL = "llama-3.3-70b-versatile"
 
-def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
+def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.0):
   client = Groq(
-      api_key='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',
+      api_key=GROQ_API_KEY,
   )
 
   while True:
     try:
       completion = client.chat.completions.create(
-        model=model,
+        model=GROQ_API_MODEL,
         messages=[
             {
                 "role": "system",
@@ -46,7 +48,6 @@ def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
       return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
     except Exception as e:
       time.sleep(3)
-
 
 def facts_hash(context):
   return hash(f"{context["facts"]}")
@@ -164,7 +165,7 @@ def select_state(messages, context):
         Do not include anything else in your output.
 
         {messages[-2:]}
-    """, temperature=0.01)
+    """)
 
     print("Selecting State:")
     print(res)
@@ -252,7 +253,7 @@ def extract_facts(user_text, context):
     Here is the user input:
 
     {user_text}
-  """, temperature=0.3)
+  """)
 
   print(user_text)
   print()
@@ -290,7 +291,7 @@ def prettify_prolog(input):
       Why do You Have Them: inference steps and reasoning that led to the the rights. Use all the Prolog terms in the explanation explicitly referencing the original Prolog when needed.
 
       Use enumerations in the 'What Rights do You Have' and 'Why do You Have Them' sections if needed.
-    """, temperature=0.01)
+    """)
 
   for _, v in input.items():
     for _, r in v.items():
@@ -349,28 +350,8 @@ def llm_response(input_text, context, memory):
 
 def main():
 
-    if "chat_message" not in st.session_state:
-      st.session_state.context = {
-        "state" : "1",
-        "person_id" : "",
-        "directive_target" : "",
-        "facts" : [],
-        "rights" : {},
-        "country_target" : "",
-        "right_target" : "",
-        "opt_target" : "",
-        "target" : {},
-        "arguments" : {},
-        "pretty_arguments" : {},
-        "suggestions" : set()
-      }
-      st.session_state.chat_message = []
-      # st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
-      st.session_state.memory = ConversationSummaryBufferMemory(llm=ChatGroq(
-          groq_api_key='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',
-          model_name="llama3-70b-8192",
-          temperature=0.5
-      ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
+    global GROQ_API_MODEL
+    global GROQ_API_KEY
 
     dirs = ["directive_2010_64", "directive_2012_13", "directive_2016_343", "directive_2013_48"]
     selected_dir = st.sidebar.selectbox('Choose from the list the relevant directives: Directive 2010/64 on right to interpretation and translation; 2012/13 on the right to information, 2016/343 on the presumption of innocence; 2013/48 on the right of access to a lawyer', dirs)
@@ -378,6 +359,17 @@ def main():
     laws = ["it", "nl", "bg", "pl"]
     selected_law = st.sidebar.selectbox('Choose the country where the proceedings are taking place, therefore the applicable national law:', laws)
 
+    old_model = st.session_state.context["model"] if "context" in st.session_state else GROQ_API_MODEL
+    old_key = st.session_state.context["api_key"] if "context" in st.session_state else GROQ_API_KEY
+    
+    new_key = st.sidebar.text_input("Enter your Groq API Key:", old_key, type="password")
+    new_model = st.sidebar.text_input("Enter the Groq Model:", old_model)
+    
+    GROQ_API_KEY = new_key
+    GROQ_API_MODEL = new_model
+
+    reinit =  new_key != old_key or new_model != old_model
+    
     st.sidebar.markdown(f"""
       ## Welcome to the Tutorial
 
@@ -406,6 +398,34 @@ def main():
 
       Providing clear, complete information ensures tailored and effective legal guidance.
     """)
+
+    if not GROQ_API_KEY or not GROQ_API_MODEL:
+        return
+        
+    if "chat_message" not in st.session_state or reinit:
+      st.session_state.context = {
+        "state" : "1",
+        "person_id" : "",
+        "directive_target" : "",
+        "facts" : [],
+        "rights" : {},
+        "country_target" : "",
+        "right_target" : "",
+        "opt_target" : "",
+        "target" : {},
+        "arguments" : {},
+        "pretty_arguments" : {},
+        "suggestions" : set(),
+        "model" : GROQ_API_MODEL,
+        "api_key" : GROQ_API_KEY
+      }
+      st.session_state.chat_message = []
+      # st.session_state.memory = ConversationBufferWindowMemory(k=3, memory_key="my_chat", return_messages=True)
+      st.session_state.memory = ConversationSummaryBufferMemory(llm=ChatGroq(
+          groq_api_key=GROQ_API_KEY,
+          model_name=GROQ_API_MODEL,
+          temperature=0.5
+      ), max_token_limit=2000, memory_key="my_chat", return_messages=True)
 
     for message in st.session_state.chat_message:
         with st.chat_message(message["role"]):

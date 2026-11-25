@@ -9,10 +9,9 @@ from together import Together
 
 import input_facts
 
-# "meta-llama/Llama-3-70b-chat-hf"
-# "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+
 def prompt_model_together(prompt, system="", model="meta-llama/Llama-3-70b-chat-hf", temperature=0.3):
-  client = Together(api_key="ae803a3783ad3d5d1c8c43fd1ca5d75ac6879a6bf29ce655b763da797528fe5a")
+  client = Together(api_key="INSERT_KEY_HERE")
   time.sleep(0.1)
   while True:
     try:
@@ -38,35 +37,6 @@ def prompt_model_together(prompt, system="", model="meta-llama/Llama-3-70b-chat-
     except:
       time.sleep(3)
 
-
-def prompt_model(prompt, system="", model="llama3-70b-8192", temperature=0.3):
-  client = Groq(
-      api_key='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',
-  )
-  time.sleep(1)
-  while True:
-    try:
-      completion = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": system
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=temperature,
-        top_p=1,
-        stream=True,
-        stop=None,
-      )
-
-      return "".join([chunk.choices[0].delta.content or "" for chunk in completion])
-    except Exception as e:
-      time.sleep(3)
 
 def extract_facts(user_text, directive, law, person_id=""):
   def _extract_code(completion):

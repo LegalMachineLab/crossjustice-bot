@@ -1,27 +1,58 @@
-# IL BOT (E RISBOT)
+# ALEXChat: a Generative - Symbolic Approach to Legal eXplainability
 
-- Estrazione Fatti via LLM pubblico **(OK CIRCA)**
-  - Selezionare LLM da [groq](https://groq.com/)
-	- Lista fatti da [CrossJustice](https://github.com/LegalMachineLab/CrossJustice/blob/main/docs/facts.md)
-	- **Task 1**: LLM conversa con l'utente e seleziona dalla lista di fatti quelli che pensa essere rilevanti per il caso
-	  - Dare un recap all'utente di quel che ho capito del suo caso
+This repository contains the support material for the paper *ALEXChat: a Generative - Symbolic Approach to Legal eXplainability*.
 
-- Interrogazione **CrossJustice** **(OK CIRCA)**
-	- **INPUT**: lista fatti
-	- **TARGET**: direttive
-	- Come farlo (https://github.com/LegalMachineLab/CrossJustice/blob/main/crossjustice/python/pl_wrapper.py)
-	- **OUTPUT**: lista diritti
+A running instance of the application is available at:  **[ALEXChat](https://alexchat.streamlit.app/)**  
 
-- Domanda: *ho gli stessi diritti nel mio paese?* **(OK CIRCA)**
-	- Interrogazione **CrossJustice** base nazionale
-	- Uso argomentazione per identificare la non conformità
-		- Ho il diritto
-		- Assenza del diritto
-		- Presenza ma con requisiti differenti
-		- Manca di identificare eventuali diritti nazionali che non sono dati dai fatti in kb
-			- Task 2: LLM estrae da codice / transposition tables / a manina
+⚠ **Note**: This instance uses limited [Groq](https://groq.com/) API keys, so it may experience crashes or timeouts under high load.
 
-- LLM spiega i problemi e capisce con l'utente se è risolvibile **(OK CIRCA)**
-	- introdurre nuovi fatti
-  - revisionarne di vecchi
-	- ...
+## Repository Structure  
+
+### `test/`  
+This directory contains the code for the quantitative evaluation of Task 1.  
+- **`facts_extraction.py`**: The main script for evaluation.  
+  - Requires a valid [Together AI](https://www.together.ai/) API key to function properly.  
+
+### `res/`  
+This directory stores evaluation results and datasets.  
+- **`extraction/`**: Contains the dataset used for testing, including both complex and single extraction scenarios.
+- **`interaction/`**: Contains  a series of examples illustrating user interactions with the application.  
+- **`results_temp_*.json`**: JSON files containing results of the extraction at different temperature settings (0.0, 0.3, 0.6, 0.9).
+
+### `src/`  
+Contains the main source code.  
+- **`prolog/`**: Stores the CrossJustice Prolog sources.  
+- **`argumentation/`**: Contains the `arg2p` executable used for conformity evaluation.  
+- **`input_facts.py`**: Defines the list of Prolog facts for the CrossJustice system.  
+- **`swi_interface.py`**: A Python interface for interacting with the CrossJustice Prolog system.  
+- **`app.py`**: The main application containing all the prompts detailed in the paper.
+
+  - To launch the application, run:  
+    ```bash
+    streamlit run src/app.py
+    ```  
+  - The script includes pre-configured [Groq](https://groq.com/) API keys. However, their usage is limited, so it is recommended to generate new keys and replace them in the code.  
+
+## Setup and Installation  
+
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/ecai2025sub/crossjustice-bot.git
+   cd crossjustice-bot
+   ```  
+2. Install system dependencies (tested with Debian Bullseye):  
+   ```bash
+   xargs sudo apt install -y < packages.txt
+   ```  
+3. Install Python dependencies (tested with Python 3.12):  
+   ```bash
+   pip install -r requirements.txt
+   ```  
+4. Set up API keys (**Optional**):
+   - Replace the Groq API key in `src/app.py`.
+   - Add a valid Together AI API key for evaluation (`test/facts_extraction.py`).
+
+5. Run the application:  
+   ```bash
+   streamlit run src/app.py
+   ```  
